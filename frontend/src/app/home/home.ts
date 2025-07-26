@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   selector: 'app-home',
   standalone: true,
   imports: [],
+    standalone: true,
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

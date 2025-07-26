@@ -1,0 +1,186 @@
+
+
+<!-- 🔍 Recherche -->
+<input
+  type="text"
+  [(ngModel)]="searchTerm"
+  placeholder="🔍 Rechercher un problème..."
+  (input)="onSearchChange()"
+  style="margin-bottom: 10px; padding: 6px;"
+/>
+<p> </p>
+   <!-- ➕ Bouton ajout -->
+  <button (click)="showPopup = true" style="margin-top: 15px;">➕ Ajouter</button>
+
+<!-- ❌ Bouton pour vider -->
+  <button
+    *ngIf="searchTerm"
+    (click)="clearSearch()"
+    title="Effacer"
+  >
+    ✖
+  </button>
+
+<h1>list Problem </h1>
+
+<!-- 📊 Tableau -->
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let problem of filteredProblems()">
+      <td>{{ problem.id }}</td>
+      <td *ngIf="editingProblem?.id !== problem.id">{{ problem.name }}</td>
+      <td *ngIf="editingProblem?.id === problem.id">
+        <input [(ngModel)]="editedName" />
+      </td>
+      <td>
+        <button *ngIf="editingProblem?.id !== problem.id" (click)="startEdit(problem)">✏️</button>
+        <button *ngIf="editingProblem?.id === problem.id" (click)="updateProblem(problem.id!)">💾</button>
+        <button (click)="askDelete(problem.id!)">🗑️</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 📄 Pagination -->
+<div *ngIf="pageCount > 1" style="margin-top: 10px;">
+  <button *ngFor="let p of [].constructor(pageCount); let i = index"
+          (click)="goToPage(i)"
+          [disabled]="i === currentPage"
+          style="margin-right: 5px;">
+    {{ i + 1 }}
+  </button>
+</div>
+
+
+
+<!-- 🪟 Pop-up -->
+<div *ngIf="showPopup" style="
+    position: fixed;
+    top: 20%;
+    left: 35%;
+    width: 30%;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px #999;
+    z-index: 1000;
+  ">
+  <h3>Ajouter un problème</h3>
+  <input
+    type="text"
+    [(ngModel)]="newProblem.name"
+    placeholder="Nom du problème"
+    style="width: 100%; padding: 6px;"
+  />
+  <div style="margin-top: 10px;">
+    <button (click)="addProblem()">✅ Ajouter</button>
+    <button (click)="showPopup = false">❌ Annuler</button>
+  </div>
+</div>
+
+<div *ngIf="showPopup" class="popup-overlay"></div>
+
+<!-- Popup campagne existe déjà -->
+<div *ngIf="showAlreadyExistsPopup" class="popup-box">
+  <h3>La campagne existe déjà !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeAlreadyExistsPopupUpdate()">OK</button>
+  </div>
+</div>
+<div *ngIf="showAlreadyExistsPopup" class="popup-overlay"></div>
+
+<!-- POPUP DE CONFIRMATION -->
+<div
+  *ngIf="showPopupSuppression"
+  style="
+    position: fixed; top: 20%; left: 35%; width: 30%; background: white;
+    padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px #999;
+    z-index: 1000;
+  "
+>
+  <h3>Voulez-vous vraiment supprimer cette campagne ?</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="confirmDelete()">Confirmer</button>
+    <button (click)="cancelDelete()">Annuler</button>
+  </div>
+</div>
+<!-- Optionnel, pour griser le fond -->
+<div
+  *ngIf="showPopupSuppression"
+  style="
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.1); z-index: 999;
+  "
+></div>
+
+
+<!-- POPUP Champ vide -->
+<div
+  *ngIf="showEmptyFieldPopup"
+  style="
+    position: fixed; top: 20%; left: 35%; width: 30%; background: white;
+    padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px #999;
+    z-index: 1000;
+  "
+>
+
+  <h3>Le champ est vide !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeEmptyFieldPopup()">OK</button>
+  </div>
+</div>
+<div
+  *ngIf="showEmptyFieldPopup"
+  style="
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.1); z-index: 999;
+  "
+></div>
+
+<!-- Popup champ vide -->
+<div *ngIf="showEmptyFieldPopup" class="popup-box">
+  <h3>Le champ est vide !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeEmptyFieldPopup()">OK</button>
+  </div>
+</div>
+<div *ngIf="showEmptyFieldPopup" class="popup-overlay"></div>
+
+<!-- Popup succès -->
+<div *ngIf="showSuccessPopup" class="popup-box">
+  <h3>Ajout avec succès !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeSuccessPopup()">OK</button>
+  </div>
+</div>
+<div *ngIf="showSuccessPopup" class="popup-overlay"></div>
+
+
+
+
+<!-- Popup succès modification -->
+<div *ngIf="showEditSuccessPopup" class="popup-box">
+  <h3>Modification avec succès !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeEditSuccessPopup()">OK</button>
+  </div>
+</div>
+<div *ngIf="showEditSuccessPopup" class="popup-overlay"></div>
+<!-- Popup succès suppression -->
+<div *ngIf="showDeleteSuccessPopup" class="popup-box">
+  <h3>Suppression avec succès !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeDeleteSuccessPopup()">OK</button>
+  </div>
+</div>
+<div *ngIf="showDeleteSuccessPopup" class="popup-overlay"></div>
+
+
+
