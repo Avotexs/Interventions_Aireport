@@ -8,9 +8,9 @@ package com.airoport.backend.dto;
         public CampagnyDTO() {}
 
         // Constructeur avec paramètres
-        public CampagnyDTO(String nom) {
+        public CampagnyDTO(String name) {
 
-            this.name = nom;
+            this.name = name;
         }
     }
 
