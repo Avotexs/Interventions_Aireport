@@ -1,10 +1,27 @@
-<h1>Bienvenue dans le portail Aéroport ✈️</h1>
-
- <nav>
-<a routerLink="/">home </a>
-<a routerLink="/campagny">Gérer les compagnies</a>
-<a routerLink="/problem" routerLinkActive="active">Problem</a>
-
-</nav>
-
-   <router-outlet></router-outlet>
+<div class="airport-layout">
+  <aside class="airport-sidebar">
+    <div class="logo-zone">
+      ✈️ <span>Aéroport</span>
+    </div>
+    <nav>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        <span>🏠</span> Tableau de bord
+      </a>
+      <a routerLink="/campagny" routerLinkActive="active">
+        <span>🛫</span> Compagnies
+      </a>
+      <a routerLink="/solution" routerLinkActive="active">
+        <span>🔑</span> Solutions
+      </a>
+      <a routerLink="/staff" routerLinkActive="active">
+        <span>👨‍✈️</span> Staff
+      </a>
+      <a routerLink="/problem" routerLinkActive="active">
+        <span>⚙️</span> Problem
+      </a>
+    </nav>
+  </aside>
+  <main class="airport-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
