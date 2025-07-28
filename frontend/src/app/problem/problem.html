@@ -1,4 +1,4 @@
-<p>campagny works!</p>
+
 
 <!-- 🔍 Recherche -->
 <input
@@ -8,6 +8,10 @@
   (input)="onSearchChange()"
   style="margin-bottom: 10px; padding: 6px;"
 />
+<p> </p>
+   <!-- ➕ Bouton ajout -->
+  <button (click)="showPopup = true" style="margin-top: 15px;">➕ Ajouter</button>
+
 <!-- ❌ Bouton pour vider -->
   <button
     *ngIf="searchTerm"
@@ -16,35 +20,29 @@
   >
     ✖
   </button>
-<h1>Liste Campagny</h1>
-<!-- ➕ Bouton ajout -->
-<button (click)="showPopup = true" style="margin-top: 15px;">➕ Ajouter</button>
 
-<h2>📋 Liste des compagnies</h2>
+<h1>list Problem </h1>
+
+<!-- 📊 Tableau -->
 <table>
   <thead>
     <tr>
       <th>ID</th>
-      <th>Name</th>
-      <th></th>
+      <th>Nom</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <!-- Si la liste est vide -->
-    <tr *ngIf="filteredCampagny().length === 0">
-      <td colspan="3" style="text-align: center;">La liste est vide</td>
-    </tr>
-    <!-- Sinon, affiche les campagnes -->
-    <tr *ngFor="let campagny of filteredCampagny()">
-      <td>{{ campagny.id }}</td>
-      <td *ngIf="editingCampagny?.id !== campagny.id">{{ campagny.name }}</td>
-      <td *ngIf="editingCampagny?.id === campagny.id">
+    <tr *ngFor="let problem of filteredProblems()">
+      <td>{{ problem.id }}</td>
+      <td *ngIf="editingProblem?.id !== problem.id">{{ problem.name }}</td>
+      <td *ngIf="editingProblem?.id === problem.id">
         <input [(ngModel)]="editedName" />
       </td>
       <td>
-        <button *ngIf="editingCampagny?.id !== campagny.id" (click)="startEdit(campagny)">✏</button>
-        <button *ngIf="editingCampagny?.id === campagny.id" (click)="updateCampagny(campagny.id!)">💾</button>
-        <button (click)="askDelete(campagny.id!)">🗑</button>
+        <button *ngIf="editingProblem?.id !== problem.id" (click)="startEdit(problem)">✏️</button>
+        <button *ngIf="editingProblem?.id === problem.id" (click)="updateProblem(problem.id!)">💾</button>
+        <button (click)="askDelete(problem.id!)">🗑️</button>
       </td>
     </tr>
   </tbody>
@@ -60,22 +58,34 @@
   </button>
 </div>
 
-<!-- Popup ajout -->
-<div *ngIf="showPopup" class="popup-box">
+
+
+<!-- 🪟 Pop-up -->
+<div *ngIf="showPopup" style="
+    position: fixed;
+    top: 20%;
+    left: 35%;
+    width: 30%;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px #999;
+    z-index: 1000;
+  ">
   <h3>Ajouter un problème</h3>
   <input
     type="text"
-    [(ngModel)]="newCampagny.name"
-    placeholder="Nom de la compagnie"
+    [(ngModel)]="newProblem.name"
+    placeholder="Nom du problème"
     style="width: 100%; padding: 6px;"
   />
   <div style="margin-top: 10px;">
-    <button (click)="addCampagny()">✅ Ajouter</button>
+    <button (click)="addProblem()">✅ Ajouter</button>
     <button (click)="showPopup = false">❌ Annuler</button>
   </div>
 </div>
-<div *ngIf="showPopup" class="popup-overlay"></div>
 
+<div *ngIf="showPopup" class="popup-overlay"></div>
 
 <!-- Popup campagne existe déjà -->
 <div *ngIf="showAlreadyExistsPopup" class="popup-box">
@@ -85,8 +95,6 @@
   </div>
 </div>
 <div *ngIf="showAlreadyExistsPopup" class="popup-overlay"></div>
-
-
 
 <!-- POPUP DE CONFIRMATION -->
 <div
@@ -173,3 +181,6 @@
   </div>
 </div>
 <div *ngIf="showDeleteSuccessPopup" class="popup-overlay"></div>
+
+
+

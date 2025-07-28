@@ -41,7 +41,7 @@ public class CampagnyService {
 
     public Campagny createCampagny(CampagnyDTO campagnyDTO) {
         Campagny campagny=new Campagny();
-        campagny.setNom(campagnyDTO.name);
+        campagny.setName(campagnyDTO.name);
         return campagnyRepository.save(campagny);
     }
 
@@ -49,7 +49,7 @@ public class CampagnyService {
         Campagny campagny = campagnyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Campagny non trouvée avec id: " + id));
 
-        campagny.setNom(campagnyDTO.name);
+        campagny.setName(campagnyDTO.name);
 
         return campagnyRepository.save(campagny);
     }
