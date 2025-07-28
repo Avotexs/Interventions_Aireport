@@ -30,7 +30,7 @@ showAlreadyExistsPopup = false;
 showSuccessPopup = false;
 showEditSuccessPopup = false;
 showDeleteSuccessPopup = false;
-
+showEmptyFieldPopupUpdate = false;
 
   constructor(private campagnyService: CampagnyService) {
     console.log('Campagny component initialized');
@@ -77,31 +77,12 @@ get pageCount(): number {
   this.searchTerm = '';
   this.onSearchChange(); // relance une recherche vide
 }
-/*
-addCampagny() {
-    this.campagnyService.createCampagny(this.newCampagny).subscribe({
-      next: () => {
-        this.getCampagnyList();
-        this.newCampagny.name = '';
-        this.showPopup = false;
-      },
-      error: (err) => console.error(err)
-    });
-  }
-*/
-/*
-deleteCampagny(id: number) {
-    this.campagnyService.deleteCampagny(id).subscribe({
-      next: () => this.getCampagnyList(),
-      error: (err) => console.error(err)
-    });
-  }
-*/
 
 addCampagny() {
   // Vérifie si le champ est vide
   if (!this.newCampagny.name || this.newCampagny.name.trim() === '') {
     this.showEmptyFieldPopup = true;
+    this.showPopup = false;
     return;
   }
 
@@ -142,7 +123,10 @@ closeAlreadyExistsPopup() {
 
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
+  this.showPopup = true;
 }
+
+
 startEdit(campagny: Campagny) {
     this.editingCampagny = campagny;
     this.editedName = campagny.name;
@@ -160,6 +144,11 @@ updateCampagny(id: number) {
     return;
   }
 
+// Vérifie si le champ est vide
+  if (!this.newCampagny.name || this.newCampagny.name.trim() === '') {
+    this.showEmptyFieldPopupUpdate = true;
+    return;
+  }
   // Modification si tout est OK
   this.campagnyService.updateCampagny(id, { name: this.editedName }).subscribe({
     next: () => {
@@ -172,6 +161,9 @@ updateCampagny(id: number) {
   });
 }
 
+closeEmptyFieldPopupUpdate() {
+  this.showEmptyFieldPopupUpdate = false;
+}
 
 closeEditSuccessPopup() {
   this.showEditSuccessPopup = false;
