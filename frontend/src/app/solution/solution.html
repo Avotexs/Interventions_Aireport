@@ -1,48 +1,52 @@
 
-
+<h1>Liste Solution</h1>
 <!-- 🔍 Recherche -->
 <input
   type="text"
   [(ngModel)]="searchTerm"
-  placeholder="🔍 Rechercher un problème..."
+  placeholder="🔍 Rechercher une solution  "
   (input)="onSearchChange()"
-  style="margin-bottom: 10px; padding: 6px;"
+  style="margin-bottom: 50px; padding: 6px;margin-right: 50px; width: 300px;margin-top: 50px;margin-left: 80px;"
 />
-<p> </p>
-   <!-- ➕ Bouton ajout -->
-  <button (click)="showPopup = true" style="margin-top: 15px;">➕ Ajouter</button>
-
 <!-- ❌ Bouton pour vider -->
-  <button
-    *ngIf="searchTerm"
-    (click)="clearSearch()"
-    title="Effacer"
-  >
-    ✖
-  </button>
+<button
+  *ngIf="searchTerm"
+  (click)="clearSearch()"
+  title="Effacer"
+>
+  ✖
+</button>
 
-<h1>list Problem </h1>
 
-<!-- 📊 Tableau -->
+
+<!-- ➕ Bouton ajout -->
+<button (click)="showPopup = true" style="margin-top: 15px;width: 300px;">➕ Ajouter</button>
+
+<h2>📋 Liste des solutions</h2>
 <table>
   <thead>
     <tr>
       <th>ID</th>
-      <th>Nom</th>
-      <th>Actions</th>
+      <th>Name</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let problem of filteredProblems()">
-      <td>{{ problem.id }}</td>
-      <td *ngIf="editingProblem?.id !== problem.id">{{ problem.name }}</td>
-      <td *ngIf="editingProblem?.id === problem.id">
+    <!-- Si la liste est vide -->
+    <tr *ngIf="filteredSolutions().length === 0">
+      <td colspan="3" style="text-align: center;">La liste est vide</td>
+    </tr>
+    <!-- Sinon, affiche les solutions -->
+    <tr *ngFor="let solution of filteredSolutions()">
+      <td>{{ solution.id }}</td>
+      <td *ngIf="editingSolution?.id !== solution.id">{{ solution.name }}</td>
+      <td *ngIf="editingSolution?.id === solution.id">
         <input [(ngModel)]="editedName" />
       </td>
       <td>
-        <button *ngIf="editingProblem?.id !== problem.id" (click)="startEdit(problem)">✏️</button>
-        <button *ngIf="editingProblem?.id === problem.id" (click)="updateProblem(problem.id!)">💾</button>
-        <button (click)="askDelete(problem.id!)">🗑️</button>
+        <button *ngIf="editingSolution?.id !== solution.id" (click)="startEdit(solution)">✏</button>
+        <button *ngIf="editingSolution?.id === solution.id" (click)="updateSolution(solution.id!)">💾</button>
+        <button (click)="askDelete(solution.id!)">🗑</button>
       </td>
     </tr>
   </tbody>
@@ -58,38 +62,25 @@
   </button>
 </div>
 
-
-
-<!-- 🪟 Pop-up -->
-<div *ngIf="showPopup" style="
-    position: fixed;
-    top: 20%;
-    left: 35%;
-    width: 30%;
-    background: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px #999;
-    z-index: 1000;
-  ">
-  <h3>Ajouter un problème</h3>
+<!-- Fenêtre d'ajout -->
+<div *ngIf="showPopup" class="popup-box">
+  <h3>Ajouter une solution </h3>
   <input
     type="text"
-    [(ngModel)]="newProblem.name"
-    placeholder="Nom du problème"
+    [(ngModel)]="newSolution.name"
+    placeholder="Nom de la solution"
     style="width: 100%; padding: 6px;"
   />
   <div style="margin-top: 10px;">
-    <button (click)="addProblem()">✅ Ajouter</button>
+    <button (click)="addSolution()">✅ Ajouter</button>
     <button (click)="showPopup = false">❌ Annuler</button>
   </div>
 </div>
-
 <div *ngIf="showPopup" class="popup-overlay"></div>
 
-<!-- Popup campagne existe déjà -->
+<!-- Popup solution existe déjà -->
 <div *ngIf="showAlreadyExistsPopup" class="popup-box">
-  <h3>La campagne existe déjà !</h3>
+  <h3>La solution existe déjà !</h3>
   <div style="margin-top: 10px;">
     <button (click)="closeAlreadyExistsPopupUpdate()">OK</button>
   </div>
@@ -105,36 +96,34 @@
     z-index: 1000;
   "
 >
-  <h3>Voulez-vous vraiment supprimer cette campagne ?</h3>
+  <h3>Voulez-vous vraiment supprimer cette solution ?</h3>
   <div style="margin-top: 10px;">
     <button (click)="confirmDelete()">Confirmer</button>
     <button (click)="cancelDelete()">Annuler</button>
   </div>
 </div>
+
 <!-- Optionnel, pour griser le fond -->
 <div
   *ngIf="showPopupSuppression"
-  style="
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.1); z-index: 999;
-  "
+ class="popup-box"
 ></div>
-
 
 <!-- POPUP Champ vide -->
 <div
   *ngIf="showEmptyFieldPopupUpdate"
-  style="
-    position: fixed; top: 20%; left: 35%; width: 30%; background: white;
-    padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px #999;
-    z-index: 1000;
-  "
+  class="popup-box"
+ 
 >
   <h3>Le champ est vide update !</h3>
   <div style="margin-top: 10px;">
     <button (click)="closeEmptyFieldPopupUpdate()">OK</button>
   </div>
 </div>
+<div
+  *ngIf="showEmptyFieldPopup"
+class="popup-box"
+></div>
 
 <!-- Popup champ vide -->
 <div *ngIf="showEmptyFieldPopup" class="popup-box">
@@ -154,9 +143,6 @@
 </div>
 <div *ngIf="showSuccessPopup" class="popup-overlay"></div>
 
-
-
-
 <!-- Popup succès modification -->
 <div *ngIf="showEditSuccessPopup" class="popup-box">
   <h3>Modification avec succès !</h3>
@@ -165,6 +151,7 @@
   </div>
 </div>
 <div *ngIf="showEditSuccessPopup" class="popup-overlay"></div>
+
 <!-- Popup succès suppression -->
 <div *ngIf="showDeleteSuccessPopup" class="popup-box">
   <h3>Suppression avec succès !</h3>

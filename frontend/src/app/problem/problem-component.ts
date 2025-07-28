@@ -26,6 +26,7 @@ export class ProblemComponent {
   showSuccessPopup = false;
   showEditSuccessPopup = false;
   showDeleteSuccessPopup = false;
+  showEmptyFieldPopupUpdate = false;
   /**
    * Constructor that injects the ProblemService and initializes data.
    * @param problemService - Service for accessing problems from backend
@@ -138,7 +139,9 @@ closeAlreadyExistsPopup() {
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
 }
-
+closeEmptyFieldPopupUpdate() {
+  this.showEmptyFieldPopupUpdate = false;
+}
 
 startEdit(problem: Problem) {
     this.editingProblem = problem;
@@ -149,6 +152,11 @@ startEdit(problem: Problem) {
  
 
 updateProblem(id: number) {
+  // Vérifie si le champ est vide ou ne contient que des espaces
+  if (!this.editedName || !this.editedName.trim()) {
+    this.showEmptyFieldPopupUpdate  = true; // Affiche le popup d'erreur pour champ vide
+    return;
+  }
   // Vérifie si le nouveau nom existe déjà chez une autre problème
   if (
     this.problems.some(

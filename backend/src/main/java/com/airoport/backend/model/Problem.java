@@ -9,7 +9,7 @@ public class Problem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false, unique = true, length = 2500)
+    @Column(nullable = false, unique = true)
     private String name;
 
     public Problem() {}
