@@ -123,26 +123,18 @@
 
 <!-- POPUP Champ vide -->
 <div
-  *ngIf="showEmptyFieldPopup"
+  *ngIf="showEmptyFieldPopupUpdate"
   style="
     position: fixed; top: 20%; left: 35%; width: 30%; background: white;
     padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px #999;
     z-index: 1000;
   "
 >
-
-  <h3>Le champ est vide !</h3>
+  <h3>Le champ est vide update !</h3>
   <div style="margin-top: 10px;">
-    <button (click)="closeEmptyFieldPopup()">OK</button>
+    <button (click)="closeEmptyFieldPopupUpdate()">OK</button>
   </div>
 </div>
-<div
-  *ngIf="showEmptyFieldPopup"
-  style="
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.1); z-index: 999;
-  "
-></div>
 
 <!-- Popup champ vide -->
 <div *ngIf="showEmptyFieldPopup" class="popup-box">
