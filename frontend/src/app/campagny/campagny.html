@@ -37,13 +37,10 @@
     <!-- Sinon, affiche les campagnes -->
     <tr *ngFor="let campagny of filteredCampagny()">
       <td>{{ campagny.id }}</td>
-      <td *ngIf="editingCampagny?.id !== campagny.id">{{ campagny.name }}</td>
-      <td *ngIf="editingCampagny?.id === campagny.id">
-        <input [(ngModel)]="editedName" />
-      </td>
+      <td >{{ campagny.name }}</td>
+
       <td>
-        <button *ngIf="editingCampagny?.id !== campagny.id" (click)="startEdit(campagny)">✏</button>
-        <button *ngIf="editingCampagny?.id === campagny.id" (click)="updateCampagny(campagny.id!)">💾</button>
+        <button (click)="openEditPopup(campagny)">✏</button> 
         <button (click)="askDelete(campagny.id!)">🗑</button>
       </td>
     </tr>
@@ -62,7 +59,7 @@
 
 <!-- Popup ajout -->
 <div *ngIf="showPopup" class="popup-box">
-  <h3>Ajouter un problème</h3>
+  <h3>Ajouter un Campagny</h3>
   <input
     type="text"
     [(ngModel)]="newCampagny.name"
@@ -77,11 +74,20 @@
 <div *ngIf="showPopup" class="popup-overlay"></div>
 
 
-<!-- Popup campagne existe déjà -->
-<div *ngIf="showAlreadyExistsPopup" class="popup-box">
+<!-- Popup campagne existe déjà Update-->
+<div *ngIf="showAlreadyExistsPopupUpdate" class="popup-box">
   <h3>La campagne existe déjà !</h3>
   <div style="margin-top: 10px;">
     <button (click)="closeAlreadyExistsPopupUpdate()">OK</button>
+  </div>
+</div>
+<div *ngIf="showAlreadyExistsPopupUpdate" class="popup-overlay"></div>
+
+<!-- Popup campagne existe Ajout -->
+<div *ngIf="showAlreadyExistsPopup" class="popup-box">
+  <h3>La campagne existe déjà !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeAlreadyExistsPopupAdd()">OK</button>
   </div>
 </div>
 <div *ngIf="showAlreadyExistsPopup" class="popup-overlay"></div>
@@ -113,7 +119,7 @@
 ></div>
 
 
-<!-- POPUP Champ vide -->
+<!-- POPUP Champ vide Update-->
 <div
   *ngIf="showEmptyFieldPopupUpdate"
   style="
@@ -137,7 +143,7 @@
   "
 ></div>
 
-<!-- Popup champ vide -->
+<!-- Popup champ vide Ajout-->
 <div *ngIf="showEmptyFieldPopup" class="popup-box">
   <h3>Le champ est vide !</h3>
   <div style="margin-top: 10px;">
@@ -168,6 +174,7 @@
   </div>
 </div>
 <div *ngIf="showEditSuccessPopup" class="popup-overlay"></div>
+
 <!-- Popup succès suppression -->
 <div *ngIf="showDeleteSuccessPopup" class="popup-box">
   <h3>Suppression avec succès !</h3>
@@ -176,3 +183,15 @@
   </div>
 </div>
 <div *ngIf="showDeleteSuccessPopup" class="popup-overlay"></div>
+
+
+
+<!-- Popup de Modiffication-->
+<div *ngIf="showEditPopup" class="popup-box">
+  <h3>Modifier la campagne</h3>
+  <input [(ngModel)]="editedName" placeholder="Nom de la campagne" />
+  <div>
+    <button [disabled]="!editId" (click)="updateCampagny(editId!, editedName)">💾 Enregistrer</button>
+    <button (click)="closeEditPopup()">❌ Annuler</button>
+  </div>
+</div>
