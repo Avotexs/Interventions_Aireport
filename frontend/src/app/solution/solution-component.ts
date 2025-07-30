@@ -25,16 +25,19 @@ searchTerm: string = '';
   noResultFound: boolean = false;
   showPopup: boolean = false;
   campagnyToDelete: number|null = null;
-showEmptyFieldPopup = false;
-showEmptyFieldPopupUpdate = false;
-showPopupSuppression = false;
-showAlreadyExistsPopup = false;
-showSuccessPopup = false;
-showEditSuccessPopup = false;
-showDeleteSuccessPopup = false;
-solutionToDelete: number|null = null;
-     // Temporary edited name used in editing UI
+  showEmptyFieldPopup = false;
+  showEmptyFieldPopupUpdate = false;
+  showPopupSuppression = false;
+  showAlreadyExistsPopup = false;
+  showSuccessPopup = false;
+  showEditSuccessPopup = false;
+  showDeleteSuccessPopup = false;
+  solutionToDelete: number|null = null;
   
+    //var pour modiffier le nom
+  showEditPopup = false;
+  editId:number|null=null;
+showAlreadyExistsPopupUpdate: boolean = false;
 
 
   constructor(private solutionService: SolutionService) {
@@ -82,6 +85,7 @@ addSolution() {
   // Vérifie si le champ est vide
   if (!this.newSolution.name || this.newSolution.name.trim() === '') {
     this.showEmptyFieldPopup = true;
+     this.showPopup = false;
     return;
   }
 
@@ -107,7 +111,11 @@ addSolution() {
     error: (err) => console.error(err)
   });
 }
-
+closeAlreadyExistsPopupAdd() {
+  this.showAlreadyExistsPopup = false;
+  // On ré-affiche la fenêtre d’édition avec le même nom
+  this.showPopup = true; // On ré-affiche la fenêtre d'ajout
+  }
 
   closeSuccessPopup() {
   this.showSuccessPopup = false;
@@ -122,10 +130,12 @@ closeAlreadyExistsPopup() {
 
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
+  this.showPopup = true;
 }
 
 closeEmptyFieldPopupUpdate() {
   this.showEmptyFieldPopupUpdate = false;
+  this.showEditPopup = true;
 }
 startEdit(solution: Solution) {
     this.editingSolution = solution;
@@ -139,10 +149,11 @@ startEdit(solution: Solution) {
     });
   }
 
-updateSolution(id: number) {
+updateSolution(id: number, editedName: string) {
   // Vérifie si le champ est vide ou ne contient que des espaces
   if (!this.editedName || !this.editedName.trim()) {
     this.showEmptyFieldPopupUpdate  = true; // Affiche le popup d'erreur pour champ vide
+    this.showEditPopup = false;
     return;
   }
 
@@ -152,8 +163,10 @@ updateSolution(id: number) {
       c => c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
     )
   ) {
-    this.editingSolution = null; // Cache la fenêtre d'édition
-    this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
+    this.showEditPopup = false; // Cache la fenêtre d'édition
+    this.showAlreadyExistsPopupUpdate = true; // Affiche le message d'erreur
+    
+  
     return;
   }
 
@@ -161,6 +174,7 @@ updateSolution(id: number) {
   this.solutionService.updateSolution(id, { name: this.editedName }).subscribe({
     next: () => {
       this.getSolutionList();
+      this.showEditPopup = false;
       this.editingSolution = null; // Cache la fenêtre d'édition
       this.editedName = '';
       this.showEditSuccessPopup = true; // Affiche le popup succès
@@ -169,13 +183,33 @@ updateSolution(id: number) {
   });
 }
 
+openEditPopup(problem: Solution) {
+
+  this.editingSolution = problem ; // Copie pour édition
+  this.editedName = problem.name;
+  this.editId= problem.id ?? null;
+  this.showEditPopup = true;
+}
+
+
+closeEditPopup() {
+  this.showEditPopup = false;
+  this.editingSolution = null;
+  this.editedName = '';
+}
+
+
+
+
+
 closeEditSuccessPopup() {
   this.showEditSuccessPopup = false;
 }
 closeAlreadyExistsPopupUpdate() {
-  this.showAlreadyExistsPopup = false;
+  this.showAlreadyExistsPopupUpdate = false;
   // On ré-affiche la fenêtre d’édition avec le même nom
   this.editingSolution = { ...this.editingSolution, name: this.editedName };
+  this.showEditPopup = true; // On ré-affiche la fenêtre d'édition
 }
 
   askDelete(id: number) {

@@ -39,13 +39,9 @@
     <!-- Sinon, affiche les solutions -->
     <tr *ngFor="let solution of filteredSolutions()">
       <td>{{ solution.id }}</td>
-      <td *ngIf="editingSolution?.id !== solution.id">{{ solution.name }}</td>
-      <td *ngIf="editingSolution?.id === solution.id">
-        <input [(ngModel)]="editedName" />
-      </td>
+      <td>{{ solution.name }}</td>
       <td>
-        <button *ngIf="editingSolution?.id !== solution.id" (click)="startEdit(solution)">✏</button>
-        <button *ngIf="editingSolution?.id === solution.id" (click)="updateSolution(solution.id!)">💾</button>
+        <button (click)="openEditPopup(solution)">✏</button>
         <button (click)="askDelete(solution.id!)">🗑</button>
       </td>
     </tr>
@@ -78,8 +74,17 @@
 </div>
 <div *ngIf="showPopup" class="popup-overlay"></div>
 
-<!-- Popup solution existe déjà -->
+<!-- Popup solution existe déjà Add-->
 <div *ngIf="showAlreadyExistsPopup" class="popup-box">
+  <h3>La solution existe déjà !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeAlreadyExistsPopupAdd()">OK</button>
+  </div>
+</div>
+<div *ngIf="showAlreadyExistsPopup" class="popup-overlay"></div>
+
+<!-- Popup solution existe déjà Update-->
+<div *ngIf="showAlreadyExistsPopupUpdate" class="popup-box">
   <h3>La solution existe déjà !</h3>
   <div style="margin-top: 10px;">
     <button (click)="closeAlreadyExistsPopupUpdate()">OK</button>
@@ -162,4 +167,13 @@ class="popup-box"
 <div *ngIf="showDeleteSuccessPopup" class="popup-overlay"></div>
 
 
+<!-- Popup de Modiffication-->
+<div *ngIf="showEditPopup" class="popup-box">
+  <h3>Modifier la campagne</h3>
+  <input [(ngModel)]="editedName" placeholder="Nom de la campagne" />
+  <div>
+    <button [disabled]="!editId" (click)="updateSolution(editId!, editedName)">💾 Enregistrer</button>
+    <button (click)="closeEditPopup()">❌ Annuler</button>
+  </div>
+</div>
 
