@@ -1,0 +1,196 @@
+.navbar-blue {
+  width: calc(100% - 263px);               /* Prend toute la largeur de .airport-main */
+  background: linear-gradient(180deg, #3b7bb1 80%, #5999c7 100%);
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0 16px 0 8px;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  position:absolute;        /* plus de fixed ici ! */
+  top: 0;
+  
+  z-index: 10;
+}
+
+.navbar-links, .navbar-actions {
+  display: flex;
+  align-items: center;
+  float: right;
+}
+
+.navbar-links {
+  gap: 21px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.navbar-actions {
+  gap: 10px;
+  min-width: 0;
+}
+
+.navbar-btn {
+  background: #f7fafc;
+  color: #2563a9;
+  border: 1px solid #b0c4d7;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 6px 18px;
+  margin-left: 14px;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s;
+  box-shadow: 0 2px 6px rgba(40,60,100,0.07);
+  white-space: nowrap;
+}
+
+.search-zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-zone input {
+  border: 1.5px solid #b0c4d7;
+  border-radius: 2px;
+  padding: 5px 30px 5px 9px;
+  font-size: .98rem;
+  outline: none;
+  width: 130px;
+}
+
+.search-zone .search-icon {
+  position: absolute;
+  right: 7px;
+  color: #6684a6;
+  pointer-events: none;
+  font-size: 1.09rem;
+}
+
+@media (max-width: 900px){
+  .navbar-blue{
+    width: 100%;                /* Prend toute la largeur de l'écran */
+    position: fixed;            /* Reste en haut de l'écran */
+    left: 0;                    /* Aligne à gauche */
+    top: 0;                     /* Aligne en haut */
+    z-index: 10;                /* Assure que la barre de navigation est au-dessus des autres éléments */
+    display: flex;
+  }
+}
+
+
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.dropbtn {
+  background: #fff;
+  color: #22223b;
+  padding: 10px 22px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(40,50,80,.07);
+  transition: background .16s;
+  display: flex;
+  align-items: center;
+  outline: none;
+}
+
+.dropbtn:hover, .dropdown:focus-within .dropbtn {
+  background: #f0f6ff;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: #fff;
+  min-width: 140px;
+  box-shadow: 0 8px 22px rgba(40,50,80,.13);
+  border-radius: 8px;
+  z-index: 10;
+  padding: 0;
+  animation: dropdownFade .2s;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-8px);}
+  to   { opacity: 1; transform: translateY(0);}
+}
+
+.dropdown:focus-within .dropdown-content,
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  color: #283593;
+  padding: 11px 18px;
+  text-decoration: none;
+  display: block;
+  border-bottom: 1px solid #f4f4fa;
+  font-size: 1rem;
+  transition: background .14s;
+}
+
+.dropdown-content a:last-child {
+  border-bottom: none;
+}
+
+.dropdown-content a:hover {
+  background: #e3eafc;
+  color: #1568c7;
+}
+.navbar-lang-btn {
+  background: #2563a9;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-weight: 600;
+  padding: 6px 14px;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: background 0.16s;
+  
+}
+.navbar-lang-btn:hover {
+  background: #10447a;
+}
+
+.navbar-theme-btn {
+  background: #f7fafc;
+  color: #2563a9;
+  border: 1px solid #b0c4d7;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+body.dark-mode .navbar-theme-btn {
+  background: #23305d;
+  color: #f1f2f3;
+  border: 1px solid #444a5a;
+}
+@media (max-width: 700px) {
+  .navbar { flex-direction: column; height: auto; padding: 0 10px; }
+  .navbar-left { margin-bottom: 4px; }
+  .navbar-right { width: 100%; justify-content: flex-end;}
+}

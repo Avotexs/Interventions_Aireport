@@ -4,10 +4,10 @@ import { CampagnyService,Campagny } from './campagny-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {  Input, Output, EventEmitter } from '@angular/core';
-
+import { LangService } from '../services/lang.service';
 @Component({
   selector: 'app-campagny',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,],
   standalone: true,
   templateUrl: './campagny.html',
   styleUrl: './campagny.css',
@@ -38,7 +38,28 @@ editedName: string = '';
 editId:number|null=null;
 showAlreadyExistsPopupUpdate: boolean = false;
 
-  constructor(private campagnyService: CampagnyService) {
+selectedEntity = 'campagny';
+
+
+
+  toggleLang() {
+    this.langService.toggleLang();
+  }
+
+  onEntityChange(newValue: string) {
+    this.selectedEntity = newValue;
+    // Ajoute ici la logique de changement selon l'entité
+  }
+
+  get t() {
+    return this.langService.t;
+  }
+
+  get lang() {
+    return this.langService.lang;
+  }
+  
+  constructor(private campagnyService: CampagnyService,public langService: LangService) {
     console.log('Campagny component initialized');
 
     this.getCampagnyList();
