@@ -21,8 +21,7 @@ currentPage: number = 0;
 pageSize: number = 5;
 editingCampagny: Campagny | null = null;
 showPopup: boolean = false;
-newCampagny: Campagny = { name: '' };
-editedName: string = '';
+
 campagnyToDelete: number|null = null;
 showEmptyFieldPopup = false;
 showPopupSuppression = false;
@@ -30,7 +29,14 @@ showAlreadyExistsPopup = false;
 showSuccessPopup = false;
 showEditSuccessPopup = false;
 showDeleteSuccessPopup = false;
+//var pour modiffier le nom
 
+showEmptyFieldPopupUpdate = false;
+showEditPopup = false;
+newCampagny: Campagny = { name: '' };
+editedName: string = '';
+editId:number|null=null;
+showAlreadyExistsPopupUpdate: boolean = false;
 
   constructor(private campagnyService: CampagnyService) {
     console.log('Campagny component initialized');
@@ -77,31 +83,13 @@ get pageCount(): number {
   this.searchTerm = '';
   this.onSearchChange(); // relance une recherche vide
 }
-/*
-addCampagny() {
-    this.campagnyService.createCampagny(this.newCampagny).subscribe({
-      next: () => {
-        this.getCampagnyList();
-        this.newCampagny.name = '';
-        this.showPopup = false;
-      },
-      error: (err) => console.error(err)
-    });
-  }
-*/
-/*
-deleteCampagny(id: number) {
-    this.campagnyService.deleteCampagny(id).subscribe({
-      next: () => this.getCampagnyList(),
-      error: (err) => console.error(err)
-    });
-  }
-*/
 
 addCampagny() {
   // Vérifie si le champ est vide
   if (!this.newCampagny.name || this.newCampagny.name.trim() === '') {
+    this.showPopup = false;
     this.showEmptyFieldPopup = true;
+    
     return;
   }
 
@@ -142,28 +130,42 @@ closeAlreadyExistsPopup() {
 
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
+  this.showPopup = true;
 }
+/*
+
 startEdit(campagny: Campagny) {
     this.editingCampagny = campagny;
     this.editedName = campagny.name;
   }
+*/
 
-updateCampagny(id: number) {
+updateCampagny(id: number,editedName:string) {
   // Vérifie si le nouveau nom existe déjà chez une autre campagne
   if (
     this.campagnies.some(
-      c => c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
+      c => {
+        return c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase();
+      }
     )
   ) {
-    this.editingCampagny = null; // Cache la fenêtre d'édition
-    this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
+    this.showEditPopup = false; // Cache la fenêtre d'édition
+    this.showAlreadyExistsPopupUpdate = true; // Affiche le message d'erreur
+    
     return;
   }
 
+ if (!this.editedName || this.editedName.trim() === '') {
+    this.showEmptyFieldPopupUpdate = true;
+    this.showEditPopup = false;
+    return;
+  }
   // Modification si tout est OK
   this.campagnyService.updateCampagny(id, { name: this.editedName }).subscribe({
     next: () => {
+      
       this.getCampagnyList();
+      this.showEditPopup = false;
       this.editingCampagny = null; // Cache la fenêtre d'édition
       this.editedName = '';
       this.showEditSuccessPopup = true; // Affiche le popup succès
@@ -172,14 +174,41 @@ updateCampagny(id: number) {
   });
 }
 
+openEditPopup(campagny: Campagny) {
+
+  this.editingCampagny = campagny ; // Copie pour édition
+  this.editedName = campagny.name;
+  this.editId= campagny.id ?? null;
+  this.showEditPopup = true;
+}
+
+
+closeEditPopup() {
+  this.showEditPopup = false;
+  this.editingCampagny = null;
+  this.editedName = '';
+}
+
+
+closeEmptyFieldPopupUpdate() {
+  this.showEmptyFieldPopupUpdate = false;
+  this.showEditPopup = true;
+}
 
 closeEditSuccessPopup() {
   this.showEditSuccessPopup = false;
 }
+
 closeAlreadyExistsPopupUpdate() {
-  this.showAlreadyExistsPopup = false;
+  this.showAlreadyExistsPopupUpdate = false;
   // On ré-affiche la fenêtre d’édition avec le même nom
   this.editingCampagny = { ...this.editingCampagny, name: this.editedName };
+  this.showEditPopup = true; // On ré-affiche la fenêtre d'édition
+  
+}
+closeAlreadyExistsPopupAdd() {
+  this.showAlreadyExistsPopup = false;  
+  this.showPopup = true; // On ré-affiche la fenêtre d'ajout
 }
 
   askDelete(id: number) {

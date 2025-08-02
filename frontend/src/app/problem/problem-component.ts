@@ -27,6 +27,11 @@ export class ProblemComponent {
   showEditSuccessPopup = false;
   showDeleteSuccessPopup = false;
   showEmptyFieldPopupUpdate = false;
+  //var pour modiffier le nom
+  showEditPopup = false;
+  editId:number|null=null;
+  showAlreadyExistsPopupUpdate: boolean = false;
+
   /**
    * Constructor that injects the ProblemService and initializes data.
    * @param problemService - Service for accessing problems from backend
@@ -97,7 +102,9 @@ getProblemList() {
   addProblem() {
   // Vérifie si le champ est vide
   if (!this.newProblem.name || this.newProblem.name.trim() === '') {
-    this.showEmptyFieldPopup = true;
+   
+    this.showPopup = false;
+     this.showEmptyFieldPopup = true;
     return;
   }
 
@@ -138,9 +145,11 @@ closeAlreadyExistsPopup() {
 
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
+  this.showPopup = true;
 }
 closeEmptyFieldPopupUpdate() {
   this.showEmptyFieldPopupUpdate = false;
+  this.showEditPopup = true;
 }
 
 startEdit(problem: Problem) {
@@ -151,27 +160,33 @@ startEdit(problem: Problem) {
 
  
 
-updateProblem(id: number) {
-  // Vérifie si le champ est vide ou ne contient que des espaces
-  if (!this.editedName || !this.editedName.trim()) {
-    this.showEmptyFieldPopupUpdate  = true; // Affiche le popup d'erreur pour champ vide
-    return;
-  }
-  // Vérifie si le nouveau nom existe déjà chez une autre problème
+updateProblem(id: number,editedName:string) {
+  // Vérifie si le nouveau nom existe déjà chez une autre campagne
   if (
     this.problems.some(
-      c => c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
+      c => {
+        return c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase();
+      }
     )
   ) {
-    this.editingProblem = null; // Cache la fenêtre d'édition
-    this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
+    this.showEditPopup = false; // Cache la fenêtre d'édition
+    this.showAlreadyExistsPopupUpdate = true; // Affiche le message d'erreur
+    
     return;
   }
 
+// Vérifie si le champ est vide
+  if (!this.editedName || this.editedName.trim() === '') {
+    this.showEmptyFieldPopupUpdate = true;
+    this.showEditPopup = false;
+    return;
+  }
   // Modification si tout est OK
   this.problemService.updateProblem(id, { name: this.editedName }).subscribe({
     next: () => {
+
       this.getProblemList();
+      this.showEditPopup = false;
       this.editingProblem = null; // Cache la fenêtre d'édition
       this.editedName = '';
       this.showEditSuccessPopup = true; // Affiche le popup succès
@@ -180,14 +195,42 @@ updateProblem(id: number) {
   });
 }
 
+openEditPopup(problem: Problem) {
+
+  this.editingProblem = problem ; // Copie pour édition
+  this.editedName = problem.name;
+  this.editId= problem.id ?? null;
+  this.showEditPopup = true;
+}
+
+
+closeEditPopup() {
+  this.showEditPopup = false;
+  this.editingProblem = null;
+  this.editedName = '';
+}
+
+
+
+
+
 closeEditSuccessPopup() {
   this.showEditSuccessPopup = false;
 }
 closeAlreadyExistsPopupUpdate() {
-  this.showAlreadyExistsPopup = false;
+  this.showAlreadyExistsPopupUpdate = false;
   // On ré-affiche la fenêtre d’édition avec le même nom
   this.editingProblem = { ...this.editingProblem, name: this.editedName };
+this.showEditPopup = true; // On ré-affiche la fenêtre d'édition
 }
+
+closeAlreadyExistsPopupAdd() {
+  this.showAlreadyExistsPopup = false;
+
+  this.showPopup = true; // On ré-affiche la fenêtre d'ajout
+}
+
+
 
   askDelete(id: number) {
     this.problemToDelete = id;

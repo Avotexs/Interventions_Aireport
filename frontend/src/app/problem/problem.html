@@ -35,13 +35,9 @@
   <tbody>
     <tr *ngFor="let problem of filteredProblems()">
       <td>{{ problem.id }}</td>
-      <td *ngIf="editingProblem?.id !== problem.id">{{ problem.name }}</td>
-      <td *ngIf="editingProblem?.id === problem.id">
-        <input [(ngModel)]="editedName" />
-      </td>
+      <td>{{ problem.name }}</td>
       <td>
-        <button *ngIf="editingProblem?.id !== problem.id" (click)="startEdit(problem)">✏️</button>
-        <button *ngIf="editingProblem?.id === problem.id" (click)="updateProblem(problem.id!)">💾</button>
+        <button (click)="openEditPopup(problem)">✏</button>
         <button (click)="askDelete(problem.id!)">🗑️</button>
       </td>
     </tr>
@@ -87,14 +83,26 @@
 
 <div *ngIf="showPopup" class="popup-overlay"></div>
 
-<!-- Popup campagne existe déjà -->
-<div *ngIf="showAlreadyExistsPopup" class="popup-box">
+<!-- Popup campagne existe déjà Update-->
+<div *ngIf="showAlreadyExistsPopupUpdate" class="popup-box">
   <h3>La campagne existe déjà !</h3>
   <div style="margin-top: 10px;">
     <button (click)="closeAlreadyExistsPopupUpdate()">OK</button>
   </div>
 </div>
+<div *ngIf="showAlreadyExistsPopupUpdate" class="popup-overlay"></div>
+
+<!-- Popup campagne existe Ajout -->
+<div *ngIf="showAlreadyExistsPopup" class="popup-box">
+  <h3>La campagne existe déjà !</h3>
+  <div style="margin-top: 10px;">
+    <button (click)="closeAlreadyExistsPopupAdd()">OK</button>
+  </div>
+</div>
 <div *ngIf="showAlreadyExistsPopup" class="popup-overlay"></div>
+
+
+
 
 <!-- POPUP DE CONFIRMATION -->
 <div
@@ -121,7 +129,7 @@
 ></div>
 
 
-<!-- POPUP Champ vide -->
+<!-- POPUP Champ vide Update-->
 <div
   *ngIf="showEmptyFieldPopupUpdate"
   style="
@@ -136,7 +144,7 @@
   </div>
 </div>
 
-<!-- Popup champ vide -->
+<!-- Popup champ vide Ajout-->
 <div *ngIf="showEmptyFieldPopup" class="popup-box">
   <h3>Le champ est vide !</h3>
   <div style="margin-top: 10px;">
@@ -175,4 +183,12 @@
 <div *ngIf="showDeleteSuccessPopup" class="popup-overlay"></div>
 
 
-
+<!-- Popup de Modiffication-->
+<div *ngIf="showEditPopup" class="popup-box">
+  <h3>Modifier la campagne</h3>
+  <input [(ngModel)]="editedName" placeholder="Nom de la campagne" />
+  <div>
+    <button [disabled]="!editId" (click)="updateProblem(editId!, editedName)">💾 Enregistrer</button>
+    <button (click)="closeEditPopup()">❌ Annuler</button>
+  </div>
+</div>
