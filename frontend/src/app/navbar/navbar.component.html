@@ -1,0 +1,28 @@
+<nav class="navbar-blue">
+  <div class="navbar-links">
+   
+  </div>
+
+  <div class="navbar-actions">
+    <!-- ... ton code navbar ... -->
+    <button class="navbar-lang-btn" (click)="toggleLang()">
+    {{ lang === 'fr' ? 'English' : 'Français' }}
+    </button>
+ <button class="navbar-theme-btn" (click)="toggleTheme()">
+  <span *ngIf="!darkMode">🌙 Dark</span>
+  <span *ngIf="darkMode">☀️ Light</span>
+</button>
+    <div class="navbar-right">
+    <div class="dropdown" tabindex="0">
+      <button class="dropbtn">
+        Menu &#x25BC;
+      </button>
+      <div class="dropdown-content">
+        <a href="#">Profil</a>
+      </div>
+
+    </div>
+  </div>
+  </div>
+ 
+</nav>

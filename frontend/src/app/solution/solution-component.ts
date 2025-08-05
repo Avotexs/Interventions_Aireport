@@ -39,6 +39,61 @@ searchTerm: string = '';
   editId:number|null=null;
 showAlreadyExistsPopupUpdate: boolean = false;
 
+lang: 'fr' | 'en' = 'fr';
+
+translations = {
+  fr: {
+    title: 'Liste des solutions',
+    add: 'Ajouter',
+    searchPlaceholder: '🔍 Rechercher une solution...',
+    emptyList: 'La liste est vide',
+    name: 'Nom',
+    id: 'ID',
+    edit: '✏ Modifier',
+    save: '💾 Enregistrer',
+    delete: '🗑 Supprimer',
+    confirmDelete: 'Voulez-vous vraiment supprimer cette solution ?',
+    confirm: 'Confirmer',
+    cancel: 'Annuler',
+    successAdd: 'Ajout avec succès !',
+    successEdit: 'Modification avec succès !',
+    successDelete: 'Suppression avec succès !',
+    exists: 'La solution existe déjà !',
+    emptyField: 'Le champ est vide !',
+    addTitle: 'Ajouter une solution',
+    componentName: 'Nom de la solution',
+    editCampaign: 'Modifier la solution',
+    actions: 'Actions'
+  },
+  en: {
+    title: 'Solutions List',
+    add: 'Add',
+    searchPlaceholder: '🔍 Search a solution...',
+    emptyList: 'The list is empty',
+    name: 'Name',
+    id: 'ID',
+    edit: '✏ Edit',
+    save: '💾 Save',
+    delete: '🗑 Delete',
+    confirmDelete: 'Do you really want to delete this solution?',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    successAdd: 'Successfully added!',
+    successEdit: 'Successfully edited!',
+    successDelete: 'Successfully deleted!',
+    exists: 'Solution already exists!',
+    emptyField: 'The field is empty!',
+    addTitle: 'Add a solution',
+    componentName: 'Solution Name',
+    editCampaign: 'Edit solution',
+    actions: 'Actions'
+  }
+};
+
+get t() {
+  return this.translations[this.lang];
+}
+
 
   constructor(private solutionService: SolutionService) {
     console.log('Solution component initialized');

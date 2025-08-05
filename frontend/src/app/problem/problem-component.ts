@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { ProblemService, Problem } from './problem-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import { Action } from 'rxjs/internal/scheduler/Action';
+import { LangService } from '../services/lang.service';
 @Component({
   selector: 'app-problem', 
   imports: [CommonModule, FormsModule], 
@@ -32,12 +33,34 @@ export class ProblemComponent {
   editId:number|null=null;
   showAlreadyExistsPopupUpdate: boolean = false;
 
+selectedEntity = 'problem';
+
+  
+  toggleLang() {
+    this.langService.toggleLang();
+  }
+
+  onEntityChange(newValue: string) {
+    this.selectedEntity = newValue;
+    // Ajoute ici la logique de changement selon l'entité
+  }
+
+  get t() {
+    return this.langService.t;
+  }
+
+  get lang() {
+    return this.langService.lang;
+  }
+  
+
+
   /**
    * Constructor that injects the ProblemService and initializes data.
    * @param problemService - Service for accessing problems from backend
    */
 
-    constructor(private problemService: ProblemService) {
+    constructor(private problemService: ProblemService,public langService: LangService) {
     this.getProblemList();
   }
 
