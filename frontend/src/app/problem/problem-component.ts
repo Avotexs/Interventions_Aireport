@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ProblemService, Problem } from './problem-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LangService } from '../services/lang.service';
 
 @Component({
   selector: 'app-problem', 
@@ -27,12 +28,28 @@ export class ProblemComponent {
   showEditSuccessPopup = false;
   showDeleteSuccessPopup = false;
   showEmptyFieldPopupUpdate = false;
+  totalItems: number = 0;
+  selectedEntity = 'problem';
+
+  toggleLang() {
+   this.langService.toggleLang();
+ }
+
+  onEntityChange(newValue: string) {
+   this.selectedEntity = newValue;
+ }
+ get t() {
+   return this.langService.t;
+ }
+ get lang() {
+   return this.langService.lang;
+}
   /**
    * Constructor that injects the ProblemService and initializes data.
    * @param problemService - Service for accessing problems from backend
    */
 
-    constructor(private problemService: ProblemService) {
+    constructor(private problemService: ProblemService, private langService: LangService) {
     this.getProblemList();
   }
 

@@ -4,6 +4,7 @@ import { CampagnyService,Campagny } from './campagny-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {  Input, Output, EventEmitter } from '@angular/core';
+import { LangService } from '../services/lang.service';
 
 @Component({
   selector: 'app-campagny',
@@ -30,9 +31,23 @@ showAlreadyExistsPopup = false;
 showSuccessPopup = false;
 showEditSuccessPopup = false;
 showDeleteSuccessPopup = false;
+totalItems: number = 0;
+selectedEntity = 'campagny';
 
+  toggleLang() {
+   this.langService.toggleLang();
+ }
 
-  constructor(private campagnyService: CampagnyService) {
+  onEntityChange(newValue: string) {
+   this.selectedEntity = newValue;
+ }
+ get t() {
+   return this.langService.t;
+ }
+ get lang() {
+   return this.langService.lang;
+}
+  constructor(private campagnyService: CampagnyService,public langService: LangService) {
     console.log('Campagny component initialized');
 
     this.getCampagnyList();
@@ -77,26 +92,7 @@ get pageCount(): number {
   this.searchTerm = '';
   this.onSearchChange(); // relance une recherche vide
 }
-/*
-addCampagny() {
-    this.campagnyService.createCampagny(this.newCampagny).subscribe({
-      next: () => {
-        this.getCampagnyList();
-        this.newCampagny.name = '';
-        this.showPopup = false;
-      },
-      error: (err) => console.error(err)
-    });
-  }
-*/
-/*
-deleteCampagny(id: number) {
-    this.campagnyService.deleteCampagny(id).subscribe({
-      next: () => this.getCampagnyList(),
-      error: (err) => console.error(err)
-    });
-  }
-*/
+
 
 addCampagny() {
   // Vérifie si le champ est vide

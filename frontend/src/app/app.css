@@ -1,112 +1,597 @@
-.airport-layout {
-  display: flex;
-  min-height: 100vh;
-  background: #f6fbff;
+/* Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.airport-sidebar {
-  width: 255px;
-  background: linear-gradient(180deg, #1764ad 60%, #37b6e9 120%);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  padding-top: 24px;
-  padding-bottom: 20px;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 2000;
-  box-shadow: 2px 0 24px rgba(40,80,130,0.14);
-}
-
-.logo-zone {
-  font-size: 1.65rem;
-  font-weight: bold;
-  color: #fff;
-  letter-spacing: 0.04em;
-  margin-bottom: 32px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 9px 0 9px 32px;
-  border-bottom: 1.5px solid #ffffff22;
-}
-
-.airport-sidebar nav {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 32px;
+html, body {
   width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
 }
 
-.airport-sidebar a {
+body {
+  position: relative;
+}
+
+/* Dashboard Layout */
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e3a8a;
+  color: white;
+  height: 40px;
+  z-index: 1000;
+}
+
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+}
+
+.menu-toggle span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: white;
+}
+
+/* Top Right Controls Group */
+.top-right-controls {
   display: flex;
   align-items: center;
   gap: 15px;
-  font-size: 1.14rem;
-  font-weight: 600;
-  color: #fff;
+  margin-right: 10px;
+}
+
+/* Bouton de langue */
+.language-button {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.language-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.top-icon {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Layout Container */
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 180px;
+  background: #1e3a8a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, width 0.3s ease;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+body.sidebar-collapsed .sidebar {
+  transform: translateX(-180px);
+  width: 0;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  max-height: 80px;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
   text-decoration: none;
-  padding: 13px 0 13px 32px;
-  margin-right: 18px;
-  border-radius: 0 18px 18px 0;
-  width: calc(100% - 18px);
-  transition: background 0.18s, color 0.18s, box-shadow 0.19s;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 12px 15px;
+  transition: background-color 0.2s;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: 500;
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f3f4f6;
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.sidebar-hidden {
+  margin-left: -180px;
+}
+
+/* Plane Switch - version adaptée pour le top bar */
+.top-plane-switch {
+  --dot: #fff;
+  --street: #6B6D76;
+  --street-line: #A8AAB4;
+  --street-line-mid: #C0C2C8;
+  --sky-1: #60A7FA;
+  --sky-2: #2F8EFC;
+  --light-1: rgba(255, 233, 0, 1);
+  --light-2: rgba(255, 233, 0, .3);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  transform: scale(0.8); /* Réduit légèrement la taille pour l'adapter à la barre du haut */
+}
+
+.plane-switch input {
+  display: none;
+}
+
+.plane-switch input + div {
+  position: relative;
+  overflow: hidden;
+  width: 80px;
+  height: 25px;
+  padding: 1px;
+  border-radius: 13px;
+  background: linear-gradient(90deg, var(--street) 0%, var(--street) 25%, var(--sky-1) 75%, var(--sky-2) 100%) left var(--p, 0%) top 0;
+  background-position-x: var(--p, 0%);
+  background-size: 400% auto;
+  transition: background-position 0.6s;
+  /* Compatible mask-image */
+  -webkit-mask-image: radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+}
+
+.plane-switch input + div:before, 
+.plane-switch input + div:after {
+  content: "";
+  display: block;
+  position: absolute;
+  transform: translateX(var(--s, 0));
+  transition: transform 0.3s;
+}
+
+.plane-switch input + div:before {
+  width: 42px;
+  right: 2px;
+  top: 4px;
+  height: 1px;
+  background: var(--street-line);
+  box-shadow: 0 16px 0 0 var(--street-line);
+}
+
+.plane-switch input + div:after {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  left: 23px;
+  top: 1px;
+  animation: lights2 2s linear infinite;
+  box-shadow: inset 0 0 0 2px var(--light-1), 0 21px 0 var(--light-1), 8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-2), 16px 21px 0 var(--light-2);
+}
+
+.plane-switch input + div span {
+  display: block;
+  position: absolute;
+}
+
+.plane-switch input + div span.street-middle {
+  top: 12px;
+  left: 21px;
+  width: 3px;
+  height: 1px;
+  transform: translateX(var(--s, 0));
+  background: var(--street-line-mid);
+  box-shadow: 5px 0 0 var(--street-line-mid), 10px 0 0 var(--street-line-mid), 15px 0 0 var(--street-line-mid), 20px 0 0 var(--street-line-mid), 25px 0 0 var(--street-line-mid);
+  transition: transform 0.3s;
+}
+
+.plane-switch input + div span.cloud {
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
+  background: #fff;
+  position: absolute;
+  top: var(--ct, 8px);
+  left: 100%;
+  opacity: var(--co, 0);
+  transition: opacity 0.3s;
+  animation: clouds2 2s linear infinite var(--cd, 0s);
+}
+
+.plane-switch input + div span.cloud:before, 
+.plane-switch input + div span.cloud:after {
+  content: "";
+  position: absolute;
+  transform: translateX(var(--cx, 0));
+  border-radius: 50%;
+  width: var(--cs, 5px);
+  height: var(--cs, 5px);
+  background: #fff;
+  bottom: 1px;
+  left: 1px;
+}
+
+.plane-switch input + div span.cloud:after {
+  --cs: 6px;
+  --cx: 4px;
+}
+
+.plane-switch input + div span.cloud.two {
+  --ct: 20px;
+  --cd: 1s;
+  opacity: var(--co-2, 0);
+}
+
+.plane-switch input + div div {
+  display: table;
   position: relative;
   z-index: 1;
+  padding: 5px;
+  border-radius: 50%;
+  background: var(--dot);
+  transform: translateX(var(--x, 0));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.35, 1.2);
 }
 
-.airport-sidebar a span {
-  font-size: 1.35rem;
-  min-width: 28px;
-  text-align: center;
+.plane-switch input + div div svg {
+  width: 13px;
+  height: 13px;
+  display: block;
+  color: var(--c, var(--street));
+  transition: color 0.6s;
 }
 
-.airport-sidebar a.active, .airport-sidebar a.router-link-active {
-  background: linear-gradient(90deg, #4ed7f1 90%, #fff0 100%);
-  color: #1764ad;
-  box-shadow: 1px 2px 14px rgba(40,80,130,0.10);
-  font-weight: 700;
+.plane-switch input:checked + div {
+  --p: 100%;
+  --x: 53px;
+  --s: -50px;
+  --c: var(--sky-2);
+  --co: .8;
+  --co-2: .6;
 }
 
-.airport-sidebar a:hover:not(.active) {
-  background: #ffffff22;
-  color: #fff;
-}
-
-.airport-main {
-  margin-left: 255px;
-  width: calc(100vw - 255px);
-  padding: 38px 38px 38px 38px;
-  min-height: 100vh;
-  background: #f6fbff;
-  transition: margin-left 0.2s;
-}
-
-@media (max-width: 900px) {
-  .airport-sidebar {
-    width: 60px;
-    padding-top: 12px;
+@keyframes lights2 {
+  20%, 30% {
+    box-shadow: inset 0 0 0 2px var(--light-2), 0 21px 0 var(--light-2), 8px 0 0 var(--light-1), 8px 21px 0 var(--light-1), 16px 0 0 var(--light-2), 16px 21px 0 var(--light-2);
   }
-  .logo-zone span { display: none; }
-  .logo-zone { padding-left: 8px; font-size: 1.2rem;}
-  .airport-sidebar a {
-    font-size: 0;
-    padding: 13px 0 13px 8px;
-    margin-right: 0;
-    border-radius: 14px;
-    justify-content: center;
-    width: 100%;
+
+  55%, 65% {
+    box-shadow: inset 0 0 0 2px var(--light-2), 0 21px 0 var(--light-2), 8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-1), 16px 21px 0 var(--light-1);
   }
-  .airport-sidebar a span {
-    font-size: 1.5rem;
-    min-width: 32px;
+
+  90%, 100% {
+    box-shadow: inset 0 0 0 2px var(--light-1), 0 21px 0 var(--light-1), 8px 0 0 var(--light-2), 8px 21px 0 var(--light-2), 16px 0 0 var(--light-2), 16px 21px 0 var(--light-2);
   }
-  .airport-main {
-    margin-left: 60px;
-    padding: 12px 6px 6px 6px;
+}
+
+@keyframes clouds2 {
+  97% {
+    transform: translateX(-72px);
+    visibility: visible;
   }
+
+  98%, 100% {
+    visibility: hidden;
+  }
+
+  99% {
+    transform: translateX(-72px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    width: 240px;
+    height: calc(100vh - 40px);
+    z-index: 990;
+    left: -240px; /* initialement caché */
+  }
+  
+  body.sidebar-collapsed .sidebar {
+    left: 0; /* visible quand sidebar-collapsed est actif */
+    transform: none;
+    width: 240px;
+  }
+  
+  body.sidebar-collapsed:before {
+    content: '';
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 980;
+  }
+  
+  .top-plane-switch {
+    transform: scale(0.7); /* Encore plus petit sur mobile */
+  }
+  
+  .top-right-controls {
+    gap: 8px;
+  }
+  
+  .language-button {
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+}
+
+/* Dark Theme Styles */
+body.dark {
+  background: #181a1b;
+  color: #e0e0e0;
+}
+
+body.dark .dashboard-layout,
+body.dark .main-content {
+  background: #181a1b;
+  color: #e0e0e0;
+}
+
+body.dark .sidebar {
+  background: #23272f;
+  color: #e0e0e0;
+}
+
+body.dark .nav-item,
+body.dark .nav-item.active {
+  color: #e0e0e0;
+}
+
+body.dark .nav-item.active {
+  background-color: #2c3440;
+}
+
+body.dark .top-bar {
+  background: #23272f;
+  color: #e0e0e0;
+}
+
+body.dark .top-icon svg,
+body.dark .language-button {
+  color: #e0e0e0;
+}
+
+body.dark .table-wrapper,
+body.dark .pagination,
+body.dark .modal {
+  background: #23272f;
+  color: #e0e0e0;
+  border-color: #333;
+}
+
+body.dark .problem-table th {
+  background: #23272f;
+  color: #90caf9;
+  border-bottom: 2px solid #90caf9;
+}
+
+body.dark .problem-table td {
+  border-bottom: 1px solid #333;
+}
+
+body.dark .problem-table tbody tr:hover {
+  background: #23272f;
+}
+
+body.dark .btn-primary,
+body.dark .btn-outline,
+body.dark .btn-danger,
+body.dark .action-btn,
+body.dark .page-btn,
+body.dark .close-btn {
+  background: #23272f;
+  color: #90caf9;
+  border-color: #90caf9;
+}
+
+body.dark .btn-primary:hover,
+body.dark .btn-outline:hover,
+body.dark .btn-danger:hover,
+body.dark .action-btn:hover,
+body.dark .page-btn:hover,
+body.dark .close-btn:hover {
+  background: #90caf9;
+  color: #23272f;
+}
+
+body.dark .delete-btn,
+body.dark .delete-btn:hover {
+  border-color: #ef5350;
+  color: #ef5350;
+  background: #23272f;
+}
+
+body.dark .save-btn,
+body.dark .save-btn:hover {
+  border-color: #66bb6a;
+  color: #66bb6a;
+  background: #23272f;
+}
+
+body.dark .search-input,
+body.dark .form-input,
+body.dark .edit-input {
+  background: #181a1b;
+  color: #e0e0e0;
+  border-color: #333;
+}
+
+body.dark .search-input:focus,
+body.dark .form-input:focus,
+body.dark .edit-input:focus {
+  border-color: #90caf9;
+  box-shadow: 0 0 0 3px rgba(144, 202, 249, 0.1);
+}
+
+body.dark .modal-header,
+body.dark .modal-footer {
+  background: #23272f;
+  color: #90caf9;
+  border-color: #333;
+}
+
+body.dark .warning-text {
+  background: #2c3440;
+  color: #ef5350;
+  border-left-color: #ef5350;
+}
+
+body.dark .success-text {
+  background: #1b2a1b;
+  color: #66bb6a;
+  border-left-color: #66bb6a;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"] + .checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+input[type="checkbox"] + .checkbox-label .checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #90caf9;
+  border-radius: 4px;
+  position: relative;
+  margin-right: 10px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+input[type="checkbox"] + .checkbox-label .checkbox::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #90caf9;
+  border-radius: 2px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.3s;
+}
+
+input[type="checkbox"]:checked + .checkbox-label .checkbox {
+  background-color: #90caf9;
+  border-color: #90caf9;
+}
+
+input[type="checkbox"]:checked + .checkbox-label .checkbox::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+input[type="checkbox"]:checked + .checkbox-label .checkbox-icon {
+  opacity: 1;
+}
+
+input[type="checkbox"] + .checkbox-label .checkbox-icon {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+input[type="checkbox"]:checked + .checkbox-label .checkbox-icon path {
+  stroke: #181a1b;
+  stroke-width: 2;
+}
+
+input[type="checkbox"] + .checkbox-label .checkbox-icon path {
+  stroke: #90caf9;
+  stroke-width: 2;
 }

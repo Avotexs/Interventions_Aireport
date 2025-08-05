@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { SolutionService, Solution } from './solution-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LangService } from '../services/lang.service';
 
 
 @Component({
@@ -33,11 +34,26 @@ showSuccessPopup = false;
 showEditSuccessPopup = false;
 showDeleteSuccessPopup = false;
 solutionToDelete: number|null = null;
-     // Temporary edited name used in editing UI
+  totalItems: number = 0;
+selectedEntity = 'solution';
+
+  toggleLang() {
+   this.langService.toggleLang();
+ }
+
+  onEntityChange(newValue: string) {
+   this.selectedEntity = newValue;
+ }
+ get t() {
+   return this.langService.t;
+ }
+ get lang() {
+   return this.langService.lang;
+}
   
 
 
-  constructor(private solutionService: SolutionService) {
+  constructor(private solutionService: SolutionService, public langService: LangService) {
     console.log('Solution component initialized');
     this.getSolutionList();
   }
