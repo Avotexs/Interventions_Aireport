@@ -35,7 +35,7 @@ showEditSuccessPopup = false;
 showDeleteSuccessPopup = false;
 solutionToDelete: number|null = null;
   totalItems: number = 0;
-selectedEntity = '';
+selectedEntity = 'solution';
 
   toggleLang() {
    this.langService.toggleLang();

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <div class="solution-container">
   <div class="solution-header">
     <div>
@@ -8,85 +7,8 @@
     <button class="btn-primary" (click)="showPopup = true">
       <i class="fas fa-plus"></i> {{ t.addSolution }}
     </button>
-=======
-<!-- Bouton pour changer la langue -->
-<button (click)="lang = 'fr'" [disabled]="lang === 'fr'">Français</button>
-<button (click)="lang = 'en'" [disabled]="lang === 'en'">English</button>
-<h1>{{ t.title }}</h1>
-<!-- 🔍 Recherche -->
-<input
-  type="text"
-  [(ngModel)]="searchTerm"
-  placeholder="{{ t.searchPlaceholder }}"
-  (input)="onSearchChange()"
-  style="margin-bottom: 50px; padding: 6px;margin-right: 50px; width: 300px;margin-top: 50px;margin-left: 80px;"
-/>
-<!-- ❌ Bouton pour vider -->
-<button
-  *ngIf="searchTerm"
-  (click)="clearSearch()"
-  title="Effacer"
->
-  ✖
-</button>
-
-
-
-<!-- ➕ Bouton ajout -->
-<button (click)="showPopup = true" style="margin-top: 15px;width: 300px;">➕ {{ t.add }}</button>
-
-<h2>📋 {{ t.title }}</h2>
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>{{ t.name }}</th>
-      <th>{{ t.actions }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Si la liste est vide -->
-    <tr *ngIf="filteredSolutions().length === 0">
-      <td colspan="3" style="text-align: center;">{{ t.emptyList }}</td>
-    </tr>
-    <!-- Sinon, affiche les solutions -->
-    <tr *ngFor="let solution of filteredSolutions()">
-      <td>{{ solution.id }}</td>
-      <td>{{ solution.name }}</td>
-      <td>
-        <button (click)="openEditPopup(solution)">✏</button>
-        <button (click)="askDelete(solution.id!)">🗑</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- 📄 Pagination -->
-<div *ngIf="pageCount > 1" style="margin-top: 10px;">
-  <button *ngFor="let p of [].constructor(pageCount); let i = index"
-          (click)="goToPage(i)"
-          [disabled]="i === currentPage"
-          style="margin-right: 5px;">
-    {{ i + 1 }}
-  </button>
-</div>
-
-<!-- Fenêtre d'ajout -->
-<div *ngIf="showPopup" class="popup-box">
-  <h3>{{ t.addTitle }}</h3>
-  <input
-    type="text"
-    [(ngModel)]="newSolution.name"
-    placeholder="{{ t.componentName }}"
-    style="width: 100%; padding: 6px;"
-  />
-  <div style="margin-top: 10px;">
-    <button (click)="addSolution()">✅ {{ t.add }}</button>
-    <button (click)="showPopup = false">❌ {{ t.cancel }}</button>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
   </div>
 
-<<<<<<< HEAD
   <div class="search-box">
     <div class="search-wrapper">
       <i class="fas fa-search search-icon"></i>
@@ -101,25 +23,8 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-=======
-<!-- Popup solution existe déjà Add-->
-<div *ngIf="showAlreadyExistsPopup" class="popup-box">
-  <h3>{{ t.exists }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeAlreadyExistsPopupAdd()">{{ t.confirm }}</button>
-  </div>
-</div>
-<div *ngIf="showAlreadyExistsPopup" class="popup-overlay"></div>
-
-<!-- Popup solution existe déjà Update-->
-<div *ngIf="showAlreadyExistsPopupUpdate" class="popup-box">
-  <h3>{{ t.exists }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeAlreadyExistsPopupUpdate()">{{ t.confirm }}</button>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
   </div>
 
-<<<<<<< HEAD
   <div class="table-wrapper">
     <table class="solution-table">
       <thead>
@@ -153,24 +58,8 @@
         </tr>
       </tbody>
     </table>
-=======
-<!-- POPUP DE CONFIRMATION -->
-<div
-  *ngIf="showPopupSuppression"
-  style="
-    position: fixed; top: 20%; left: 35%; width: 30%; background: white;
-    padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px #999;
-    z-index: 1000;
-  "
->
-  <h3>{{ t.confirmDelete }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="confirmDelete()">{{ t.confirm }}</button>
-    <button (click)="cancelDelete()">{{ t.cancel }}</button>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
   </div>
 
-<<<<<<< HEAD
   <div *ngIf="pageCount > 1" class="pagination">
     <span class="page-info">{{ t.page }} {{ currentPage + 1 }} {{ t.of }} {{ pageCount }}</span>
     <div class="page-controls">
@@ -187,26 +76,8 @@
         <i class="fas fa-angle-double-right"></i>
       </button>
     </div>
-=======
-<!-- Optionnel, pour griser le fond -->
-<div
-  *ngIf="showPopupSuppression"
- class="popup-box"
-></div>
-
-<!-- POPUP Champ vide -->
-<div
-  *ngIf="showEmptyFieldPopupUpdate"
-  class="popup-box"
- 
->
-  <h3>{{ t.emptyField }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeEmptyFieldPopupUpdate()">{{ t.confirm }}</button>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
   </div>
 
-<<<<<<< HEAD
   <!-- Modal pour ajouter une solution -->
   <div *ngIf="showPopup" class="modal-overlay">
     <div class="modal">
@@ -233,16 +104,8 @@
         <button (click)="addSolution()" class="btn-primary">{{ t.add }}</button>
       </div>
     </div>
-=======
-<!-- Popup champ vide -->
-<div *ngIf="showEmptyFieldPopup" class="popup-box">
-  <h3>{{ t.emptyField }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeEmptyFieldPopup()">{{ t.confirm }}</button>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
   </div>
 
-<<<<<<< HEAD
   <!-- Modal de confirmation de suppression -->
   <div *ngIf="showPopupSuppression" class="modal-overlay">
     <div class="modal">
@@ -263,16 +126,8 @@
         <button (click)="confirmDelete()" class="btn-danger">{{ t.confirm }}</button>
       </div>
     </div>
-=======
-<!-- Popup succès -->
-<div *ngIf="showSuccessPopup" class="popup-box">
-  <h3>{{ t.successAdd }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeSuccessPopup()">{{ t.confirm }}</button>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
   </div>
 
-<<<<<<< HEAD
   <!-- Modal "Existe déjà" -->
   <div *ngIf="showAlreadyExistsPopup" class="modal-overlay">
     <div class="modal">
@@ -291,16 +146,8 @@
         <button (click)="closeAlreadyExistsPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
       </div>
     </div>
-=======
-<!-- Popup succès modification -->
-<div *ngIf="showEditSuccessPopup" class="popup-box">
-  <h3>{{ t.successEdit }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeEditSuccessPopup()">{{ t.confirm }}</button>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
   </div>
 
-<<<<<<< HEAD
   <!-- Modal "Champ vide" pour ajout -->
   <div *ngIf="showEmptyFieldPopup" class="modal-overlay">
     <div class="modal">
@@ -319,13 +166,6 @@
         <button (click)="closeEmptyFieldPopup()" class="btn-primary">{{ t.ok }}</button>
       </div>
     </div>
-=======
-<!-- Popup succès suppression -->
-<div *ngIf="showDeleteSuccessPopup" class="popup-box">
-  <h3>{{ t.successDelete }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeDeleteSuccessPopup()">{{ t.confirm }}</button>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
   </div>
 
   <!-- Modal "Champ vide" pour modification -->
@@ -348,7 +188,6 @@
     </div>
   </div>
 
-<<<<<<< HEAD
   <!-- Modal "Succès Ajout" -->
   <div *ngIf="showSuccessPopup" class="modal-overlay">
     <div class="modal">
@@ -368,17 +207,6 @@
       </div>
     </div>
   </div>
-=======
-<!-- Popup de Modiffication-->
-<div *ngIf="showEditPopup" class="popup-box">
-  <h3>{{ t.editCampaign }}</h3>
-  <input [(ngModel)]="editedName" placeholder="{{ t.componentName }}" />
-  <div>
-    <button [disabled]="!editId" (click)="updateSolution(editId!, editedName)">{{ t.save }}</button>
-    <button (click)="closeEditPopup()">❌ {{ t.cancel }}</button>
-  </div>
-</div>
->>>>>>> 18e7c6ff2b496885d45063a7bd2cbc7c6367ff0d
 
   <!-- Modal "Succès Modification" -->
   <div *ngIf="showEditSuccessPopup" class="modal-overlay">
