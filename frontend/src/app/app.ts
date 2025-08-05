@@ -15,6 +15,7 @@ export class App implements OnInit {
   protected readonly title = signal('frontend');
 
   sidebarVisible = true;
+  window = window; // Expose window object to template
 
   constructor(
     public langService: LangService,
@@ -23,6 +24,7 @@ export class App implements OnInit {
 
   ngOnInit() {
     // La logique d'initialisation est gérée par le service
+    this.updateSidebarClass();
   }
 
   toggleLang() {
@@ -44,7 +46,30 @@ export class App implements OnInit {
   
   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
-    document.body.classList.toggle('sidebar-collapsed');
+    this.updateSidebarClass();
+  }
+
+  private updateSidebarClass() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-overlay');
+    
+    if (window.innerWidth <= 768) {
+      // Mobile logic
+      if (this.sidebarVisible) {
+        sidebar?.classList.add('mobile-open');
+        overlay?.classList.add('active');
+      } else {
+        sidebar?.classList.remove('mobile-open');
+        overlay?.classList.remove('active');
+      }
+    } else {
+      // Desktop logic
+      if (this.sidebarVisible) {
+        document.body.classList.remove('sidebar-collapsed');
+      } else {
+        document.body.classList.add('sidebar-collapsed');
+      }
+    }
   }
 
   // Méthode pour basculer le mode sombre

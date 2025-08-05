@@ -1,11 +1,12 @@
 <div class="dashboard-layout">
   <!-- Top Bar -->
   <header class="top-bar">
-    <button class="menu-toggle" id="sidebarToggle">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+    <!-- Ajoutez l’évènement click -->
+<button class="menu-toggle"
+        id="sidebarToggle"
+        (click)="toggleSidebar()">
+  <span></span><span></span><span></span>
+</button>
     
     <div class="top-right-controls">
       <!-- Bouton de langue avec la syntaxe Angular -->
@@ -39,6 +40,9 @@
   </header>
 
   <div class="layout">
+    <!-- Mobile overlay -->
+    <div id="mobile-overlay" class="mobile-overlay" (click)="toggleSidebar()"></div>
+    
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="image-container">
@@ -89,7 +93,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="main-content" [ngClass]="{'sidebar-hidden': !sidebarVisible}">
+    <main class="main-content" [ngClass]="{'sidebar-hidden': !sidebarVisible && window.innerWidth > 768}">
       <router-outlet></router-outlet>
     </main>
   </div>
