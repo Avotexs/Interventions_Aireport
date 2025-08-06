@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { SolutionService, Solution } from './solution-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LangService } from '../services/lang.service';
 
 
 @Component({
@@ -25,77 +26,34 @@ searchTerm: string = '';
   noResultFound: boolean = false;
   showPopup: boolean = false;
   campagnyToDelete: number|null = null;
-  showEmptyFieldPopup = false;
-  showEmptyFieldPopupUpdate = false;
-  showPopupSuppression = false;
-  showAlreadyExistsPopup = false;
-  showSuccessPopup = false;
-  showEditSuccessPopup = false;
-  showDeleteSuccessPopup = false;
-  solutionToDelete: number|null = null;
-  
-    //var pour modiffier le nom
-  showEditPopup = false;
-  editId:number|null=null;
-showAlreadyExistsPopupUpdate: boolean = false;
+showEmptyFieldPopup = false;
+showEmptyFieldPopupUpdate = false;
+showPopupSuppression = false;
+showAlreadyExistsPopup = false;
+showSuccessPopup = false;
+showEditSuccessPopup = false;
+showDeleteSuccessPopup = false;
+solutionToDelete: number|null = null;
+  totalItems: number = 0;
+selectedEntity = 'solution';
 
-lang: 'fr' | 'en' = 'fr';
+  toggleLang() {
+   this.langService.toggleLang();
+ }
 
-translations = {
-  fr: {
-    title: 'Liste des solutions',
-    add: 'Ajouter',
-    searchPlaceholder: '🔍 Rechercher une solution...',
-    emptyList: 'La liste est vide',
-    name: 'Nom',
-    id: 'ID',
-    edit: '✏ Modifier',
-    save: '💾 Enregistrer',
-    delete: '🗑 Supprimer',
-    confirmDelete: 'Voulez-vous vraiment supprimer cette solution ?',
-    confirm: 'Confirmer',
-    cancel: 'Annuler',
-    successAdd: 'Ajout avec succès !',
-    successEdit: 'Modification avec succès !',
-    successDelete: 'Suppression avec succès !',
-    exists: 'La solution existe déjà !',
-    emptyField: 'Le champ est vide !',
-    addTitle: 'Ajouter une solution',
-    componentName: 'Nom de la solution',
-    editCampaign: 'Modifier la solution',
-    actions: 'Actions'
-  },
-  en: {
-    title: 'Solutions List',
-    add: 'Add',
-    searchPlaceholder: '🔍 Search a solution...',
-    emptyList: 'The list is empty',
-    name: 'Name',
-    id: 'ID',
-    edit: '✏ Edit',
-    save: '💾 Save',
-    delete: '🗑 Delete',
-    confirmDelete: 'Do you really want to delete this solution?',
-    confirm: 'Confirm',
-    cancel: 'Cancel',
-    successAdd: 'Successfully added!',
-    successEdit: 'Successfully edited!',
-    successDelete: 'Successfully deleted!',
-    exists: 'Solution already exists!',
-    emptyField: 'The field is empty!',
-    addTitle: 'Add a solution',
-    componentName: 'Solution Name',
-    editCampaign: 'Edit solution',
-    actions: 'Actions'
-  }
-};
-
-get t() {
-  return this.translations[this.lang];
+  onEntityChange(newValue: string) {
+   this.selectedEntity = newValue;
+ }
+ get t() {
+   return this.langService.t;
+ }
+ get lang() {
+   return this.langService.lang;
 }
+  
 
 
-  constructor(private solutionService: SolutionService) {
+  constructor(private solutionService: SolutionService, public langService: LangService) {
     console.log('Solution component initialized');
     this.getSolutionList();
   }
@@ -140,7 +98,6 @@ addSolution() {
   // Vérifie si le champ est vide
   if (!this.newSolution.name || this.newSolution.name.trim() === '') {
     this.showEmptyFieldPopup = true;
-     this.showPopup = false;
     return;
   }
 
@@ -166,11 +123,7 @@ addSolution() {
     error: (err) => console.error(err)
   });
 }
-closeAlreadyExistsPopupAdd() {
-  this.showAlreadyExistsPopup = false;
-  // On ré-affiche la fenêtre d’édition avec le même nom
-  this.showPopup = true; // On ré-affiche la fenêtre d'ajout
-  }
+
 
   closeSuccessPopup() {
   this.showSuccessPopup = false;
@@ -185,12 +138,10 @@ closeAlreadyExistsPopup() {
 
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
-  this.showPopup = true;
 }
 
 closeEmptyFieldPopupUpdate() {
   this.showEmptyFieldPopupUpdate = false;
-  this.showEditPopup = true;
 }
 startEdit(solution: Solution) {
     this.editingSolution = solution;
@@ -204,11 +155,10 @@ startEdit(solution: Solution) {
     });
   }
 
-updateSolution(id: number, editedName: string) {
+updateSolution(id: number) {
   // Vérifie si le champ est vide ou ne contient que des espaces
   if (!this.editedName || !this.editedName.trim()) {
     this.showEmptyFieldPopupUpdate  = true; // Affiche le popup d'erreur pour champ vide
-    this.showEditPopup = false;
     return;
   }
 
@@ -218,10 +168,8 @@ updateSolution(id: number, editedName: string) {
       c => c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
     )
   ) {
-    this.showEditPopup = false; // Cache la fenêtre d'édition
-    this.showAlreadyExistsPopupUpdate = true; // Affiche le message d'erreur
-    
-  
+    this.editingSolution = null; // Cache la fenêtre d'édition
+    this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
     return;
   }
 
@@ -229,7 +177,6 @@ updateSolution(id: number, editedName: string) {
   this.solutionService.updateSolution(id, { name: this.editedName }).subscribe({
     next: () => {
       this.getSolutionList();
-      this.showEditPopup = false;
       this.editingSolution = null; // Cache la fenêtre d'édition
       this.editedName = '';
       this.showEditSuccessPopup = true; // Affiche le popup succès
@@ -238,33 +185,13 @@ updateSolution(id: number, editedName: string) {
   });
 }
 
-openEditPopup(problem: Solution) {
-
-  this.editingSolution = problem ; // Copie pour édition
-  this.editedName = problem.name;
-  this.editId= problem.id ?? null;
-  this.showEditPopup = true;
-}
-
-
-closeEditPopup() {
-  this.showEditPopup = false;
-  this.editingSolution = null;
-  this.editedName = '';
-}
-
-
-
-
-
 closeEditSuccessPopup() {
   this.showEditSuccessPopup = false;
 }
 closeAlreadyExistsPopupUpdate() {
-  this.showAlreadyExistsPopupUpdate = false;
+  this.showAlreadyExistsPopup = false;
   // On ré-affiche la fenêtre d’édition avec le même nom
   this.editingSolution = { ...this.editingSolution, name: this.editedName };
-  this.showEditPopup = true; // On ré-affiche la fenêtre d'édition
 }
 
   askDelete(id: number) {

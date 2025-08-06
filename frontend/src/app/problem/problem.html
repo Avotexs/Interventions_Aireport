@@ -1,200 +1,196 @@
-
-<!-- Bouton pour changer la langue -->
-<button (click)="toggleLang()">
-  {{ lang === 'fr' ? 'English' : 'Français' }}
-</button>
-<p>{{ t.title }}</p>
-
-<!-- 🔍 Recherche -->
-
-<input
-  type="text"
-  [(ngModel)]="searchTerm"
-  placeholder="{{ t.searchPlaceholder }}"
-  (input)="onSearchChange()"
-  style="margin-bottom: 10px; padding: 6px;"
-/>
-<p> </p>
-   <!-- ➕ Bouton ajout -->
-  <button (click)="showPopup = true" style="margin-top: 15px;">➕ {{ t.add }}</button>
-
-<!-- ❌ Bouton pour vider -->
-  <button
-    *ngIf="searchTerm"
-    (click)="clearSearch()"
-    title="Effacer"
-  >
-    ✖
-  </button>
-
-<h1>{{ t.title }}</h1>
-
-<!-- 📊 Tableau -->
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>{{ t.name }}</th>
-      <th>{{ t.actions }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let problem of filteredProblems()">
-      <td>{{ problem.id }}</td>
-      <td>{{ problem.name }}</td>
-      <td>
-        <button (click)="openEditPopup(problem)">✏</button>
-        <button (click)="askDelete(problem.id!)">🗑️</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- 📄 Pagination -->
-<div *ngIf="pageCount > 1" style="margin-top: 10px;">
-  <button *ngFor="let p of [].constructor(pageCount); let i = index"
-          (click)="goToPage(i)"
-          [disabled]="i === currentPage"
-          style="margin-right: 5px;">
-    {{ i + 1 }}
-  </button>
-</div>
-
-
-
-<!-- 🪟 Pop-up -->
-<div *ngIf="showPopup" style="
-    position: fixed;
-    top: 20%;
-    left: 35%;
-    width: 30%;
-    background: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px #999;
-    z-index: 1000;
-  ">
-  <h3>{{ t.addTitle }}</h3>
-  <input
-    type="text"
-    [(ngModel)]="newProblem.name"
-    placeholder="{{ t.name }}"
-    style="width: 100%; padding: 6px;"
-  />
-  <div style="margin-top: 10px;">
-    <button (click)="addProblem()">✅ {{ t.add }}</button>
-    <button (click)="showPopup = false">❌ {{ t.cancel }}</button>
+<div class="problem-container">
+  <div class="problem-header">
+    <div>
+      <h1 class="problem-title">{{ t.problemTitle }}</h1>
+      <p class="problem-subtitle">{{ t.problemSubtitle }}</p>
+    </div>
+    <button class="btn-primary" (click)="showPopup = true">
+      <i class="fas fa-plus"></i> {{ t.addProblem }}
+    </button>
   </div>
-</div>
 
-<div *ngIf="showPopup" class="popup-overlay"></div>
-
-<!-- Popup problème existe déjà Update-->
-<div *ngIf="showAlreadyExistsPopupUpdate" class="popup-box">
-  <h3>{{ t.exists }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeAlreadyExistsPopupUpdate()">{{ t.confirm }}</button>
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="{{ t.searchProblem }}"
+        (input)="onSearchChange()"
+        class="search-input"
+      />
+      <button *ngIf="searchTerm" (click)="clearSearch()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
   </div>
-</div>
-<div *ngIf="showAlreadyExistsPopupUpdate" class="popup-overlay"></div>
 
-<!-- Popup problème existe Ajout -->
-<div *ngIf="showAlreadyExistsPopup" class="popup-box">
-  <h3>{{ t.exists }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeAlreadyExistsPopupAdd()">{{ t.confirm }}</button>
+  <div class="table-wrapper">
+    <table class="problem-table">
+      <thead>
+        <tr>
+          <th>{{ t.id }}</th>
+          <th>{{ t.name }}</th>
+          <th class="actions-column">{{ t.actions }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="filteredProblems().length === 0">
+          <td colspan="3" class="empty-message">{{ t.noProblems }}</td>
+        </tr>
+        <tr *ngFor="let problem of filteredProblems()">
+          <td>{{ problem.id }}</td>
+          <td *ngIf="editingProblem?.id !== problem.id" class="name-cell">{{ problem.name }}</td>
+          <td *ngIf="editingProblem?.id === problem.id" class="edit-cell">
+            <input [(ngModel)]="editedName" class="edit-input" />
+          </td>
+          <td class="actions-cell">
+            <button *ngIf="editingProblem?.id !== problem.id" (click)="startEdit(problem)" class="action-btn edit-btn" title="{{ t.edit }}">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button *ngIf="editingProblem?.id === problem.id" (click)="updateProblem(problem.id!)" class="action-btn save-btn" title="{{ t.save }}">
+              <i class="fas fa-save"></i>
+            </button>
+            <button (click)="askDelete(problem.id!)" class="action-btn delete-btn" title="{{ t.delete }}">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</div>
-<div *ngIf="showAlreadyExistsPopup" class="popup-overlay"></div>
 
-
-
-
-<!-- POPUP DE CONFIRMATION -->
-<div
-  *ngIf="showPopupSuppression"
-  style="
-    position: fixed; top: 20%; left: 35%; width: 30%; background: white;
-    padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px #999;
-    z-index: 1000;
-  "
->
-  <h3>{{ t.confirmDelete }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="confirmDelete()">{{ t.confirm }}</button>
-    <button (click)="cancelDelete()">{{ t.cancel }}</button>
+  <div *ngIf="pageCount > 1" class="pagination">
+    <span class="page-info">{{ t.page }} {{ currentPage + 1 }} {{ t.of }} {{ pageCount }}</span>
+    <div class="page-controls">
+      <button (click)="goToPage(0)" [disabled]="currentPage === 0" class="page-btn">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0" class="page-btn">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === pageCount - 1" class="page-btn">
+        <i class="fas fa-angle-right"></i>
+      </button>
+      <button (click)="goToPage(pageCount - 1)" [disabled]="currentPage === pageCount - 1" class="page-btn">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+    </div>
   </div>
-</div>
-<!-- Optionnel, pour griser le fond -->
-<div
-  *ngIf="showPopupSuppression"
-  style="
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.1); z-index: 999;
-  "
-></div>
 
-
-<!-- POPUP Champ vide Update-->
-<div
-  *ngIf="showEmptyFieldPopupUpdate"
-  style="
-    position: fixed; top: 20%; left: 35%; width: 30%; background: white;
-    padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px #999;
-    z-index: 1000;
-  "
->
-  <h3>{{ t.emptyField }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeEmptyFieldPopupUpdate()">{{ t.confirm }}</button>
+  <!-- Modal pour ajouter un problème -->
+  <div *ngIf="showPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.addProblem }}</h3>
+        <button (click)="showPopup = false" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="problemName">{{ t.problemName }}</label>
+          <input
+            type="text"
+            id="problemName"
+            [(ngModel)]="newProblem.name"
+            placeholder="{{ t.enterProblemName }}"
+            class="form-input"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="showPopup = false" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="addProblem()" class="btn-primary">{{ t.add }}</button>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- Popup champ vide Ajout-->
-<div *ngIf="showEmptyFieldPopup" class="popup-box">
-  <h3>{{ t.emptyField }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeEmptyFieldPopup()">{{ t.confirm }}</button>
+  <!-- Modal de confirmation de suppression -->
+  <div *ngIf="showPopupSuppression" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.confirm }}</h3>
+        <button (click)="cancelDelete()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ t.confirmDeleteProblem }}</p>
+        <p class="warning-text">
+          <i class="fas fa-exclamation-triangle"></i> {{ t.actionUndone }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="cancelDelete()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="confirmDelete()" class="btn-danger">{{ t.confirm }}</button>
+      </div>
+    </div>
   </div>
-</div>
-<div *ngIf="showEmptyFieldPopup" class="popup-overlay"></div>
 
-<!-- Popup succès -->
-<div *ngIf="showSuccessPopup" class="popup-box">
-  <h3>{{ t.successAdd }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeSuccessPopup()">{{ t.confirm }}</button>
+  <!-- Modal "Existe déjà" -->
+  <div *ngIf="showAlreadyExistsPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.problemExists }}</h3>
+        <button (click)="closeAlreadyExistsPopupUpdate()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.problemExists }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeAlreadyExistsPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
   </div>
-</div>
-<div *ngIf="showSuccessPopup" class="popup-overlay"></div>
 
-
-
-
-<!-- Popup succès modification -->
-<div *ngIf="showEditSuccessPopup" class="popup-box">
-  <h3>{{ t.successEdit }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeEditSuccessPopup()">{{ t.confirm }}</button>
+  <!-- Modal "Champ vide" -->
+  <div *ngIf="showEmptyFieldPopup || showEmptyFieldPopupUpdate" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.emptyField }}</h3>
+        <button (click)="showEmptyFieldPopup ? closeEmptyFieldPopup() : closeEmptyFieldPopupUpdate()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.problemEmptyField }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="showEmptyFieldPopup ? closeEmptyFieldPopup() : closeEmptyFieldPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
   </div>
-</div>
-<div *ngIf="showEditSuccessPopup" class="popup-overlay"></div>
-<!-- Popup succès suppression -->
-<div *ngIf="showDeleteSuccessPopup" class="popup-box">
-  <h3>{{ t.successDelete }}</h3>
-  <div style="margin-top: 10px;">
-    <button (click)="closeDeleteSuccessPopup()">{{ t.confirm }}</button>
-  </div>
-</div>
-<div *ngIf="showDeleteSuccessPopup" class="popup-overlay"></div>
 
-
-<!-- Popup de Modiffication-->
-<div *ngIf="showEditPopup" class="popup-box">
-  <h3>{{ t.edit }}</h3>
-  <input [(ngModel)]="editedName" placeholder="{{ t.componentName }}" />
-  <div>
-    <button [disabled]="!editId" (click)="updateProblem(editId!, editedName)">{{ t.save }}</button>
-    <button (click)="closeEditPopup()">{{ t.cancel }}</button>
+  <!-- Modal "Succès" -->
+  <div *ngIf="showSuccessPopup || showEditSuccessPopup || showDeleteSuccessPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.successAdd }}</h3>
+        <button 
+          (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
+          class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="success-text">
+          <i class="fas fa-check-circle"></i> 
+          {{ showSuccessPopup ? t.problemAdded : 
+             (showEditSuccessPopup ? t.problemUpdated : t.problemDeleted) }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button 
+          (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
+          class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
   </div>
 </div>

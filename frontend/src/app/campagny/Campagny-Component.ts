@@ -5,9 +5,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {  Input, Output, EventEmitter } from '@angular/core';
 import { LangService } from '../services/lang.service';
+
 @Component({
   selector: 'app-campagny',
-  imports: [CommonModule,FormsModule,],
+  imports: [CommonModule,FormsModule],
   standalone: true,
   templateUrl: './campagny.html',
   styleUrl: './campagny.css',
@@ -21,7 +22,8 @@ currentPage: number = 0;
 pageSize: number = 5;
 editingCampagny: Campagny | null = null;
 showPopup: boolean = false;
-
+newCampagny: Campagny = { name: '' };
+editedName: string = '';
 campagnyToDelete: number|null = null;
 showEmptyFieldPopup = false;
 showPopupSuppression = false;
@@ -29,36 +31,22 @@ showAlreadyExistsPopup = false;
 showSuccessPopup = false;
 showEditSuccessPopup = false;
 showDeleteSuccessPopup = false;
-//var pour modiffier le nom
-
-showEmptyFieldPopupUpdate = false;
-showEditPopup = false;
-newCampagny: Campagny = { name: '' };
-editedName: string = '';
-editId:number|null=null;
-showAlreadyExistsPopupUpdate: boolean = false;
-
+totalItems: number = 0;
 selectedEntity = 'campagny';
 
-
-
   toggleLang() {
-    this.langService.toggleLang();
-  }
+   this.langService.toggleLang();
+ }
 
   onEntityChange(newValue: string) {
-    this.selectedEntity = newValue;
-    // Ajoute ici la logique de changement selon l'entité
-  }
-
-  get t() {
-    return this.langService.t;
-  }
-
-  get lang() {
-    return this.langService.lang;
-  }
-  
+   this.selectedEntity = newValue;
+ }
+ get t() {
+   return this.langService.t;
+ }
+ get lang() {
+   return this.langService.lang;
+}
   constructor(private campagnyService: CampagnyService,public langService: LangService) {
     console.log('Campagny component initialized');
 
@@ -105,12 +93,11 @@ get pageCount(): number {
   this.onSearchChange(); // relance une recherche vide
 }
 
+
 addCampagny() {
   // Vérifie si le champ est vide
   if (!this.newCampagny.name || this.newCampagny.name.trim() === '') {
-    this.showPopup = false;
     this.showEmptyFieldPopup = true;
-    
     return;
   }
 
@@ -151,42 +138,28 @@ closeAlreadyExistsPopup() {
 
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
-  this.showPopup = true;
 }
-/*
-
 startEdit(campagny: Campagny) {
     this.editingCampagny = campagny;
     this.editedName = campagny.name;
   }
-*/
 
-updateCampagny(id: number,editedName:string) {
+updateCampagny(id: number) {
   // Vérifie si le nouveau nom existe déjà chez une autre campagne
   if (
     this.campagnies.some(
-      c => {
-        return c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase();
-      }
+      c => c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
     )
   ) {
-    this.showEditPopup = false; // Cache la fenêtre d'édition
-    this.showAlreadyExistsPopupUpdate = true; // Affiche le message d'erreur
-    
+    this.editingCampagny = null; // Cache la fenêtre d'édition
+    this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
     return;
   }
 
- if (!this.editedName || this.editedName.trim() === '') {
-    this.showEmptyFieldPopupUpdate = true;
-    this.showEditPopup = false;
-    return;
-  }
   // Modification si tout est OK
   this.campagnyService.updateCampagny(id, { name: this.editedName }).subscribe({
     next: () => {
-      
       this.getCampagnyList();
-      this.showEditPopup = false;
       this.editingCampagny = null; // Cache la fenêtre d'édition
       this.editedName = '';
       this.showEditSuccessPopup = true; // Affiche le popup succès
@@ -195,41 +168,14 @@ updateCampagny(id: number,editedName:string) {
   });
 }
 
-openEditPopup(campagny: Campagny) {
-
-  this.editingCampagny = campagny ; // Copie pour édition
-  this.editedName = campagny.name;
-  this.editId= campagny.id ?? null;
-  this.showEditPopup = true;
-}
-
-
-closeEditPopup() {
-  this.showEditPopup = false;
-  this.editingCampagny = null;
-  this.editedName = '';
-}
-
-
-closeEmptyFieldPopupUpdate() {
-  this.showEmptyFieldPopupUpdate = false;
-  this.showEditPopup = true;
-}
 
 closeEditSuccessPopup() {
   this.showEditSuccessPopup = false;
 }
-
 closeAlreadyExistsPopupUpdate() {
-  this.showAlreadyExistsPopupUpdate = false;
+  this.showAlreadyExistsPopup = false;
   // On ré-affiche la fenêtre d’édition avec le même nom
   this.editingCampagny = { ...this.editingCampagny, name: this.editedName };
-  this.showEditPopup = true; // On ré-affiche la fenêtre d'édition
-  
-}
-closeAlreadyExistsPopupAdd() {
-  this.showAlreadyExistsPopup = false;  
-  this.showPopup = true; // On ré-affiche la fenêtre d'ajout
 }
 
   askDelete(id: number) {
