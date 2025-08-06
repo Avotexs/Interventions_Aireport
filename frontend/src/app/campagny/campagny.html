@@ -40,16 +40,10 @@
         </tr>
         <tr *ngFor="let campagny of filteredCampagny()">
           <td>{{ campagny.id }}</td>
-          <td *ngIf="editingCampagny?.id !== campagny.id" class="name-cell">{{ campagny.name }}</td>
-          <td *ngIf="editingCampagny?.id === campagny.id" class="edit-cell">
-            <input [(ngModel)]="editedName" class="edit-input" />
-          </td>
+          <td class="name-cell">{{ campagny.name }}</td>
           <td class="actions-cell">
-            <button *ngIf="editingCampagny?.id !== campagny.id" (click)="startEdit(campagny)" class="action-btn edit-btn" title="{{ t.edit }}">
+            <button (click)="startEdit(campagny)" class="action-btn edit-btn" title="{{ t.edit }}">
               <i class="fas fa-edit"></i>
-            </button>
-            <button *ngIf="editingCampagny?.id === campagny.id" (click)="updateCampagny(campagny.id!)" class="action-btn save-btn" title="{{ t.save }}">
-              <i class="fas fa-save"></i>
             </button>
             <button (click)="askDelete(campagny.id!)" class="action-btn delete-btn" title="{{ t.delete }}">
               <i class="fas fa-trash-alt"></i>
@@ -102,6 +96,34 @@
       <div class="modal-footer">
         <button (click)="showPopup = false" class="btn-outline">{{ t.cancel }}</button>
         <button (click)="addCampagny()" class="btn-primary">{{ t.add }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour modifier une compagnie -->
+  <div *ngIf="showEditPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.edit }}</h3>
+        <button (click)="closeEditPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editCampagnyName">{{ t.companyName }}</label>
+          <input
+            type="text"
+            id="editCampagnyName"
+            [(ngModel)]="editedName"
+            placeholder="{{ t.enterCompanyName }}"
+            class="form-input"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeEditPopup()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="saveEditedCampagny()" class="btn-primary">{{ t.save }}</button>
       </div>
     </div>
   </div>

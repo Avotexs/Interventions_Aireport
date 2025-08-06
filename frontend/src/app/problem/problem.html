@@ -40,16 +40,10 @@
         </tr>
         <tr *ngFor="let problem of filteredProblems()">
           <td>{{ problem.id }}</td>
-          <td *ngIf="editingProblem?.id !== problem.id" class="name-cell">{{ problem.name }}</td>
-          <td *ngIf="editingProblem?.id === problem.id" class="edit-cell">
-            <input [(ngModel)]="editedName" class="edit-input" />
-          </td>
+          <td class="name-cell">{{ problem.name }}</td>
           <td class="actions-cell">
-            <button *ngIf="editingProblem?.id !== problem.id" (click)="startEdit(problem)" class="action-btn edit-btn" title="{{ t.edit }}">
+            <button (click)="startEdit(problem)" class="action-btn edit-btn" title="{{ t.edit }}">
               <i class="fas fa-edit"></i>
-            </button>
-            <button *ngIf="editingProblem?.id === problem.id" (click)="updateProblem(problem.id!)" class="action-btn save-btn" title="{{ t.save }}">
-              <i class="fas fa-save"></i>
             </button>
             <button (click)="askDelete(problem.id!)" class="action-btn delete-btn" title="{{ t.delete }}">
               <i class="fas fa-trash-alt"></i>
@@ -190,6 +184,34 @@
         <button 
           (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
           class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour modifier un problème -->
+  <div *ngIf="showEditPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.edit }}</h3>
+        <button (click)="closeEditPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editProblemName">{{ t.problemName }}</label>
+          <input
+            type="text"
+            id="editProblemName"
+            [(ngModel)]="editedName"
+            placeholder="{{ t.enterProblemName }}"
+            class="form-input"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeEditPopup()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="saveEditedProblem()" class="btn-primary">{{ t.save }}</button>
       </div>
     </div>
   </div>

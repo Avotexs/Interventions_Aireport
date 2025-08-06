@@ -25,6 +25,7 @@ searchTerm: string = '';
   editedName: string = '';
   noResultFound: boolean = false;
   showPopup: boolean = false;
+  showEditPopup: boolean = false;
   campagnyToDelete: number|null = null;
 showEmptyFieldPopup = false;
 showEmptyFieldPopupUpdate = false;
@@ -146,6 +147,47 @@ closeEmptyFieldPopupUpdate() {
 startEdit(solution: Solution) {
     this.editingSolution = solution;
     this.editedName = solution.name;
+    this.showEditPopup = true;
+  }
+
+  closeEditPopup() {
+    this.showEditPopup = false;
+    this.editingSolution = null;
+    this.editedName = '';
+  }
+
+  saveEditedSolution() {
+    // Vérifie si le champ est vide
+    if (!this.editedName || this.editedName.trim() === '') {
+      this.showEmptyFieldPopupUpdate = true;
+      this.showEditPopup = false; // Cache la fenêtre d'édition
+      return;
+    }
+    
+    // Vérifie si le nouveau nom existe déjà chez une autre solution
+    if (
+      this.solutions.some(
+        s => s.id !== this.editingSolution?.id && s.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
+      )
+    ) {
+      this.showEditPopup = false;
+      this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
+      return;
+    }
+
+    // Modification si tout est OK
+    if (this.editingSolution && this.editingSolution.id) {
+      this.solutionService.updateSolution(this.editingSolution.id, { name: this.editedName }).subscribe({
+        next: () => {
+          this.getSolutionList();
+          this.showEditPopup = false;
+          this.editingSolution = null; // Cache la fenêtre d'édition
+          this.editedName = '';
+          this.showEditSuccessPopup = true; // Affiche le popup succès
+        },
+        error: (err) => console.error(err)
+      });
+    }
   }
 
   deleteSolution(id: number) {
