@@ -20,6 +20,7 @@ export class ProblemComponent {
   currentPage: number = 0;     // Pagination: current page index
   pageSize: number = 5;   // Pagination: number of items per page
   showPopup: boolean = false;  // Whether the popup/modal is visible
+  showEditPopup: boolean = false; // Whether the edit popup/modal is visible
   problemToDelete: number|null = null;
   showEmptyFieldPopup = false;
   showPopupSuppression = false;
@@ -163,8 +164,48 @@ closeEmptyFieldPopupUpdate() {
 startEdit(problem: Problem) {
     this.editingProblem = problem;
     this.editedName = problem.name;
+    this.showEditPopup = true;
   }
 
+  closeEditPopup() {
+    this.showEditPopup = false;
+    this.editingProblem = null;
+    this.editedName = '';
+  }
+
+  saveEditedProblem() {
+    // Vérifie si le champ est vide
+    if (!this.editedName || this.editedName.trim() === '') {
+      this.showEmptyFieldPopupUpdate = true;
+      this.showEditPopup = false; // Cache la fenêtre d'édition
+      return;
+    }
+    
+    // Vérifie si le nouveau nom existe déjà chez un autre problème
+    if (
+      this.problems.some(
+        p => p.id !== this.editingProblem?.id && p.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
+      )
+    ) {
+      this.showEditPopup = false;
+      this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
+      return;
+    }
+
+    // Modification si tout est OK
+    if (this.editingProblem && this.editingProblem.id) {
+      this.problemService.updateProblem(this.editingProblem.id, { name: this.editedName }).subscribe({
+        next: () => {
+          this.getProblemList();
+          this.showEditPopup = false;
+          this.editingProblem = null; // Cache la fenêtre d'édition
+          this.editedName = '';
+          this.showEditSuccessPopup = true; // Affiche le popup succès
+        },
+        error: (err) => console.error(err)
+      });
+    }
+  }
 
  
 
