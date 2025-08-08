@@ -1,0 +1,300 @@
+
+<div class="technicien-container">
+  <div class="technicien-header">
+    <div>
+      <h1 class="technicien-title">{{ t.technicienTitle }}</h1>
+      <p class="technicien-subtitle">{{ t.technicienSubtitle }}</p>
+    </div>
+    <button class="btn-primary" (click)="showPopup = true">
+      <i class="fas fa-plus"></i> {{ t.addTechnicien }}
+    </button>
+  </div>
+
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="{{ t.searchTechnicien }}"
+        (input)="onSearchChange()"
+        class="search-input"
+      />
+      <button *ngIf="searchTerm" (click)="clearSearch()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="technicien-table">
+      <thead>
+        <tr>
+          <th>{{ t.id }}</th>
+          <th>{{ t.firstname }}</th>
+          <th>{{ t.lastname }}</th>
+          <th>{{ t.pseudoname }}</th>
+          <th>{{ t.role }}</th>
+          <th>{{ t.motDePass }}</th>
+          <th>{{ t.aeroportId }}</th>
+          <th class="actions-column">{{ t.actions }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="filteredTechniciens().length === 0">
+          <td colspan="3" class="empty-message">{{ t.noTechniciens }}</td>
+        </tr>
+        <tr *ngFor="let technicien of filteredTechniciens()">
+          <td>{{ technicien.id }}</td>
+          <td >{{ technicien.firstname }}</td>
+          <td >{{ technicien.lastname }}</td>
+          <td >{{ technicien.pseudoname }}</td>
+          <td >{{ technicien.role }}</td>
+          <td >{{ technicien.motDePass }}</td>
+          <td >{{ technicien.aeroportId }}</td>
+          <td class="actions-cell">
+            
+            
+            <!--
+            <button *ngIf="editingTechnicien?.id === technicien.id" (click)="updateTechnicien(technicien.id!)" class="action-btn save-btn" title="{{ t.save }}">
+              <i class="fas fa-save"></i>
+            </button>
+            -->
+            <button (click)="askDelete(technicien.id!)" class="action-btn delete-btn" title="{{ t.delete }}" 
+                    [disabled]="!technicien.id">
+              <i class="fas fa-trash-alt"></i>
+              <!-- Debug: ID={{ technicien.id }} -->
+            </button>
+            
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="pageCount > 1" class="pagination">
+    <span class="page-info">{{ t.page }} {{ currentPage + 1 }} {{ t.of }} {{ pageCount }}</span>
+    <div class="page-controls">
+      <button (click)="goToPage(0)" [disabled]="currentPage === 0" class="page-btn">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0" class="page-btn">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === pageCount - 1" class="page-btn">
+        <i class="fas fa-angle-right"></i>
+      </button>
+      <button (click)="goToPage(pageCount - 1)" [disabled]="currentPage === pageCount - 1" class="page-btn">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal pour ajouter un technicien -->
+  <div *ngIf="showPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.addTechnicien }}</h3>
+        <button (click)="showPopup = false" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label for="technicienFirstname">{{ t.firstname }}</label>
+          <input
+            type="text"
+            id="technicienFirstname"
+            [(ngModel)]="newTechnicien.firstname"
+            placeholder="{{ t.enterFirstname }}"
+            class="form-input"
+          />
+      </div>
+      <div class="form-group">
+          <label for="technicienLastname">{{ t.lastname }}</label>
+          <input
+            type="text"
+            id="technicienLastname"
+            [(ngModel)]="newTechnicien.lastname"
+            placeholder="{{ t.enterLastname }}"
+            class="form-input"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="technicienPseudoname">{{ t.pseudoname }}</label>
+          <input
+            type="text"
+            id="technicienPseudoname"
+            [(ngModel)]="newTechnicien.pseudoname"
+            placeholder="{{ t.enterPseudoname }}"
+            class="form-input"
+          />
+        </div>
+        
+       <div class="form-group">
+        <label for="technicienRole">Rôle</label>
+        <select
+            id="technicienRole"
+            [(ngModel)]="newTechnicien.role"
+            class="form-input"
+            required
+        >
+            <option value="" disabled selected>Choisir un rôle</option>
+            <option value="admin">Admin</option>
+            <option value="technicien">Technicien</option>
+        </select>
+        </div>
+        <div class="form-group" style="position: relative;">
+            <label for="technicienMotDePass">Mot de passe</label>
+            <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="technicienMotDePass"
+                [(ngModel)]="newTechnicien.motDePass"
+                placeholder="Entrer le mot de passe"
+                class="form-input"
+            />
+            <button
+            
+                type="button"
+                (click)="togglePasswordVisibility()"
+                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none;"
+                tabindex="-1"
+            >
+                {{ showPassword ? '👁️' : '👁️' }}
+            </button>
+        </div>
+        <div class="form-group">
+          <label for="technicienAeroportId">{{ t.aeroportId }}</label>
+          <select
+            id="technicienAeroportId"
+            [(ngModel)]="newTechnicien.aeroportId"
+            class="form-input"
+>
+            <option value="" disabled selected>Sélectionner un aéroport</option>
+            <option >1</option>
+          </select>
+        </div>
+
+      <div class="modal-footer">
+        <button (click)="showPopup = false" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="addTechnicien()" class="btn-primary">{{ t.add }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+  <!-- Modal "ID d'aéroport invalide" -->
+<div *ngIf="showInvalidAeroportIdPopup" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>id incorrect</h3>
+      <button (click)="closeInvalidAeroportIdPopup()" class="close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="warning-text">
+        <i class="fas fa-exclamation-circle"></i> errrur
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button (click)="closeInvalidAeroportIdPopup()" class="btn-primary">{{ t.ok }}</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Modal de confirmation de suppression -->
+  
+  <div *ngIf="showPopupSuppression" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.confirm }}</h3>
+        <button (click)="cancelDelete()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ t.confirmDeleteTechnicien }}</p>
+        <p class="warning-text">
+          <i class="fas fa-exclamation-triangle"></i> {{ t.actionUndone }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="cancelDelete()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="confirmDelete()" class="btn-danger">{{ t.confirm }}</button>
+      </div>
+    </div>
+  </div>
+   
+
+  <!-- Modal "Existe déjà" -->
+   <!--
+  <div *ngIf="showAlreadyExistsPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.problemExists }}</h3>
+        <button (click)="closeAlreadyExistsPopupUpdate()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.problemExists }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeAlreadyExistsPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+    -->
+  <!-- Modal "Champ vide" -->
+  
+  <div *ngIf="showEmptyFieldPopup || showEmptyFieldPopupUpdate" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.emptyField }}</h3>
+        <button (click)="showEmptyFieldPopup ? closeEmptyFieldPopup() : closeEmptyFieldPopupUpdate()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.technicienEmptyField }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="showEmptyFieldPopup ? closeEmptyFieldPopup() : closeEmptyFieldPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Succès" -->
+
+  <div *ngIf="showSuccessPopup || showEditSuccessPopup || showDeleteSuccessPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.successAdd }}</h3>
+        <button 
+          (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
+          class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="success-text">
+          <i class="fas fa-check-circle"></i> 
+          {{ showSuccessPopup ? t.technicienAdded : 
+             (showEditSuccessPopup ? t.technicienUpdated : t.technicienDeleted) }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button 
+          (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
+          class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
