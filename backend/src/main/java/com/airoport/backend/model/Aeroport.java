@@ -13,9 +13,7 @@ public class Aeroport {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "aeroport")
-    @JsonManagedReference
-    private List<Technicien> techniciens;
+
 
     public Aeroport() {}
 
@@ -27,7 +25,10 @@ public class Aeroport {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    /*
     // Optionnel : getter/setter pour la liste des techniciens
     public List<Technicien> getTechniciens() { return techniciens; }
     public void setTechniciens(List<Technicien> techniciens) { this.techniciens = techniciens; }
+
+     */
 }

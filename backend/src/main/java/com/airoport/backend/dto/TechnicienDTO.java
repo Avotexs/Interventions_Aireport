@@ -2,7 +2,7 @@ package com.airoport.backend.dto;
 
 public class TechnicienDTO {
     public int id;
-    public String name;
+    public String firstname;
     public String lastname;
     public String pseudoname;
     public String role;
@@ -11,8 +11,8 @@ public class TechnicienDTO {
 
     public TechnicienDTO() {}
 
-    public TechnicienDTO(String name, String lastname, String pseudoname, String role, String motDePass, int aeroportId) {
-        this.name = name;
+    public TechnicienDTO(String firstname, String lastname, String pseudoname, String role, String motDePass, int aeroportId) {
+        this.firstname = firstname;
         this.lastname = lastname;
         this.pseudoname = pseudoname;
         this.role = role;
