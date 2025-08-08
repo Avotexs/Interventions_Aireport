@@ -1,6 +1,4 @@
 package com.airoport.backend.service;
-
-
 import com.airoport.backend.dto.CampagnyDTO;
 import com.airoport.backend.model.Campagny;
 import com.airoport.backend.repository.CampagnyRepository;
@@ -10,12 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import static org.mockito.ArgumentMatchers.any;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
