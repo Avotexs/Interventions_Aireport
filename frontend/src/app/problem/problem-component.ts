@@ -11,7 +11,9 @@ import { LangService } from '../services/lang.service';
   templateUrl: './problem.html', 
   styleUrl: './problem.css' 
 })
+
 export class ProblemComponent {
+  
   problems: Problem[] = [];     // List of all problems fetched from the backend
   editingProblem: Problem | null = null;    // Problem currently being edited (null if none)
   newProblem: Problem = { name: '' }; // New problem to be created
@@ -67,6 +69,7 @@ getProblemList() {
     error: (err) => console.error(err)
   });
 }
+
    /**
    * Returns the list of problems filtered by the search term
    * and sliced for pagination.
@@ -142,6 +145,9 @@ getProblemList() {
   });
 }
 
+/**
+ * Closes the success popup after adding a new problem.
+ */
 closeSuccessPopup() {
   this.showSuccessPopup = false;
 }
