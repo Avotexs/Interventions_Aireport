@@ -1,5 +1,7 @@
 package com.airoport.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,10 +12,14 @@ public class ProjetEquipement {
 
     @ManyToOne
     @JoinColumn(name = "projet_id")
+    @JsonBackReference  // <-- ici, c'est @JsonBackReference, pas JsonManagedReference
     private Project projet;
 
-    @ManyToOne @JoinColumn(name = "equipement_id")
+    @ManyToOne
+    @JoinColumn(name = "equipement_id")
+// pas d'annotation JsonManagedReference ici, laisse simple
     private Equipement equipement;
+
 
     private int quantiteReservee;
 
@@ -58,4 +64,3 @@ public class ProjetEquipement {
         this.quantiteReservee = quantiteReservee;
     }
 }
-

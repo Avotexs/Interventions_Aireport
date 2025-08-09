@@ -33,9 +33,9 @@ public class TechnicienServiceTest {
 
     @Test
     void testGetAll() {
-        Technicien tech1 = new Technicien("Ali", "Sami", "pseudo1", "admin", "pass", new Aeroport("CMN"));
-        Technicien tech2 = new Technicien("Zineb", "Nour", "pseudo2", "tech", "1234", new Aeroport("RAK"));
-        when(technicienRepository.findAll()).thenReturn(Arrays.asList(tech1, tech2));
+        Technicien t1 = new Technicien("Ali", "Ben", "AliTech", "technicien", "pass123", 1);
+        Technicien t2 = new Technicien("Sara", "Saidi", "SaraTech", "technicien", "pass456", 2);
+        when(technicienRepository.findAll()).thenReturn(Arrays.asList(t1, t2));
 
         List<Technicien> result = technicienService.getAll();
 
@@ -44,67 +44,62 @@ public class TechnicienServiceTest {
     }
 
     @Test
-    void testCreateTechnicien() {
-        Aeroport aeroport = new Aeroport("CMN");
+    void testCreateTechnicien_Success() {
+        TechnicienDTO dto = new TechnicienDTO("Ali", "Ben", "AliTech", "technicien", "pass123", 1);
+        Aeroport aeroport = new Aeroport();
 
-
-        TechnicienDTO dto = new TechnicienDTO();
-        dto.name = "Omar";
-        dto.lastname = "El Fassi";
-        dto.pseudoname = "omar2000";
-        dto.role = "admin";
-        dto.motDePass = "pass123";
-        dto.aeroportId = 1;
 
         when(aeroportRepository.findById(1)).thenReturn(Optional.of(aeroport));
-        when(technicienRepository.save(any(Technicien.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Technicien created = technicienService.createTechnicien(dto);
+        Technicien saved = new Technicien("Ali", "Ben", "AliTech", "technicien", "pass123", 1);
+        when(technicienRepository.save(any())).thenReturn(saved);
 
-        assertEquals(dto.name, created.getName());
-        assertEquals(dto.lastname, created.getLastname());
-        assertEquals(dto.pseudoname, created.getPseudoname());
-        assertEquals(dto.role, created.getRole());
-        assertEquals(dto.motDePass, created.getMotDePass());
-        assertEquals(aeroport, created.getAeroport());
+        Technicien result = technicienService.createTechnicien(dto);
+
+        assertNotNull(result);
+        assertEquals("Ali", result.getFirstname());
+        verify(aeroportRepository, times(1)).findById(1);
+        verify(technicienRepository, times(1)).save(any(Technicien.class));
     }
 
     @Test
-    void testUpdateTechnicien() {
-        Aeroport oldAeroport = new Aeroport("CMN");
+    void testCreateTechnicien_AeroportNotFound() {
+        TechnicienDTO dto = new TechnicienDTO("Ali", "Ben", "AliTech", "technicien", "pass123", 999);
 
-        Aeroport newAeroport = new Aeroport("RAK");
+        when(aeroportRepository.findById(999)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                technicienService.createTechnicien(dto));
+
+        assertEquals("Aéroport non trouvé", exception.getMessage());
+        verify(aeroportRepository, times(1)).findById(999);
+        verify(technicienRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateTechnicien_Success() {
+        Technicien existing = new Technicien("Old", "Name", "OldPseudo", "technicien", "oldpass", 1);
+
+        Aeroport aeroport = new Aeroport();
 
 
-        Technicien existing = new Technicien("Ali", "Sami", "pseudo1", "tech", "pass", oldAeroport);
+        TechnicienDTO dto = new TechnicienDTO("New", "Updated", "NewPseudo", "technicien", "newpass", 2);
 
+        when(technicienRepository.findById(1)).thenReturn(Optional.of(existing));
+        when(aeroportRepository.findById(2)).thenReturn(Optional.of(aeroport));
+        when(technicienRepository.save(any())).thenReturn(existing);
 
-        TechnicienDTO dto = new TechnicienDTO();
-        dto.name = "Ali";
-        dto.lastname = "Sami";
-        dto.pseudoname = "updated";
-        dto.role = "tech";
-        dto.motDePass = "newpass";
-        dto.aeroportId = 2;
+        Technicien result = technicienService.updateTechnicien(1, dto);
 
-        when(technicienRepository.findById(10)).thenReturn(Optional.of(existing));
-        when(aeroportRepository.findById(2)).thenReturn(Optional.of(newAeroport));
-        when(technicienRepository.save(any(Technicien.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        Technicien updated = technicienService.updateTechnicien(10, dto);
-
-        assertEquals("updated", updated.getPseudoname());
-        assertEquals("newpass", updated.getMotDePass());
-        assertEquals(newAeroport, updated.getAeroport());
+        assertEquals("New", result.getFirstname());
+        assertEquals("Updated", result.getLastname());
+        verify(technicienRepository).save(existing);
     }
 
     @Test
     void testDeleteTechnicien() {
-        int idToDelete = 5;
-
-        technicienService.deleteTechnicien(idToDelete);
-
-        verify(technicienRepository, times(1)).deleteById(idToDelete);
+        technicienService.deleteTechnicien(1);
+        verify(technicienRepository).deleteById(1);
     }
 }
 

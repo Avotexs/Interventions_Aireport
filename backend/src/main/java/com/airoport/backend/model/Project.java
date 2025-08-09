@@ -1,5 +1,6 @@
 package com.airoport.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -10,9 +11,11 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false,unique = true)
     private String name;
 
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference  // côté parent, ok ici
     private Set<ProjetEquipement> projetEquipements = new HashSet<>();
 
     public Project(String name, Set<ProjetEquipement> projetEquipements) {
