@@ -94,8 +94,8 @@ export class LangService {
       enterRole: 'Entrez le rôle',
       motDePass: 'Mot de passe',
       enterMotDePass: 'Entrez le mot de passe',
-      aeroportId: 'ID d\'aéroport',
-      enterAeroportId: 'Choisissez l\'aéroport',
+      aeroport: 'Aéroport',
+      enterAeroport: 'Choisissez l\'aéroport',
       technicienTitle: 'Techniciens', 
       technicienSubtitle: 'Liste de tous les techniciens',
       addTechnicien: 'Nouveau technicien',
@@ -124,6 +124,9 @@ export class LangService {
       aeroportAdded: 'Aéroport ajouté avec succès !',
       aeroportUpdated: 'Aéroport mis à jour avec succès !',
       aeroportDeleted: 'Aéroport supprimé avec succès !',
+      // New cannot-delete messages
+      cannotDeleteAeroport: 'Suppression impossible',
+      aeroportInUseByTechniciens: 'Cet aéroport est associé à un ou plusieurs techniciens. Supprimez ou modifiez ces techniciens avant de supprimer l\'aéroport.'
 
 
 
@@ -212,8 +215,8 @@ export class LangService {
       enterRole: 'Enter role',
       motDePass: 'Password',
       enterMotDePass: 'Enter password',
-      aeroportId: 'Airport ID',
-      enterAeroportId: 'Choose airport',
+      aeroport: 'Airport ',
+      enterAeroport: 'Choose airport',
       technicienTitle: 'Technicians',
       technicienSubtitle: 'The list of all technicians',
       addTechnicien: 'New technician',
@@ -243,6 +246,8 @@ export class LangService {
        aeroportAdded: 'Airport added successfully!',
        aeroportUpdated: 'Airport updated successfully!',
        aeroportDeleted: 'Airport deleted successfully!',
+       cannotDeleteAeroport: 'Cannot delete airport',
+       aeroportInUseByTechniciens: 'This airport is linked to one or more technicians. Please delete or modify these technicians before deleting the airport.'
     }
   };
 
@@ -259,7 +264,7 @@ export class LangService {
       { value: 'problem', label: 'Problem' },
       { value: 'solution', label: 'Solution' },
       { value: 'staff', label: 'Staff' },
-      { value: 'technicien', label: 'Technicien' }
+      { value: 'technicien', label: 'Technician' }
     ]
   };
 

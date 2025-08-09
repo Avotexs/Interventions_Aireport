@@ -3,7 +3,9 @@ import { Aeroport } from './aeroport-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AeroportService } from './aeroport-service';
-import { LangService } from '../services/lang.service'; // Assuming LangService is in the same directory
+import { LangService } from '../services/lang.service';
+import { TechnicienService, Technicien } from '../technicien-component/technicien-service';
+
 @Component({
   selector: 'app-aeroport-component',
   imports: [CommonModule, FormsModule],
@@ -30,6 +32,9 @@ export class AeroportComponent {
   showEmptyFieldPopupUpdate = false;
   totalItems: number = 0;
   selectedEntity = 'aeroport';
+  showEditPopup: boolean = false;
+  // Popup when deletion is blocked due to linked technicians
+  showCannotDeletePopup = false;
 
   toggleLang() {
    this.langService.toggleLang();
@@ -49,7 +54,7 @@ export class AeroportComponent {
    * @param aeroportService - Service for accessing aeroports from backend
    */
 
-    constructor(private aeroportService: AeroportService, private langService: LangService) {
+    constructor(private aeroportService: AeroportService, private langService: LangService, private technicienService: TechnicienService) {
     this.getAllAeroports();
   }
 
@@ -58,7 +63,7 @@ export class AeroportComponent {
    */
 
 getAllAeroports() {
-  this.aeroportService.getAllAeroports().subscribe({
+  this.aeroportService.getAll().subscribe({
     next: (data) => {
       // 🔁 Trie décroissant par ID (le plus récent en haut)
       this.aeroports = data.sort((a, b) => b.id! - a.id!);
@@ -155,7 +160,7 @@ closeAlreadyExistsPopup() {
   this.showPopup = true; // On ré-affiche la fenêtre d'ajout
 }
 
-
+ 
 
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
@@ -168,7 +173,46 @@ startEdit(aeroport: Aeroport) {
     this.editingAeroport = aeroport;
     this.editedName = aeroport.name;
   }
+  
+  closeEditPopup() {
+    this.showEditPopup = false;
+    this.editingAeroport = null;
+    this.editedName = '';
+  }
 
+
+  saveEditedAeroport() {
+    // Vérifie si le champ est vide
+    if (!this.editedName || this.editedName.trim() === '') {
+      this.showEmptyFieldPopup = true;
+      return;
+    }
+    
+    // Vérifie si le nouveau nom existe déjà chez une autre aéroport
+    if (
+      this.aeroports.some(
+        c => c.id !== this.editingAeroport?.id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
+      )
+    ) {
+      this.showEditPopup = false;
+      this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
+      return;
+    }
+
+    // Modification si tout est OK
+    if (this.editingAeroport && this.editingAeroport.id) {
+      this.aeroportService.updateAeroport(this.editingAeroport.id, { name: this.editedName }).subscribe({
+        next: () => {
+          this.getAllAeroports();
+          this.showEditPopup = false;
+          this.editingAeroport = null; // Cache la fenêtre d'édition
+          this.editedName = '';
+          this.showEditSuccessPopup = true; // Affiche le popup succès
+        },
+        error: (err) => console.error(err)
+      });
+    }
+  }
 
 
 updateAeroport(id: number) {
@@ -216,18 +260,50 @@ closeAlreadyExistsPopupUpdate() {
 
 
 confirmDelete() {
-  if (this.aeroportToDelete) {
-    this.aeroportService.deleteAeroport(this.aeroportToDelete).subscribe({
-      next: () => {
-        this.getAllAeroports();
-        this.showDeleteSuccessPopup = true; // Affiche le popup succès
-      },
-      error: (err) => console.error(err)
-    });
+  if (!this.aeroportToDelete) {
+    this.showPopupSuppression = false;
+    return;
   }
 
-  this.showPopupSuppression = false; // Cache la fenêtre de confirmation
-  this.aeroportToDelete = null;
+  const idToDelete = this.aeroportToDelete;
+
+  // Check if any technician is linked to this airport before deleting
+  this.technicienService.getTechniciens().subscribe({
+    next: (techniciens: Technicien[]) => {
+      const used = techniciens.some(t => t.aeroportId === idToDelete);
+      if (used) {
+        // Block deletion and inform user
+        this.showPopupSuppression = false;
+        this.showCannotDeletePopup = true;
+        this.aeroportToDelete = null;
+        return;
+      }
+
+      // Proceed with deletion if not used
+      this.aeroportService.deleteAeroport(idToDelete).subscribe({
+        next: () => {
+          this.getAllAeroports();
+          this.showDeleteSuccessPopup = true;
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+
+      this.showPopupSuppression = false;
+      this.aeroportToDelete = null;
+    },
+    error: (err) => {
+      console.error('Error checking technicians before delete:', err);
+      // Fallback: close dialog without deleting
+      this.showPopupSuppression = false;
+    }
+  });
+}
+
+// Close the cannot-delete popup
+closeCannotDeletePopup() {
+  this.showCannotDeletePopup = false;
 }
 
 // Annule la suppression

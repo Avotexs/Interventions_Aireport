@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { TechnicienService } from './technicien-service';
 import { LangService } from '../services/lang.service';
 import { Technicien } from './technicien-service';
+import { Aeroport } from '../aeroport-component/aeroport-service';
+import { AeroportComponent } from '../aeroport-component/aeroport-component';
+
 @Component({
   selector: 'app-technicien-component',
   imports: [CommonModule, FormsModule],
@@ -13,7 +16,7 @@ import { Technicien } from './technicien-service';
 export class TechnicienComponent {
 
 techniciens: Technicien[] = [];     // List of all techniciens fetched from the backend
-aeroports: any[] = []; // Liste des aéroports pour la sélection
+aeroports: Aeroport[] = []; // Liste des aéroports pour la sélection
 //pagination
   searchTerm: string = '';       // Search term bound to input field
   currentPage: number = 0;     // Pagination: current page index
@@ -44,6 +47,12 @@ aeroports: any[] = []; // Liste des aéroports pour la sélection
   technicienToDelete: number | null = null; // ID of the technicien to delete
   selectedEntity = 'technicien';
   
+
+  //update
+
+  showEditPopup = false;
+  
+  
   toggleLang() {
    this.langService.toggleLang();
  }
@@ -65,6 +74,7 @@ aeroports: any[] = []; // Liste des aéroports pour la sélection
   constructor(private technicienService: TechnicienService, private langService: LangService) {
     // Initialization logic can go here if needed
     this.getAllTechniciens();
+    this.getAeroports(); // Charger la liste des aéroports
   }
 
    /**
@@ -81,6 +91,17 @@ getAllTechniciens() {
     error: (err) => console.error(err)
   });
 }
+
+getAeroports() {
+  this.technicienService.getAeroports().subscribe({
+    next: (data) => {
+      this.aeroports = data;
+      console.log('Aeroports loaded:', this.aeroports);
+    },
+    error: (err) => console.error('Error loading aeroports:', err)
+  });
+}
+
 togglePasswordVisibility() {
   this.showPassword = !this.showPassword;
 }
@@ -92,7 +113,7 @@ togglePasswordVisibility() {
  */
 filteredTechniciens(): Technicien[] {
     return this.techniciens
-      .filter(p => p.firstname.toLowerCase().includes(this.searchTerm.toLowerCase()))
+      .filter(p => p.lastname.toLowerCase().includes(this.searchTerm.toLowerCase()))
       .slice(this.currentPage * this.pageSize, (this.currentPage + 1) * this.pageSize);
   } 
 
@@ -145,7 +166,18 @@ filteredTechniciens(): Technicien[] {
     this.showEmptyFieldPopup = true;
     return;
   }
-
+// Vérifie si l'ID de l'aéroport est valide
+    if (!this.aeroports.find(a => a.id === this.newTechnicien.aeroportId)) {
+      this.showInvalidAeroportIdPopup = true;
+      console.log('Invalid aeroport ID');
+      return;
+    }
+    // Vérifie si l'ID de l'aéroport est 0
+    if (this.newTechnicien.aeroportId === 0) {
+      this.showInvalidAeroportIdPopup = true;
+      console.log('Invalid aeroport ID: 0');
+      return;
+    }
   // Vérifie si le nom existe déjà
   if (
     this.techniciens.some(
@@ -170,61 +202,14 @@ filteredTechniciens(): Technicien[] {
     },
     error: (err) => console.error(err)
   });
-    /*
-    // Vérifie si le champ est vide
-    if (!this.newTechnicien.firstname || this.newTechnicien.firstname.trim() === '' ||
-        !this.newTechnicien.lastname || this.newTechnicien.lastname.trim() === '' ||
-        !this.newTechnicien.pseudoname || this.newTechnicien.pseudoname.trim() === '' ||
-        !this.newTechnicien.role || this.newTechnicien.role.trim() === '' ||
-        !this.newTechnicien.motDePass || this.newTechnicien.motDePass.trim() === '' ||
-        !this.newTechnicien.aeroportId || this.newTechnicien.aeroportId <= 0) {
-      this.showEmptyFieldPopup = true;
-      console.log('Empty field detected');
-      return;
-    }
 
-    // Vérifie si l'ID de l'aéroport est valide
-    if (!this.aeroports.find(a => a.id === this.newTechnicien.aeroportId)) {
-      this.showInvalidAeroportIdPopup = true;
-      console.log('Invalid aeroport ID');
-      return;
-    }
-    // Vérifie si l'ID de l'aéroport est 0
-    if (this.newTechnicien.aeroportId === 0) {
-      this.showInvalidAeroportIdPopup = true;
-      console.log('Invalid aeroport ID: 0');
-      return;
-    }
-
-    // Vérifie si le nom existe déjà
-  if (
-  this.techniciens.some(
-    c => c.firstname?.trim().toLowerCase() === this.newTechnicien.firstname.trim().toLowerCase()
-  )
-  || this.techniciens.some(
-    c => c.lastname?.trim().toLowerCase() === this.newTechnicien.lastname.trim().toLowerCase()
-  )
-) {
-  this.showPopup = false;
-  this.showAlreadyExistsPopup = true;
-  return;
+  
 }
+canceladd() {
+    this.showPopup = false;
+    this.newTechnicien = { firstname: '', lastname: '', pseudoname: '', role: '', motDePass: '', aeroportId: 0 };
+  }
 
-    // Ajout si tout est OK
-    this.technicienService.create(this.newTechnicien).subscribe({
-        
-      next: () => {
-        this.getAllTechniciens();
-        this.newTechnicien = { firstname: '', lastname: '', pseudoname: '', role: '', motDePass: '', aeroportId: 0   };
-        this.showPopup = false; // Cache la fenêtre d’ajout
-        this.showSuccessPopup = true; // Affiche le popup succès
-      },
-      error: (err) => console.error(err)
-      
-    });
-    console.log('Adding new technicien:', this.newTechnicien);
-    */
-}
 /**
  * Closes the invalid aeroport ID popup.
  */
@@ -264,9 +249,20 @@ closeDeleteSuccessPopup() {
   this.showDeleteSuccessPopup = false;
 }
 
-
+ closeEditPopup() {
+    this.showEditPopup = false;
+    this.editingTechnicien = null;
+    this.editedFirstname = '';
+    this.editedLastname = '';
+    this.editedPseudoname = '';
+    this.editedRole = '';
+    this.editedMotDePass = '';
+    this.editedAeroport = 0;
+  }
  
 startEdit(technician: Technicien) {
+  this.showEditPopup = true;
+    // Set the editing technicien and pre-fill the edit fields
     this.editingTechnicien = technician;
     this.editedFirstname = technician.firstname;
     this.editedLastname = technician.lastname;
@@ -275,6 +271,72 @@ startEdit(technician: Technicien) {
     this.editedMotDePass = technician.motDePass;
     this.editedAeroport = technician.aeroportId; // Assuming aeroportId is a number
   }
+
+  saveEditedTechnicien() {
+    // Vérifie si le champ est vide
+    if (!this.editedFirstname || this.editedFirstname.trim() === '' 
+    || !this.editedLastname || this.editedLastname.trim() === ''
+     || !this.editedPseudoname || this.editedPseudoname.trim() === '' 
+     || !this.editedRole || this.editedRole.trim() === '' 
+     || !this.editedMotDePass || this.editedMotDePass.trim() === '' 
+     || this.editedAeroport === 0) 
+     {
+      this.showEmptyFieldPopup = true;
+      return;
+    }
+
+    // Vérifie si le nouveau nom existe déjà chez une autre technicien
+    if (
+      this.techniciens.some(
+        c => c.id !== this.editingTechnicien?.id && c.firstname.trim().toLowerCase() === this.editedFirstname.trim().toLowerCase()
+      )
+    ) {
+      this.showEditPopup = false;
+      this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
+      return;
+    }
+
+    // Modification si tout est OK
+    if (this.editingTechnicien && this.editingTechnicien.id) {
+        console.log('Updating technicien:', this.editedFirstname, this.editedLastname, this.editedPseudoname, this.editedRole, this.editedMotDePass, this.editedAeroport);
+
+      this.technicienService.update(this.editingTechnicien.id, {
+        firstname: this.editedFirstname,
+        lastname: this.editedLastname,
+        pseudoname: this.editedPseudoname,
+        role: this.editedRole,
+        motDePass: this.editedMotDePass,
+        aeroportId: this.editedAeroport
+      }).subscribe({
+        next: () => {
+          this.getAllTechniciens();
+          this.showEditPopup = false;
+          this.editingTechnicien = null; // Cache la fenêtre d'édition
+          this.editedFirstname = '';
+          this.editedLastname = '';
+          this.editedPseudoname = '';
+          this.editedRole = '';
+          this.editedMotDePass = '';
+          this.editedAeroport = 0;
+          this.showEditSuccessPopup = true; // Affiche le popup succès
+        },
+        error: (err) => console.error(err)
+      });
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Annule la suppression
   cancelDelete() {
@@ -343,4 +405,15 @@ addTechnicien() {
     this.showPopup = true;
   }
   
+  onAeroportChange(id: number) {
+    // Optionnel: debug/force conversion en nombre si besoin
+    this.newTechnicien.aeroportId = typeof id === 'string' ? Number(id) : id;
+    console.log('Aéroport sélectionné ID =', this.newTechnicien.aeroportId);
+  }
+
+  getAeroportNameById(id?: number | null): string {
+    if (id == null) return '';
+    const a = this.aeroports.find(x => x.id === id);
+    return a?.name ?? '';
+  }
 }

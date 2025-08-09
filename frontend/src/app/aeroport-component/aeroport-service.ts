@@ -15,13 +15,15 @@ export class AeroportService {
   
     constructor(private http: HttpClient) {}
 
-    getAllAeroports(): Observable<Aeroport[]> {
+    getAll(): Observable<Aeroport[]> {
       return this.http.get<Aeroport[]>(this.apiUrl);
     }
   
     getAeroportByName(name: string): Observable<Aeroport[]> {
       return this.http.get<Aeroport[]>(`${this.apiUrl}/search?name=${name}`);
     }
+
+    
 
     createAeroport(aeroport: Aeroport): Observable<Aeroport> {
       return this.http.post<Aeroport>(this.apiUrl, aeroport);
