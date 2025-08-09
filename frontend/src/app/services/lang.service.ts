@@ -80,7 +80,43 @@ export class LangService {
       confirmDeleteSolution: 'Voulez-vous vraiment supprimer cette solution ?',
       solutionAdded: 'Solution ajoutée avec succès !',
       solutionUpdated: 'Solution mise à jour avec succès !',
-      solutionDeleted: 'Solution supprimée avec succès !'
+      solutionDeleted: 'Solution supprimée avec succès !',
+
+      zoneTitle: 'Zones',
+      zoneSubtitle: 'Liste de toutes les zones',
+      addZone: 'Nouvelle zone',
+      searchZone: '🔍 Rechercher une zone...',
+      noZones: 'Aucune zone trouvée',
+      zoneName: 'Nom de la zone',
+      enterZoneName: 'Entrez le nom de la zone',
+      zoneExists: 'Une zone avec ce nom existe déjà !',
+      zoneEmptyField: 'Le nom de la zone ne peut pas être vide !',
+      confirmDeleteZone: 'Voulez-vous vraiment supprimer cette zone ?',
+      zoneAdded: 'Zone ajoutée avec succès !',
+      zoneUpdated: 'Zone mise à jour avec succès !',
+      zoneDeleted: 'Zone supprimée avec succès !',
+      cannotDelete: 'Suppression impossible',
+      zoneHasCounters: 'Cette zone contient des comptoirs et ne peut pas être supprimée.',
+      deleteCountersFirst: 'Veuillez d\'abord supprimer tous les comptoirs associés à cette zone.',
+
+      counterTitle: 'Comptoires',
+      counterSubtitle: 'Liste de tous les comptoires',
+      addCounter: 'Nouveau comptoire',
+      searchCounter: '🔍 Rechercher un comptoire...',
+      noCounters: 'Aucun comptoire trouvé',
+      counterName: 'Nom du comptoire',
+      enterCounterName: 'Entrez le nom du comptoire',
+      selectZone: 'Sélectionnez une zone',
+      zone: 'Zone',
+      zoneRequired: 'Zone nécessaire',
+      counterNeedsZone: 'Veuillez sélectionner une zone pour ce comptoir.',
+      zoneUnavailable: 'Zone indisponible',
+      counterExists: 'Un comptoire avec ce nom existe déjà !',
+      counterEmptyField: 'Le nom du comptoire ne peut pas être vide !',
+      confirmDeleteCounter: 'Voulez-vous vraiment supprimer ce comptoire ?',
+      counterAdded: 'Comptoire ajouté avec succès !',
+      counterUpdated: 'Comptoire mis à jour avec succès !',
+      counterDeleted: 'Comptoire supprimé avec succès !',
     },
 
     en: {
@@ -152,7 +188,43 @@ export class LangService {
       confirmDeleteSolution: 'Are you sure you want to delete this solution?',
       solutionAdded: 'Solution added successfully!',
       solutionUpdated: 'Solution updated successfully!',
-      solutionDeleted: 'Solution deleted successfully!'
+      solutionDeleted: 'Solution deleted successfully!',
+
+      zoneTitle: 'Zones',
+      zoneSubtitle: 'The list of all zones',
+      addZone: 'New zone',
+      searchZone: '🔍 Search a zone...',
+      noZones: 'No zones found',
+      zoneName: 'Zone Name',
+      enterZoneName: 'Enter zone name',
+      zoneExists: 'A zone with this name already exists!',
+      zoneEmptyField: 'The zone name cannot be empty!',
+      confirmDeleteZone: 'Are you sure you want to delete this zone?',
+      zoneAdded: 'Zone added successfully!',
+      zoneUpdated: 'Zone updated successfully!',
+      zoneDeleted: 'Zone deleted successfully!',
+      cannotDelete: 'Deletion not allowed',
+      zoneHasCounters: 'This zone contains counters and cannot be deleted.',
+      deleteCountersFirst: 'Please delete all counters associated with this zone first.',
+
+      counterTitle: 'Counters',
+      counterSubtitle: 'The list of all counters',
+      addCounter: 'New counter',
+      searchCounter: '🔍 Search a counter...',
+      noCounters: 'No counters found',
+      counterName: 'Counter Name',
+      enterCounterName: 'Enter counter name',
+      selectZone: 'Select a zone',
+      zone: 'Zone',
+      zoneRequired: 'Zone Required',
+      counterNeedsZone: 'Please select a zone for this counter.',
+      zoneUnavailable: 'Zone unavailable',
+      counterExists: 'A counter with this name already exists!',
+      counterEmptyField: 'The counter name cannot be empty!',
+      confirmDeleteCounter: 'Are you sure you want to delete this counter?',
+      counterAdded: 'Counter added successfully!',
+      counterUpdated: 'Counter updated successfully!',
+      counterDeleted: 'Counter deleted successfully!',
     }
   };
 
@@ -161,13 +233,17 @@ export class LangService {
       { value: 'campagny', label: 'Compagnie' },
       { value: 'problem', label: 'Problème' },
       { value: 'solution', label: 'Solution' },
-      { value: 'staff', label: 'Personnel' }
+      { value: 'staff', label: 'Personnel' },
+      { value: 'zone', label: 'Zone' },
+      { value: 'comptoire', label: 'Comptoire' }
     ],
     en: [
       { value: 'campagny', label: 'Company' },
       { value: 'problem', label: 'Problem' },
       { value: 'solution', label: 'Solution' },
-      { value: 'staff', label: 'Staff' }
+      { value: 'staff', label: 'Staff' },
+      { value: 'zone', label: 'Zone' },
+      { value: 'comptoire', label: 'Counter' }
     ]
   };
 

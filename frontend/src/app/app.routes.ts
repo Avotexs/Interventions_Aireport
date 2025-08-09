@@ -10,6 +10,9 @@ export const routes: Routes = [
   { path: '', component: Home },
   { path: 'problem', component: ProblemComponent },
   { path: 'campagny', component: CampagnyComponent },
-  { path: 'solution', component: SolutionComponent }
-
+  { path: 'solution', component: SolutionComponent },
+  { path: 'zone',      loadComponent: () => import('./zone/zone-component')
+                                         .then(m => m.ZoneComponent) },
+  { path: 'comptoire', loadComponent: () => import('./comptoire/comptoire-component')
+                                         .then(m => m.ComptoireComponent) },
 ];

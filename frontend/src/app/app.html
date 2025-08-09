@@ -73,12 +73,20 @@
           <span>Solutions</span>
         </a>
 
-        <a routerLink="/staff" routerLinkActive="active" class="nav-item">
+  <a routerLink="/zone" routerLinkActive="active" class="nav-item">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span>Staff</span>
+          <span>Zones</span>
+        </a>
+
+        <a routerLink="/comptoire" routerLinkActive="active" class="nav-item">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Comptoires</span>
         </a>
 
         <a routerLink="/problem" routerLinkActive="active" class="nav-item">
@@ -92,6 +100,8 @@
       </nav>
     </aside>
 
+
+  
     <!-- Main Content -->
     <main class="main-content" [ngClass]="{'sidebar-hidden': !sidebarVisible && window.innerWidth > 768}">
       <router-outlet></router-outlet>
