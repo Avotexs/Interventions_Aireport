@@ -1,29 +1,28 @@
 import { Component } from '@angular/core';
-import { ProblemService, Problem } from './problem-service';
+import { Aeroport } from './aeroport-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AeroportService } from './aeroport-service';
 import { LangService } from '../services/lang.service';
+import { TechnicienService, Technicien } from '../technicien-component/technicien-service';
 
 @Component({
-  selector: 'app-problem', 
-  imports: [CommonModule, FormsModule], 
-  standalone: true, 
-  templateUrl: './problem.html', 
-  styleUrl: './problem.css' 
+  selector: 'app-aeroport-component',
+  imports: [CommonModule, FormsModule],
+  templateUrl: './aeroport-component.html',
+  styleUrl: './aeroport-component.css'
 })
+export class AeroportComponent {
 
-export class ProblemComponent {
-  
-  problems: Problem[] = [];     // List of all problems fetched from the backend
-  editingProblem: Problem | null = null;    // Problem currently being edited (null if none)
-  newProblem: Problem = { name: '' }; // New problem to be created
+  aeroports: Aeroport[] = [];     // List of all aeroports fetched from the backend
+  editingAeroport: Aeroport | null = null;    // Aeroport currently being edited (null if none)
+  newAeroport: Aeroport = { name: '' }; // New aeroport to be created
   editedName: string = '';     // Temporary edited name used in editing UI
   searchTerm: string = '';       // Search term bound to input field
   currentPage: number = 0;     // Pagination: current page index
   pageSize: number = 5;   // Pagination: number of items per page
   showPopup: boolean = false;  // Whether the popup/modal is visible
-  showEditPopup: boolean = false; // Whether the edit popup/modal is visible
-  problemToDelete: number|null = null;
+  aeroportToDelete: number|null = null;
   showEmptyFieldPopup = false;
   showPopupSuppression = false;
   showAlreadyExistsPopup = false;
@@ -32,7 +31,10 @@ export class ProblemComponent {
   showDeleteSuccessPopup = false;
   showEmptyFieldPopupUpdate = false;
   totalItems: number = 0;
-  selectedEntity = 'problem';
+  selectedEntity = 'aeroport';
+  showEditPopup: boolean = false;
+  // Popup when deletion is blocked due to linked technicians
+  showCannotDeletePopup = false;
 
   toggleLang() {
    this.langService.toggleLang();
@@ -48,36 +50,36 @@ export class ProblemComponent {
    return this.langService.lang;
 }
   /**
-   * Constructor that injects the ProblemService and initializes data.
-   * @param problemService - Service for accessing problems from backend
+   * Constructor that injects the AeroportService and initializes data.
+   * @param aeroportService - Service for accessing aeroports from backend
    */
 
-    constructor(private problemService: ProblemService, private langService: LangService) {
-    this.getProblemList();
+    constructor(private aeroportService: AeroportService, private langService: LangService, private technicienService: TechnicienService) {
+    this.getAllAeroports();
   }
 
    /**
-   * Fetches all problems from the backend and sorts them in descending order by ID.
+   * Fetches all aeroports from the backend and sorts them in descending order by ID.
    */
 
-getProblemList() {
-  this.problemService.getAllProblems().subscribe({
+getAllAeroports() {
+  this.aeroportService.getAll().subscribe({
     next: (data) => {
       // 🔁 Trie décroissant par ID (le plus récent en haut)
-      this.problems = data.sort((a, b) => b.id! - a.id!);
+      this.aeroports = data.sort((a, b) => b.id! - a.id!);
     },
     error: (err) => console.error(err)
   });
 }
 
    /**
-   * Returns the list of problems filtered by the search term
+   * Returns the list of aeroports filtered by the search term
    * and sliced for pagination.
-   * @returns Filtered and paginated problems
+   * @returns Filtered and paginated aeroports
    */
-  filteredProblems(): Problem[] {
-    return this.problems
-      .filter(p => p.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+  filteredAeroports(): Aeroport[] {
+    return this.aeroports
+      .filter(a => a.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
       .slice(this.currentPage * this.pageSize, (this.currentPage + 1) * this.pageSize);
   } 
   /**
@@ -86,7 +88,7 @@ getProblemList() {
    */
     get pageCount(): number {
     return Math.ceil(
-      this.problems.filter(p => p.name.toLowerCase().includes(this.searchTerm.toLowerCase())).length / this.pageSize
+      this.aeroports.filter(a => a.name.toLowerCase().includes(this.searchTerm.toLowerCase())).length / this.pageSize
     );
     }
 
@@ -115,17 +117,17 @@ getProblemList() {
 
 
 
-  addProblem() {
+  addAeroport() {
   // Vérifie si le champ est vide
-  if (!this.newProblem.name || this.newProblem.name.trim() === '') {
+  if (!this.newAeroport.name || this.newAeroport.name.trim() === '') {
     this.showEmptyFieldPopup = true;
     return;
   }
 
   // Vérifie si le nom existe déjà
   if (
-    this.problems.some(
-      c => c.name.trim().toLowerCase() === this.newProblem.name.trim().toLowerCase()
+    this.aeroports.some(
+      c => c.name.trim().toLowerCase() === this.newAeroport.name.trim().toLowerCase()
     )
   ) {
     this.showPopup = false;
@@ -134,10 +136,10 @@ getProblemList() {
   }
 
   // Ajout si tout est OK
-  this.problemService.createProblem(this.newProblem).subscribe({
+  this.aeroportService.createAeroport(this.newAeroport).subscribe({
     next: () => {
-      this.getProblemList();
-      this.newProblem.name = '';
+      this.getAllAeroports();
+      this.newAeroport.name = '';
       this.showPopup = false; // Cache la fenêtre d’ajout
       this.showSuccessPopup = true; // Affiche le popup succès
     },
@@ -158,7 +160,7 @@ closeAlreadyExistsPopup() {
   this.showPopup = true; // On ré-affiche la fenêtre d'ajout
 }
 
-
+ 
 
 closeEmptyFieldPopup() {
   this.showEmptyFieldPopup = false;
@@ -167,30 +169,29 @@ closeEmptyFieldPopupUpdate() {
   this.showEmptyFieldPopupUpdate = false;
 }
 
-startEdit(problem: Problem) {
-    this.editingProblem = problem;
-    this.editedName = problem.name;
-    this.showEditPopup = true;
+startEdit(aeroport: Aeroport) {
+    this.editingAeroport = aeroport;
+    this.editedName = aeroport.name;
   }
-
+  
   closeEditPopup() {
     this.showEditPopup = false;
-    this.editingProblem = null;
+    this.editingAeroport = null;
     this.editedName = '';
   }
 
-  saveEditedProblem() {
+
+  saveEditedAeroport() {
     // Vérifie si le champ est vide
     if (!this.editedName || this.editedName.trim() === '') {
-      this.showEmptyFieldPopupUpdate = true;
-      this.showEditPopup = false; // Cache la fenêtre d'édition
+      this.showEmptyFieldPopup = true;
       return;
     }
     
-    // Vérifie si le nouveau nom existe déjà chez un autre problème
+    // Vérifie si le nouveau nom existe déjà chez une autre aéroport
     if (
-      this.problems.some(
-        p => p.id !== this.editingProblem?.id && p.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
+      this.aeroports.some(
+        c => c.id !== this.editingAeroport?.id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
       )
     ) {
       this.showEditPopup = false;
@@ -199,12 +200,12 @@ startEdit(problem: Problem) {
     }
 
     // Modification si tout est OK
-    if (this.editingProblem && this.editingProblem.id) {
-      this.problemService.updateProblem(this.editingProblem.id, { name: this.editedName }).subscribe({
+    if (this.editingAeroport && this.editingAeroport.id) {
+      this.aeroportService.updateAeroport(this.editingAeroport.id, { name: this.editedName }).subscribe({
         next: () => {
-          this.getProblemList();
+          this.getAllAeroports();
           this.showEditPopup = false;
-          this.editingProblem = null; // Cache la fenêtre d'édition
+          this.editingAeroport = null; // Cache la fenêtre d'édition
           this.editedName = '';
           this.showEditSuccessPopup = true; // Affiche le popup succès
         },
@@ -213,30 +214,29 @@ startEdit(problem: Problem) {
     }
   }
 
- 
 
-updateProblem(id: number) {
+updateAeroport(id: number) {
   // Vérifie si le champ est vide ou ne contient que des espaces
   if (!this.editedName || !this.editedName.trim()) {
     this.showEmptyFieldPopupUpdate  = true; // Affiche le popup d'erreur pour champ vide
     return;
   }
-  // Vérifie si le nouveau nom existe déjà chez une autre problème
+  // Vérifie si le nouveau nom existe déjà chez une autre aéroport
   if (
-    this.problems.some(
+    this.aeroports.some(
       c => c.id !== id && c.name.trim().toLowerCase() === this.editedName.trim().toLowerCase()
     )
   ) {
-    this.editingProblem = null; // Cache la fenêtre d'édition
+    this.editingAeroport = null; // Cache la fenêtre d'édition
     this.showAlreadyExistsPopup = true; // Affiche le message d'erreur
     return;
   }
 
   // Modification si tout est OK
-  this.problemService.updateProblem(id, { name: this.editedName }).subscribe({
+  this.aeroportService.updateAeroport(id, { name: this.editedName }).subscribe({
     next: () => {
-      this.getProblemList();
-      this.editingProblem = null; // Cache la fenêtre d'édition
+      this.getAllAeroports();
+      this.editingAeroport = null; // Cache la fenêtre d'édition
       this.editedName = '';
       this.showEditSuccessPopup = true; // Affiche le popup succès
     },
@@ -250,40 +250,68 @@ closeEditSuccessPopup() {
 closeAlreadyExistsPopupUpdate() {
   this.showAlreadyExistsPopup = false;
   // On ré-affiche la fenêtre d’édition avec le même nom
-  this.editingProblem = { ...this.editingProblem, name: this.editedName };
+  this.editingAeroport = { ...this.editingAeroport, name: this.editedName };
 }
 
   askDelete(id: number) {
-    this.problemToDelete = id;
+    this.aeroportToDelete = id;
     this.showPopupSuppression = true;
   }
 
 
 confirmDelete() {
-  if (this.problemToDelete) {
-    this.problemService.deleteProblem(this.problemToDelete).subscribe({
-      next: () => {
-        this.getProblemList();
-        this.showDeleteSuccessPopup = true; // Affiche le popup succès
-      },
-      error: (err) => console.error(err)
-    });
+  if (!this.aeroportToDelete) {
+    this.showPopupSuppression = false;
+    return;
   }
 
-  this.showPopupSuppression = false; // Cache la fenêtre de confirmation
-  this.problemToDelete = null;
+  const idToDelete = this.aeroportToDelete;
+
+  // Check if any technician is linked to this airport before deleting
+  this.technicienService.getTechniciens().subscribe({
+    next: (techniciens: Technicien[]) => {
+      const used = techniciens.some(t => t.aeroportId === idToDelete);
+      if (used) {
+        // Block deletion and inform user
+        this.showPopupSuppression = false;
+        this.showCannotDeletePopup = true;
+        this.aeroportToDelete = null;
+        return;
+      }
+
+      // Proceed with deletion if not used
+      this.aeroportService.deleteAeroport(idToDelete).subscribe({
+        next: () => {
+          this.getAllAeroports();
+          this.showDeleteSuccessPopup = true;
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+
+      this.showPopupSuppression = false;
+      this.aeroportToDelete = null;
+    },
+    error: (err) => {
+      console.error('Error checking technicians before delete:', err);
+      // Fallback: close dialog without deleting
+      this.showPopupSuppression = false;
+    }
+  });
+}
+
+// Close the cannot-delete popup
+closeCannotDeletePopup() {
+  this.showCannotDeletePopup = false;
 }
 
 // Annule la suppression
   cancelDelete() {
     this.showPopupSuppression = false;
-    this.problemToDelete = null;
+    this.aeroportToDelete = null;
   }
 closeDeleteSuccessPopup() {
   this.showDeleteSuccessPopup = false;
 }
-
 }
-
-
-
