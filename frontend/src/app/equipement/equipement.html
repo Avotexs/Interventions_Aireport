@@ -1,0 +1,240 @@
+<div class="problem-container">
+  <div class="problem-header">
+    <div>
+      <h1 class="problem-title">{{ t.equipementTitle }}</h1>
+      <p class="problem-subtitle">{{ t.equipementSubtitle }}</p>
+    </div>
+    <button class="btn-primary" (click)="showPopup = true">
+      <i class="fas fa-plus"></i> {{ t.addEquipement }}
+    </button>
+  </div>
+
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="{{ t.searchEquipement }}"
+        (input)="onSearchChange()"
+        class="search-input"
+      />
+      <button *ngIf="searchTerm" (click)="clearSearch()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="problem-table">
+      <thead>
+        <tr>
+          <th>{{ t.id }}</th>
+          <th>{{ t.nameEquipement }}</th>
+          <th>{{ t.quantite }}</th>
+          <th class="actions-column">{{ t.actions }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="filteredEquipements().length === 0">
+          <td colspan="4" class="empty-message">{{ t.noEquipements }}</td>
+        </tr>
+        <tr *ngFor="let equipement of filteredEquipements()">
+          <td>{{ equipement.id }}</td>
+          <td class="name-cell">{{ equipement.nameEquipement }}</td>
+          <td class="name-cell">{{ equipement.quantite }}</td>
+          <td class="actions-cell">
+            <button (click)="startEdit(equipement)" class="action-btn edit-btn" title="{{ t.edit }}">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="askDelete(equipement.id!)" class="action-btn delete-btn" title="{{ t.delete }}">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="pageCount > 1" class="pagination">
+    <span class="page-info">{{ t.page }} {{ currentPage + 1 }} {{ t.of }} {{ pageCount }}</span>
+    <div class="page-controls">
+      <button (click)="goToPage(0)" [disabled]="currentPage === 0" class="page-btn">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0" class="page-btn">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === pageCount - 1" class="page-btn">
+        <i class="fas fa-angle-right"></i>
+      </button>
+      <button (click)="goToPage(pageCount - 1)" [disabled]="currentPage === pageCount - 1" class="page-btn">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal pour ajouter un équipement -->
+  <div *ngIf="showPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.addEquipement }}</h3>
+        <button (click)="showPopup = false" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="equipementName">{{ t.nameEquipement }}</label>
+          <input
+            type="text"
+            id="equipementName"
+            [(ngModel)]="newEquipement.nameEquipement"
+            placeholder="{{ t.enterEquipementName }}"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <label for="equipementQuantite">{{ t.quantite }}</label>
+          <input
+            type="number"
+            id="equipementQuantite"
+            [(ngModel)]="newEquipement.quantite"
+            placeholder="{{ t.enterQuantite }}"
+            class="form-input"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="showPopup = false" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="addEquipement()" class="btn-primary">{{ t.add }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmation de suppression -->
+  <div *ngIf="showPopupSuppression" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.confirm }}</h3>
+        <button (click)="cancelDelete()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ t.confirmDeleteEquipement }}</p>
+        <p class="warning-text">
+          <i class="fas fa-exclamation-triangle"></i> {{ t.actionUndone }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="cancelDelete()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="confirmDelete()" class="btn-danger">{{ t.confirm }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Existe déjà" -->
+  <div *ngIf="showAlreadyExistsPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.equipementExists }}</h3>
+        <button (click)="closeAlreadyExistsPopupUpdate()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.equipementExists }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeAlreadyExistsPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Champ vide" -->
+  <div *ngIf="showEmptyFieldPopup || showEmptyFieldPopupUpdate" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.emptyField }}</h3>
+        <button (click)="showEmptyFieldPopup ? closeEmptyFieldPopup() : closeEmptyFieldPopupUpdate()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.equipementEmptyField }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="showEmptyFieldPopup ? closeEmptyFieldPopup() : closeEmptyFieldPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Succès" -->
+  <div *ngIf="showSuccessPopup || showEditSuccessPopup || showDeleteSuccessPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.successAdd }}</h3>
+        <button 
+          (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
+          class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="success-text">
+          <i class="fas fa-check-circle"></i> 
+          {{ showSuccessPopup ? t.equipementAdded : 
+             (showEditSuccessPopup ? t.equipementUpdated : t.equipementDeleted) }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button 
+          (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
+          class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour modifier un équipement -->
+  <div *ngIf="showEditPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.edit }}</h3>
+        <button (click)="closeEditPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editEquipementName">{{ t.nameEquipement }}</label>
+          <input
+            type="text"
+            id="editEquipementName"
+            [(ngModel)]="editedName"
+            placeholder="{{ t.enterEquipementName }}"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <label for="editEquipementQuantite">{{ t.quantite }}</label>
+          <input
+            type="number"
+            id="editEquipementQuantite"
+            [(ngModel)]="editedQuantite"
+            placeholder="{{ t.enterQuantite }}"
+            class="form-input"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeEditPopup()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="saveEditedEquipement()" class="btn-primary">{{ t.save }}</button>
+      </div>
+    </div>
+  </div>
+</div>
