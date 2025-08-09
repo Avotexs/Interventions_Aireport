@@ -42,4 +42,3 @@ public class EquipementService {
         equipementRepository.deleteById(id);
     }
 }
-
