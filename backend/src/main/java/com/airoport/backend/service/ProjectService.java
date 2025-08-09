@@ -33,11 +33,11 @@ public class ProjectService {
             Equipement equipement = equipementRepository.findById(eDto.equipementId)
                     .orElseThrow(() -> new RuntimeException("Equipement introuvable"));
 
-            if (equipement.getQuantiteTotal() < eDto.quantite) {
+            if (equipement.getQuantite() < eDto.quantite) {
                 throw new RuntimeException("Stock insuffisant pour " + equipement.getNameEquipement());
             }
 
-            equipement.setQuantiteTotal(equipement.getQuantiteTotal() - eDto.quantite);
+            equipement.setQuantite(equipement.getQuantite() - eDto.quantite);
             equipementRepository.save(equipement);
 
             ProjetEquipement lien = new ProjetEquipement();
@@ -68,7 +68,7 @@ public class ProjectService {
         // Réincrémente le stock
         project.getProjetEquipements().forEach(pe -> {
             Equipement eq = pe.getEquipement();
-            eq.setQuantiteTotal(eq.getQuantiteTotal() + pe.getQuantiteReservee());
+            eq.setQuantite(eq.getQuantite() + pe.getQuantiteReservee());
             equipementRepository.save(eq);
         });
 
@@ -98,22 +98,22 @@ public class ProjectService {
 
                 if (diff > 0) {
                     // Augmentation → vérifier stock
-                    if (equipement.getQuantiteTotal() < diff) {
+                    if (equipement.getQuantite() < diff) {
                         throw new IllegalArgumentException("Stock insuffisant pour " + equipement.getNameEquipement());
                     }
-                    equipement.setQuantiteTotal(equipement.getQuantiteTotal() - diff);
+                    equipement.setQuantite(equipement.getQuantite() - diff);
                 } else if (diff < 0) {
                     // Diminution → rendre stock
-                    equipement.setQuantiteTotal(equipement.getQuantiteTotal() + Math.abs(diff));
+                    equipement.setQuantite(equipement.getQuantite() + Math.abs(diff));
                 }
                 existingLink.setQuantiteReservee(eDto.quantite);
                 equipementRepository.save(equipement);
             } else {
                 // Nouvel équipement → réserver stock
-                if (equipement.getQuantiteTotal() < eDto.quantite) {
+                if (equipement.getQuantite() < eDto.quantite) {
                     throw new IllegalArgumentException("Stock insuffisant pour " + equipement.getNameEquipement());
                 }
-                equipement.setQuantiteTotal(equipement.getQuantiteTotal() - eDto.quantite);
+                equipement.setQuantite(equipement.getQuantite() - eDto.quantite);
                 equipementRepository.save(equipement);
 
                 ProjetEquipement newLink = new ProjetEquipement(project, equipement, eDto.quantite);
@@ -132,7 +132,7 @@ public class ProjectService {
 
         toRemove.forEach(pe -> {
             Equipement eq = pe.getEquipement();
-            eq.setQuantiteTotal(eq.getQuantiteTotal() + pe.getQuantiteReservee());
+            eq.setQuantite(eq.getQuantite() + pe.getQuantiteReservee());
             equipementRepository.save(eq);
             project.getProjetEquipements().remove(pe);
         });

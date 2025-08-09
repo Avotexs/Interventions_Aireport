@@ -1,7 +1,9 @@
 package com.airoport.backend.model;
 
 import jakarta.persistence.*;
+import org.springframework.lang.Nullable;
 
+import javax.annotation.processing.Generated;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,12 +12,14 @@ public class Equipement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false,unique = true)
     private String nameEquipement;
-    private int quantiteTotal;
+    @Column(nullable = false)
+    private int quantite;
 
-    public Equipement(String nameEquipement, int quantiteTotal) {
+    public Equipement(String nameEquipement, int quantite) {
         this.nameEquipement = nameEquipement;
-        this.quantiteTotal = quantiteTotal;
+        this.quantite = quantite;
     }
 
     public Equipement() {
@@ -37,11 +41,11 @@ public class Equipement {
         this.nameEquipement = nameEquipement;
     }
 
-    public int getQuantiteTotal() {
-        return quantiteTotal;
+    public int getQuantite() {
+        return quantite;
     }
 
-    public void setQuantiteTotal(int quantiteTotal) {
-        this.quantiteTotal = quantiteTotal;
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
     }
 }

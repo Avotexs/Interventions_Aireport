@@ -20,24 +20,23 @@ public class TechnicienService {
     }
     public TechnicienDTO convertTDTO(Technicien technicien) {
         return new TechnicienDTO(
-
-                technicien.getName(),
+                technicien.getFirstname(),
                 technicien.getLastname(),
                 technicien.getPseudoname(),
                 technicien.getRole(),
                 technicien.getMotDePass(),
-                technicien.getAeroport().getId()
+                technicien.getAeroport() != null ? technicien.getAeroport().getId() : 0
         );
     }
     public List<Technicien> getAll() {
         return technicienRepository.findAll();
     }
-
     public Technicien createTechnicien(TechnicienDTO dto) {
         Aeroport aeroport = aeroportRepository.findById(dto.aeroportId)
-                .orElseThrow(() -> new IllegalArgumentException("Aéroport non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Aéroport non trouvé avec l'ID : " + dto.aeroportId));
+
         Technicien technicien = new Technicien(
-                dto.name, dto.lastname, dto.pseudoname, dto.role, dto.motDePass, aeroport
+                dto.firstname, dto.lastname, dto.pseudoname, dto.role, dto.motDePass, aeroport
         );
         return technicienRepository.save(technicien);
     }
@@ -48,7 +47,7 @@ public class TechnicienService {
         Aeroport aeroport = aeroportRepository.findById(dto.aeroportId)
                 .orElseThrow(() -> new IllegalArgumentException("Aéroport non trouvé"));
 
-        technicien.setName(dto.name);
+        technicien.setFirstname(dto.firstname);
         technicien.setLastname(dto.lastname);
         technicien.setPseudoname(dto.pseudoname);
         technicien.setRole(dto.role);

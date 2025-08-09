@@ -18,7 +18,7 @@ public class EquipementService {
     public Equipement createEquipement(EquipementDTO dto) {
         Equipement equipement = new Equipement();
         equipement.setNameEquipement(dto.nameEquipement);
-        equipement.setQuantiteTotal(dto.quantite);
+        equipement.setQuantite(dto.quantite);
         return equipementRepository.save(equipement);
     }
 
@@ -33,7 +33,7 @@ public class EquipementService {
     public Equipement updateEquipement(Long id, EquipementDTO dto) {
         return equipementRepository.findById(id).map(equipement -> {
             equipement.setNameEquipement(dto.nameEquipement);
-            equipement.setQuantiteTotal(dto.quantite);
+            equipement.setQuantite(dto.quantite);
             return equipementRepository.save(equipement);
         }).orElseThrow(() -> new RuntimeException("Équipement non trouvé"));
     }
@@ -42,4 +42,3 @@ public class EquipementService {
         equipementRepository.deleteById(id);
     }
 }
-

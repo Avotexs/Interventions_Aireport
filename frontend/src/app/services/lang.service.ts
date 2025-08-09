@@ -117,6 +117,55 @@ export class LangService {
       counterAdded: 'Comptoire ajouté avec succès !',
       counterUpdated: 'Comptoire mis à jour avec succès !',
       counterDeleted: 'Comptoire supprimé avec succès !',
+      // Techniciens
+      
+      firstname: 'Prénom',
+      enterFirstname: 'Entrez le prénom',
+      lastname: 'Nom',
+      enterLastname: 'Entrez le nom',
+      pseudoname: 'Surnom',
+      enterPseudoname: 'Entrez le surnom',
+      role: 'Rôle',
+      enterRole: 'Entrez le rôle',
+      motDePass: 'Mot de passe',
+      enterMotDePass: 'Entrez le mot de passe',
+      aeroport: 'Aéroport',
+      enterAeroport: 'Choisissez l\'aéroport',
+      technicienTitle: 'Techniciens', 
+      technicienSubtitle: 'Liste de tous les techniciens',
+      addTechnicien: 'Nouveau technicien',
+      searchTechnicien: '🔍 Rechercher un technicien...',
+      noTechniciens: 'Aucun technicien trouvé',
+      technicienName: 'Nom du technicien',  
+      enterTechnicienName: 'Entrez le nom du technicien',
+      technicienExists: 'Un technicien avec ce nom existe déjà !',
+      technicienEmptyField: 'Veuillez remplir tous les champs !',
+      confirmDeleteTechnicien: 'Voulez-vous vraiment supprimer ce technicien ?',
+      technicienAdded: 'Technicien ajouté avec succès !',
+      technicienUpdated: 'Technicien mis à jour avec succès !',
+      technicienDeleted: 'Technicien supprimé avec succès !',
+
+       // Aeroports
+      aeroportTitle: 'Liste des Aéroports',
+      aeroportSubtitle: 'Liste de tous les aéroports',
+      addAeroport: 'Nouvel aéroport',
+      searchAeroport: '🔍 Rechercher un aéroport...',
+      noAeroports: 'Aucun aéroport trouvé',
+      aeroportName: 'Nom de l\'aéroport',
+      enterAeroportName: 'Entrez le nom de l\'aéroport',
+      aeroportExists: 'Un aéroport avec ce nom existe déjà !',
+      aeroportEmptyField: 'Le nom de l\'aéroport ne peut pas être vide !',
+      confirmDeleteAeroport: 'Voulez-vous vraiment supprimer cet aéroport ?',
+      aeroportAdded: 'Aéroport ajouté avec succès !',
+      aeroportUpdated: 'Aéroport mis à jour avec succès !',
+      aeroportDeleted: 'Aéroport supprimé avec succès !',
+      // New cannot-delete messages
+      cannotDeleteAeroport: 'Suppression impossible',
+      aeroportInUseByTechniciens: 'Cet aéroport est associé à un ou plusieurs techniciens. Supprimez ou modifiez ces techniciens avant de supprimer l\'aéroport.'
+
+
+
+
     },
 
     en: {
@@ -225,6 +274,50 @@ export class LangService {
       counterAdded: 'Counter added successfully!',
       counterUpdated: 'Counter updated successfully!',
       counterDeleted: 'Counter deleted successfully!',
+      // Technicians
+      firstname: 'Firstname',
+      enterFirstname: 'Enter firstname',
+      lastname: 'Lastname',
+      enterLastname: 'Enter lastname',
+      pseudoname: 'Pseudoname',
+      enterPseudoname: 'Enter pseudoname',
+      role: 'Role',
+      enterRole: 'Enter role',
+      motDePass: 'Password',
+      enterMotDePass: 'Enter password',
+      aeroport: 'Airport ',
+      enterAeroport: 'Choose airport',
+      technicienTitle: 'Technicians',
+      technicienSubtitle: 'The list of all technicians',
+      addTechnicien: 'New technician',
+      searchTechnicien: '🔍 Search a technician...',
+      noTechniciens: 'No technicians found',
+      technicienName: 'Technician Name',
+      enterTechnicienName: 'Enter technician name',
+      technicienExists: 'A technician with this name already exists!',
+      technicienEmptyField: 'Please fill in all fields !',
+      confirmDeleteTechnicien: 'Are you sure you want to delete this technician?',
+      technicienAdded: 'Technician added successfully!',
+      technicienUpdated: 'Technician updated successfully!',
+      technicienDeleted: 'Technician deleted successfully!' ,
+
+
+       // Aeroports
+       aeroportTitle: 'Airports',
+       aeroportSubtitle: 'The list of all airports',
+       addAeroport: 'New airport',
+       searchAeroport: '🔍 Search an airport...',
+       noAeroports: 'No airports found',
+       aeroportName: 'Airport Name',
+       enterAeroportName: 'Enter airport name',
+       aeroportExists: 'An airport with this name already exists!',
+       aeroportEmptyField: 'The airport name cannot be empty!',
+       confirmDeleteAeroport: 'Are you sure you want to delete this airport?',
+       aeroportAdded: 'Airport added successfully!',
+       aeroportUpdated: 'Airport updated successfully!',
+       aeroportDeleted: 'Airport deleted successfully!',
+       cannotDeleteAeroport: 'Cannot delete airport',
+       aeroportInUseByTechniciens: 'This airport is linked to one or more technicians. Please delete or modify these technicians before deleting the airport.'
     }
   };
 
@@ -235,7 +328,8 @@ export class LangService {
       { value: 'solution', label: 'Solution' },
       { value: 'staff', label: 'Personnel' },
       { value: 'zone', label: 'Zone' },
-      { value: 'comptoire', label: 'Comptoire' }
+      { value: 'comptoire', label: 'Comptoire' },
+      { value: 'technicien', label: 'Technicien' }
     ],
     en: [
       { value: 'campagny', label: 'Company' },
@@ -243,7 +337,8 @@ export class LangService {
       { value: 'solution', label: 'Solution' },
       { value: 'staff', label: 'Staff' },
       { value: 'zone', label: 'Zone' },
-      { value: 'comptoire', label: 'Counter' }
+      { value: 'comptoire', label: 'Counter' },
+      { value: 'technicien', label: 'Technician' }
     ]
   };
 
