@@ -172,6 +172,7 @@ closeEmptyFieldPopupUpdate() {
 startEdit(aeroport: Aeroport) {
     this.editingAeroport = aeroport;
     this.editedName = aeroport.name;
+    this.showEditPopup = true;
   }
   
   closeEditPopup() {
