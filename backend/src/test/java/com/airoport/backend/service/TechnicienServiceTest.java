@@ -30,11 +30,14 @@ public class TechnicienServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+    
 
     @Test
     void testGetAll() {
-        Technicien t1 = new Technicien("Ali", "Ben", "AliTech", "technicien", "pass123", 1);
-        Technicien t2 = new Technicien("Sara", "Saidi", "SaraTech", "technicien", "pass456", 2);
+        Aeroport a1 = new Aeroport("A1");
+        Aeroport a2 = new Aeroport("A2");
+        Technicien t1 = new Technicien("Ali", "Ben", "AliTech", "technicien", "pass123", a1);
+        Technicien t2 = new Technicien("Sara", "Saidi", "SaraTech", "technicien", "pass456", a2);
         when(technicienRepository.findAll()).thenReturn(Arrays.asList(t1, t2));
 
         List<Technicien> result = technicienService.getAll();
@@ -46,12 +49,11 @@ public class TechnicienServiceTest {
     @Test
     void testCreateTechnicien_Success() {
         TechnicienDTO dto = new TechnicienDTO("Ali", "Ben", "AliTech", "technicien", "pass123", 1);
-        Aeroport aeroport = new Aeroport();
-
+        Aeroport aeroport = new Aeroport("A1");
 
         when(aeroportRepository.findById(1)).thenReturn(Optional.of(aeroport));
 
-        Technicien saved = new Technicien("Ali", "Ben", "AliTech", "technicien", "pass123", 1);
+        Technicien saved = new Technicien("Ali", "Ben", "AliTech", "technicien", "pass123", aeroport);
         when(technicienRepository.save(any())).thenReturn(saved);
 
         Technicien result = technicienService.createTechnicien(dto);
@@ -71,22 +73,22 @@ public class TechnicienServiceTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 technicienService.createTechnicien(dto));
 
-        assertEquals("Aéroport non trouvé", exception.getMessage());
+        assertEquals("Aéroport non trouvé avec l'ID : 999", exception.getMessage());
         verify(aeroportRepository, times(1)).findById(999);
         verify(technicienRepository, never()).save(any());
     }
 
     @Test
     void testUpdateTechnicien_Success() {
-        Technicien existing = new Technicien("Old", "Name", "OldPseudo", "technicien", "oldpass", 1);
+        Aeroport a1 = new Aeroport("A1");
+        Technicien existing = new Technicien("Old", "Name", "OldPseudo", "technicien", "oldpass", a1);
 
-        Aeroport aeroport = new Aeroport();
-
+        Aeroport a2 = new Aeroport("A2");
 
         TechnicienDTO dto = new TechnicienDTO("New", "Updated", "NewPseudo", "technicien", "newpass", 2);
 
         when(technicienRepository.findById(1)).thenReturn(Optional.of(existing));
-        when(aeroportRepository.findById(2)).thenReturn(Optional.of(aeroport));
+        when(aeroportRepository.findById(2)).thenReturn(Optional.of(a2));
         when(technicienRepository.save(any())).thenReturn(existing);
 
         Technicien result = technicienService.updateTechnicien(1, dto);
