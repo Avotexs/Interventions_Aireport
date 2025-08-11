@@ -3,6 +3,7 @@ import { ProjectDTO, ProjectService, EquipementDTO } from './project-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { LangService } from '../services/lang.service';
 
 interface Equipement {
   id: number;
@@ -26,7 +27,22 @@ export class ProjectComponent implements OnInit {
   equipementsDisponibles: Equipement[] = [];
   newProjectEquipements: EquipementDTO[] = [];
   editingProject: ProjectDTO | null = null;
+  showProjectForm = false;
+  selectedEntity = 'project';
 
+  toggleLang() {
+   this.langService.toggleLang();
+ }
+
+  onEntityChange(newValue: string) {
+   this.selectedEntity = newValue;
+ }
+ get t() {
+   return this.langService.t;
+ }
+ get lang() {
+   return this.langService.lang;
+}
   // Normalize an array of equipment items coming from backend
   private normalizeEquipements(items: any[]): EquipementDTO[] {
     return (items ?? []).map((it: any) => {
@@ -58,6 +74,13 @@ export class ProjectComponent implements OnInit {
     };
   }
 
+  cancelAddProject() {
+  this.showProjectForm = false;
+  this.newProjectName = '';
+  this.newProjectEquipements = [];
+  this.selectedEquipementId = null;
+  this.selectedQuantite = null;
+}
   saveEditProject() {
     if (!this.editingProject) return;
 
@@ -100,7 +123,7 @@ export class ProjectComponent implements OnInit {
     this.editingProject = null;
   }
 
-  constructor(private projectService: ProjectService) {}
+  constructor(private projectService: ProjectService, public langService: LangService) {}
 
   addEquipementToProject() {
     if (!this.selectedEquipementId || !this.selectedQuantite || this.selectedQuantite <= 0) {
@@ -195,30 +218,30 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  addProject() {
-    if (!this.newProjectName.trim()) return;
+ addProject() {
+  if (!this.newProjectName.trim()) return;
 
-    const project: ProjectDTO = {
-      name: this.newProjectName,
-      equipements: this.newProjectEquipements,
-    };
+  const project: ProjectDTO = {
+    name: this.newProjectName,
+    equipements: this.newProjectEquipements,
+  };
 
-    console.log('Envoi projet:', JSON.stringify(project));
+  console.log('Envoi projet:', JSON.stringify(project));
 
-    this.projectService.createProject(project).subscribe({
-      next: (p) => {
-        const saved = this.normalizeProject(p);
-        if (!saved.equipements || saved.equipements.length === 0) {
-          // Ensure UI shows selected equipments since API may not return them
-          saved.equipements = this.newProjectEquipements.map(e => ({ ...e }));
-        }
-        this.projects.push(saved);
-        this.newProjectName = '';
-        this.newProjectEquipements = [];
-      },
-      error: (err) => console.error('Erreur création projet', err),
-    });
-  }
+  this.projectService.createProject(project).subscribe({
+    next: (p) => {
+      const saved = this.normalizeProject(p);
+      if (!saved.equipements || saved.equipements.length === 0) {
+        saved.equipements = this.newProjectEquipements.map(e => ({ ...e }));
+      }
+      this.projects.push(saved);
+      this.newProjectName = '';
+      this.newProjectEquipements = [];
+      this.showProjectForm = false; // Masquer le formulaire après l'ajout
+    },
+    error: (err) => console.error('Erreur création projet', err),
+  });
+}
 }
 
 import { EquipementService } from '../equipement/equipement-service';

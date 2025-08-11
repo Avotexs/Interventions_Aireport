@@ -6,6 +6,7 @@ import { CampagnyComponent } from './campagny/Campagny-Component';
 import { SolutionComponent } from './solution/solution-component';
 import { EquipementComponent } from './equipement/equipement-component';
 import { ProjectComponent } from './projet/project-component';
+import { ZoneComponent } from './zone/zone-component';
 
 import { TechnicienComponent } from './technicien-component/technicien-component';
 import { AeroportComponent } from './aeroport-component/aeroport-component';
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'problem', component: ProblemComponent },
   { path: 'campagny', component: CampagnyComponent },
   { path: 'solution', component: SolutionComponent },
+  
   { path: 'zone',      loadComponent: () => import('./zone/zone-component')
                                          .then(m => m.ZoneComponent) },
   { path: 'comptoire', loadComponent: () => import('./comptoire/comptoire-component')

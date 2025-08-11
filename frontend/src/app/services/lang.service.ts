@@ -26,6 +26,8 @@ export class LangService {
       ok: 'OK',
       page: 'Page',
       of: 'sur',
+      quantity: 'Quantité',
+      stock: 'stock',
 
       // Messages
       confirmDeleteGeneric: 'Voulez-vous vraiment supprimer cet élément ?',
@@ -117,8 +119,53 @@ export class LangService {
       counterAdded: 'Comptoire ajouté avec succès !',
       counterUpdated: 'Comptoire mis à jour avec succès !',
       counterDeleted: 'Comptoire supprimé avec succès !',
-      // Techniciens
       
+      // Équipements
+      equipementTitle: 'Équipements',
+      equipementSubtitle: 'Liste de tous les équipements',
+      addEquipement: 'Nouvel équipement',
+      searchEquipement: '🔍 Rechercher un équipement...',
+      noEquipements: 'Aucun équipement trouvé',
+      nameEquipement: 'Nom de l\'équipement',
+      enterEquipementName: 'Entrez le nom de l\'équipement',
+      quantite: 'Quantité',
+      enterQuantite: 'Entrez la quantité',
+      equipementExists: 'Un équipement avec ce nom existe déjà !',
+      equipementEmptyField: 'Les champs ne peuvent pas être vides !',
+      confirmDeleteEquipement: 'Voulez-vous vraiment supprimer cet équipement ?',
+      equipementAdded: 'Équipement ajouté avec succès !',
+      equipementUpdated: 'Équipement mis à jour avec succès !',
+      equipementDeleted: 'Équipement supprimé avec succès !',
+      
+      // Projets
+      projectTitle: 'Projets',
+      projectSubtitle: 'Gérez vos projets et leurs équipements',
+      addProject: 'Nouveau projet',
+      createProject: 'Créer un projet',
+      projectName: 'Nom du projet',
+      enterProjectName: 'Entrez le nom du projet',
+      selectEquipment: 'Choisir un équipement',
+      equipmentQuantity: 'Quantité',
+      selectedEquipments: 'Équipements sélectionnés',
+      projectListTitle: 'Liste des projets',
+      noProjects: 'Aucun projet trouvé',
+      modifyProject: 'Modifier projet',
+      saveProject: 'Enregistrer le projet',
+      deleteProjectConfirm: 'Voulez-vous vraiment supprimer ce projet ?',
+      projectAdded: 'Projet ajouté avec succès !',
+      projectUpdated: 'Projet mis à jour avec succès !',
+      projectDeleted: 'Projet supprimé avec succès !',
+      equipments: 'Équipements',
+      addEquipment: 'Ajouter équipment',
+      equipment: 'Équipement',
+      unknownEquipment: 'Équipement inconnu',
+      editEquipment: 'Modifier',
+      deleteEquipment: 'Supprimer',
+      chooseEquipment: 'Choisir un équipement',
+      equipmentStock: 'stock',
+      removeEquipment: 'X',
+
+      // Techniciens
       firstname: 'Prénom',
       enterFirstname: 'Entrez le prénom',
       lastname: 'Nom',
@@ -145,7 +192,7 @@ export class LangService {
       technicienUpdated: 'Technicien mis à jour avec succès !',
       technicienDeleted: 'Technicien supprimé avec succès !',
 
-       // Aeroports
+      // Aeroports
       aeroportTitle: 'Liste des Aéroports',
       aeroportSubtitle: 'Liste de tous les aéroports',
       addAeroport: 'Nouvel aéroport',
@@ -162,10 +209,6 @@ export class LangService {
       // New cannot-delete messages
       cannotDeleteAeroport: 'Suppression impossible',
       aeroportInUseByTechniciens: 'Cet aéroport est associé à un ou plusieurs techniciens. Supprimez ou modifiez ces techniciens avant de supprimer l\'aéroport.'
-
-
-
-
     },
 
     en: {
@@ -183,6 +226,8 @@ export class LangService {
       ok: 'OK',
       page: 'Page',
       of: 'of',
+      quantity: 'Quantity',
+      stock: 'stock',
 
       // Messages
       confirmDeleteGeneric: 'Are you sure you want to delete this item?',
@@ -274,6 +319,52 @@ export class LangService {
       counterAdded: 'Counter added successfully!',
       counterUpdated: 'Counter updated successfully!',
       counterDeleted: 'Counter deleted successfully!',
+      
+      // Equipment
+      equipementTitle: 'Equipment',
+      equipementSubtitle: 'List of all equipment',
+      addEquipement: 'New equipment',
+      searchEquipement: '🔍 Search equipment...',
+      noEquipements: 'No equipment found',
+      nameEquipement: 'Equipment name',
+      enterEquipementName: 'Enter equipment name',
+      quantite: 'Quantity',
+      enterQuantite: 'Enter quantity',
+      equipementExists: 'Equipment with this name already exists!',
+      equipementEmptyField: 'Fields cannot be empty!',
+      confirmDeleteEquipement: 'Are you sure you want to delete this equipment?',
+      equipementAdded: 'Equipment added successfully!',
+      equipementUpdated: 'Equipment updated successfully!',
+      equipementDeleted: 'Equipment deleted successfully!',
+      
+      // Projects
+      projectTitle: 'Projects',
+      projectSubtitle: 'Manage your projects and their equipment',
+      addProject: 'New project',
+      createProject: 'Create project',
+      projectName: 'Project name',
+      enterProjectName: 'Enter project name',
+      selectEquipment: 'Select equipment',
+      equipmentQuantity: 'Quantity',
+      selectedEquipments: 'Selected equipment',
+      projectListTitle: 'Project list',
+      noProjects: 'No projects found',
+      modifyProject: 'Modify project',
+      saveProject: 'Save project',
+      deleteProjectConfirm: 'Are you sure you want to delete this project?',
+      projectAdded: 'Project added successfully!',
+      projectUpdated: 'Project updated successfully!',
+      projectDeleted: 'Project deleted successfully!',
+      equipments: 'Equipment',
+      addEquipment: 'Add equipment',
+      equipment: 'Equipment',
+      unknownEquipment: 'Unknown equipment',
+      editEquipment: 'Edit',
+      deleteEquipment: 'Delete',
+      chooseEquipment: 'Choose equipment',
+      equipmentStock: 'stock',
+      removeEquipment: 'X',
+
       // Technicians
       firstname: 'Firstname',
       enterFirstname: 'Enter firstname',
@@ -299,25 +390,24 @@ export class LangService {
       confirmDeleteTechnicien: 'Are you sure you want to delete this technician?',
       technicienAdded: 'Technician added successfully!',
       technicienUpdated: 'Technician updated successfully!',
-      technicienDeleted: 'Technician deleted successfully!' ,
+      technicienDeleted: 'Technician deleted successfully!',
 
-
-       // Aeroports
-       aeroportTitle: 'Airports',
-       aeroportSubtitle: 'The list of all airports',
-       addAeroport: 'New airport',
-       searchAeroport: '🔍 Search an airport...',
-       noAeroports: 'No airports found',
-       aeroportName: 'Airport Name',
-       enterAeroportName: 'Enter airport name',
-       aeroportExists: 'An airport with this name already exists!',
-       aeroportEmptyField: 'The airport name cannot be empty!',
-       confirmDeleteAeroport: 'Are you sure you want to delete this airport?',
-       aeroportAdded: 'Airport added successfully!',
-       aeroportUpdated: 'Airport updated successfully!',
-       aeroportDeleted: 'Airport deleted successfully!',
-       cannotDeleteAeroport: 'Cannot delete airport',
-       aeroportInUseByTechniciens: 'This airport is linked to one or more technicians. Please delete or modify these technicians before deleting the airport.'
+      // Aeroports
+      aeroportTitle: 'Airports',
+      aeroportSubtitle: 'The list of all airports',
+      addAeroport: 'New airport',
+      searchAeroport: '🔍 Search an airport...',
+      noAeroports: 'No airports found',
+      aeroportName: 'Airport Name',
+      enterAeroportName: 'Enter airport name',
+      aeroportExists: 'An airport with this name already exists!',
+      aeroportEmptyField: 'The airport name cannot be empty!',
+      confirmDeleteAeroport: 'Are you sure you want to delete this airport?',
+      aeroportAdded: 'Airport added successfully!',
+      aeroportUpdated: 'Airport updated successfully!',
+      aeroportDeleted: 'Airport deleted successfully!',
+      cannotDeleteAeroport: 'Cannot delete airport',
+      aeroportInUseByTechniciens: 'This airport is linked to one or more technicians. Please delete or modify these technicians before deleting the airport.'
     }
   };
 
@@ -329,7 +419,9 @@ export class LangService {
       { value: 'staff', label: 'Personnel' },
       { value: 'zone', label: 'Zone' },
       { value: 'comptoire', label: 'Comptoire' },
-      { value: 'technicien', label: 'Technicien' }
+      { value: 'technicien', label: 'Technicien' },
+      { value: 'project', label: 'Projet' },
+      { value: 'equipement', label: 'Équipement' }
     ],
     en: [
       { value: 'campagny', label: 'Company' },
@@ -338,7 +430,9 @@ export class LangService {
       { value: 'staff', label: 'Staff' },
       { value: 'zone', label: 'Zone' },
       { value: 'comptoire', label: 'Counter' },
-      { value: 'technicien', label: 'Technician' }
+      { value: 'technicien', label: 'Technician' },
+      { value: 'project', label: 'Project' },
+      { value: 'equipement', label: 'Equipment' }
     ]
   };
 

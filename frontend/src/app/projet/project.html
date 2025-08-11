@@ -1,21 +1,36 @@
 <div class="project-container">
+  <!-- En-tête avec bouton d'ajout -->
+  <div class="project-header">
+    <div>
+      <h1 class="project-title">{{ t.projectTitle }}</h1>
+      <p class="project-subtitle">{{ t.projectSubtitle }}</p>
+    </div>
+    <button class="btn-add-project" (click)="showProjectForm = true">
+      <i class="fas fa-plus"></i> {{ t.addProject }}
+    </button>
+  </div>
 
-  <!-- FORMULAIRE DE CRÉATION -->
-  <div class="project-form">
-    <h2>Créer un projet</h2>
+  <!-- FORMULAIRE DE CRÉATION (conditionnel) -->
+  <div *ngIf="showProjectForm" class="project-form">
+    <div class="project-form-header">
+      <h2>{{ t.createProject }}</h2>
+      <button class="form-close-btn" (click)="showProjectForm = false">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
 
-    <label for="projectName">Nom du projet :</label>
-    <input type="text" id="projectName" [(ngModel)]="newProjectName" placeholder="Nom du projet" />
+    <label for="projectName">{{ t.projectName }} :</label>
+    <input type="text" id="projectName" [(ngModel)]="newProjectName" placeholder="{{ t.enterProjectName }}" />
 
-    <label for="equipementSelect">Ajouter un équipement :</label>
+    <label for="equipementSelect">{{ t.selectEquipment }} :</label>
     <select id="equipementSelect" [(ngModel)]="selectedEquipementId" name="equipSelect">
-      <option [ngValue]="null" disabled>Choisir un équipement</option>
+      <option [ngValue]="null" disabled>{{ t.selectEquipment }}</option>
       <option *ngFor="let eq of equipementsDisponibles" [ngValue]="eq.id">
-        {{ eq.nameEquipement }} (stock: {{ eq.quantite }})
+        {{ eq.nameEquipement }} ({{ t.equipmentQuantity }}: {{ eq.quantite }})
       </option>
     </select>
 
-    <label for="equipementQuantite">Quantité :</label>
+    <label for="equipementQuantite">{{ t.equipmentQuantity }} :</label>
     <input
       id="equipementQuantite"
       type="number"
@@ -28,17 +43,17 @@
       (click)="addEquipementToProject()"
       [disabled]="!selectedEquipementId || !selectedQuantite || selectedQuantite <= 0"
     >
-      Ajouter
+      {{ t.selectEquipment }}
     </button>
 
     <div *ngIf="newProjectEquipements.length > 0" class="selected-equipements">
-      <h3>Équipements sélectionnés :</h3>
+      <h3>{{ t.selectedEquipments }} :</h3>
       <table>
         <thead>
           <tr>
-            <th>Équipement</th>
-            <th>Quantité</th>
-            <th>Supprimer</th>
+            <th>{{ t.equipment }}</th>
+            <th>{{ t.equipmentQuantity }}</th>
+            <th>{{ t.delete }}</th>
           </tr>
         </thead>
         <tbody>
@@ -53,33 +68,35 @@
               />
             </td>
             <td>
-              <button (click)="removeEquipementFromProject(eq.equipementId)">X</button>
+              <button (click)="removeEquipementFromProject(eq.equipementId)">{{ t.delete }}</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <button
-      (click)="addProject()"
-      [disabled]="!newProjectName.trim() || newProjectEquipements.length === 0"
-    >
-      Créer le projet
-    </button>
+    <div class="form-actions">
+      <button class="btn-cancel" (click)="cancelAddProject()">{{ t.cancel }}</button>
+      <button
+        class="btn-create"
+        (click)="addProject()"
+        [disabled]="!newProjectName.trim() || newProjectEquipements.length === 0"
+      >
+        {{ t.createProject }}
+      </button>
+    </div>
   </div>
-
-  <hr />
 
   <!-- LISTE DES PROJETS -->
   <div class="project-list">
-    <h2>Liste des projets</h2>
+    <h2>{{ t.projectListTitle }}</h2>
 
-    <table *ngIf="projects.length > 0; else noProjects" class="solution-table">
+  <table *ngIf="projects.length > 0; else noProjects" class="solution-table">
       <thead>
         <tr>
-          <th>Nom du projet</th>
-          <th>Équipements</th>
-          <th>Actions</th>
+          <th>{{ t.projectName }}</th>
+          <th>{{ t.equipments }}</th>
+          <th>{{ t.actions }}</th>
         </tr>
       </thead>
       <tbody>
@@ -89,40 +106,43 @@
             <ul>
               <li *ngFor="let eq of project.equipements || []">
                 {{ getEquipementDisplayName(eq) }} : {{ eq.quantite }}
-                <span *ngIf="getEquipementDisplayName(eq) === 'Équipement inconnu'">(id: {{ eq.equipementId }})</span>
+                <span *ngIf="getEquipementDisplayName(eq) === t.unknownEquipment">(id: {{ eq.equipementId }})</span>
               </li>
             </ul>
           </td>
           
           <td>
-            <button (click)="startEditProject(project)">Modifier</button>
-            <button (click)="deleteProject(project.id!)">Supprimer</button>
+            <button (click)="startEditProject(project)">{{ t.edit }}</button>
+            <button (click)="deleteProject(project.id!)">{{ t.delete }}</button>
           </td>
         </tr>
       </tbody>
     </table>
 
     <ng-template #noProjects>
-      <p>Aucun projet trouvé.</p>
+      <p>{{ t.noProjects }}</p>
     </ng-template>
   </div>
 
-  <hr />
-
   <!-- FORMULAIRE D'ÉDITION -->
   <div *ngIf="editingProject" class="project-edit-form">
-    <h3>Modifier projet : {{ editingProject.name }}</h3>
+    <div class="project-form-header">
+      <h3>{{ t.modifyProject }} : {{ editingProject.name }}</h3>
+      <button class="form-close-btn" (click)="cancelEditProject()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
 
-    <label>Nom du projet :</label>
+  <label>{{ t.projectName }} :</label>
     <input type="text" [(ngModel)]="editingProject.name" />
 
-    <h4>Équipements</h4>
+  <h4>{{ t.equipments }}</h4>
     <table class="solution-table">
       <thead>
         <tr>
-          <th>Équipement</th>
-          <th>Quantité</th>
-          <th>Supprimer</th>
+          <th>{{ t.equipment }}</th>
+          <th>{{ t.equipmentQuantity }}</th>
+          <th>{{ t.delete }}</th>
         </tr>
       </thead>
       <tbody>
@@ -136,37 +156,37 @@
             />
           </td>
           <td>
-            <button (click)="removeEquipementFromEditingProject(eq.equipementId)">X</button>
+            <button (click)="removeEquipementFromEditingProject(eq.equipementId)">{{ t.removeEquipment }}</button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <label>Ajouter un équipement :</label>
+  <label>{{ t.addEquipment }} :</label>
     <select [(ngModel)]="selectedEquipementId" name="editEquipSelect">
-      <option [ngValue]="null" disabled>Choisir un équipement</option>
+      <option [ngValue]="null" disabled>{{ t.selectEquipment }}</option>
       <option *ngFor="let eq of equipementsDisponibles" [ngValue]="eq.id">
-        {{ eq.nameEquipement }} (stock: {{ eq.quantite }})
+        {{ eq.nameEquipement }} ({{ t.equipmentQuantity }}: {{ eq.quantite }})
       </option>
     </select>
     <input
+      id="equipementQuantite"
       type="number"
       min="1"
       [(ngModel)]="selectedQuantite"
       name="editEquipQuantite"
-      placeholder="Quantité"
+      placeholder="{{ t.equipmentQuantity }}"
     />
     <button
       (click)="addEquipementToEditingProject()"
       [disabled]="!selectedEquipementId || !selectedQuantite || selectedQuantite <= 0"
     >
-      Ajouter équipement
+      {{ t.add }}
     </button>
 
-    <div style="margin-top: 10px;">
-      <button (click)="saveEditProject()">Enregistrer</button>
-      <button (click)="cancelEditProject()">Annuler</button>
+    <div class="form-actions">
+      <button class="btn-cancel" (click)="cancelEditProject()">{{ t.cancel }}</button>
+      <button class="btn-create" (click)="saveEditProject()">{{ t.saveProject }}</button>
     </div>
   </div>
-
 </div>
