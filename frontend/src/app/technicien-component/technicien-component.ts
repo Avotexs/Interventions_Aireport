@@ -261,6 +261,7 @@ closeDeleteSuccessPopup() {
   }
  
 startEdit(technician: Technicien) {
+  
   this.showEditPopup = true;
     // Set the editing technicien and pre-fill the edit fields
     this.editingTechnicien = technician;
