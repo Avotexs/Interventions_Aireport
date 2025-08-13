@@ -1,39 +1,59 @@
-<div class="project-container">
+<div class="solution-container">
 
   <!-- FORMULAIRE DE CRÉATION -->
-  <div class="project-form">
-    <h2>Créer un projet</h2>
+  <div class="project-form" style="margin-bottom: 40px;">
+    <h2 class="solution-title" style="margin-bottom: 20px;">Créer un projet</h2>
 
-    <label for="projectName">Nom du projet :</label>
-    <input type="text" id="projectName" [(ngModel)]="newProjectName" placeholder="Nom du projet" />
+    <div class="form-group">
+      <label for="projectName">Nom du projet :</label>
+      <input
+        id="projectName"
+        type="text"
+        [(ngModel)]="newProjectName"
+        placeholder="Nom du projet"
+        class="form-input"
+      />
+    </div>
 
-    <label for="equipementSelect">Ajouter un équipement :</label>
-    <select id="equipementSelect" [(ngModel)]="selectedEquipementId" name="equipSelect">
-      <option [ngValue]="null" disabled>Choisir un équipement</option>
-      <option *ngFor="let eq of equipementsDisponibles" [ngValue]="eq.id">
-        {{ eq.nameEquipement }} (stock: {{ eq.quantite }})
-      </option>
-    </select>
+    <div class="form-group">
+      <label for="equipementSelect">Ajouter un équipement :</label>
+      <select
+        id="equipementSelect"
+        [(ngModel)]="selectedEquipementId"
+        name="equipSelect"
+        class="form-input"
+      >
+        <option [ngValue]="null" disabled>Choisir un équipement</option>
+        <option *ngFor="let eq of equipementsDisponibles" [ngValue]="eq.id">
+          {{ eq.nameEquipement }} (stock: {{ eq.quantite }})
+        </option>
+      </select>
+    </div>
 
-    <label for="equipementQuantite">Quantité :</label>
-    <input
-      id="equipementQuantite"
-      type="number"
-      min="1"
-      [(ngModel)]="selectedQuantite"
-      name="equipQuantite"
-    />
+    <div class="form-group">
+      <label for="equipementQuantite">Quantité :</label>
+      <input
+        id="equipementQuantite"
+        type="number"
+        min="1"
+        [(ngModel)]="selectedQuantite"
+        name="equipQuantite"
+        class="form-input"
+      />
+    </div>
 
     <button
       (click)="addEquipementToProject()"
       [disabled]="!selectedEquipementId || !selectedQuantite || selectedQuantite <= 0"
+      class="btn-primary"
+      style="margin-bottom: 20px;"
     >
       Ajouter
     </button>
 
-    <div *ngIf="newProjectEquipements.length > 0" class="selected-equipements">
-      <h3>Équipements sélectionnés :</h3>
-      <table>
+    <div *ngIf="newProjectEquipements.length > 0" class="selected-equipements table-wrapper" style="margin-bottom: 20px;">
+      <h3 class="solution-title" style="font-size: 20px; margin-bottom: 10px;">Équipements sélectionnés :</h3>
+      <table class="solution-table">
         <thead>
           <tr>
             <th>Équipement</th>
@@ -50,10 +70,18 @@
                 min="1"
                 [value]="eq.quantite"
                 (input)="updateQuantite(eq.equipementId, $any($event.target).value)"
+                class="edit-input"
               />
             </td>
             <td>
-              <button (click)="removeEquipementFromProject(eq.equipementId)">X</button>
+              <button
+                (click)="removeEquipementFromProject(eq.equipementId)"
+                class="btn-danger"
+                style="padding: 6px 12px;"
+                title="Supprimer"
+              >
+                X
+              </button>
             </td>
           </tr>
         </tbody>
@@ -63,61 +91,77 @@
     <button
       (click)="addProject()"
       [disabled]="!newProjectName.trim() || newProjectEquipements.length === 0"
+      class="btn-primary"
     >
       Créer le projet
     </button>
   </div>
 
-  <hr />
+  <hr style="margin: 40px 0;" />
 
   <!-- LISTE DES PROJETS -->
   <div class="project-list">
-    <h2>Liste des projets</h2>
+    <h2 class="solution-title" style="margin-bottom: 20px;">Liste des projets</h2>
 
-    <table *ngIf="projects.length > 0; else noProjects" class="solution-table">
+    <table *ngIf="projects.length > 0; else noProjects" class="solution-table table-wrapper">
       <thead>
         <tr>
           <th>Nom du projet</th>
           <th>Équipements</th>
-          <th>Actions</th>
+          <th class="actions-column">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let project of projects">
           <td>{{ project.name }}</td>
           <td>
-            <ul>
-              <li *ngFor="let eq of project.equipements || []">
+            <ul style="padding-left: 18px; margin: 0;">
+              <li *ngFor="let eq of project.equipements || []" style="margin-bottom: 4px;">
                 {{ getEquipementDisplayName(eq) }} : {{ eq.quantite }}
-                <span *ngIf="getEquipementDisplayName(eq) === 'Équipement inconnu'">(id: {{ eq.equipementId }})</span>
+                <span *ngIf="getEquipementDisplayName(eq) === 'Équipement inconnu'">
+                  (id: {{ eq.equipementId }})
+                </span>
               </li>
             </ul>
           </td>
-          
-          <td>
-            <button (click)="startEditProject(project)">Modifier</button>
-            <button (click)="deleteProject(project.id!)">Supprimer</button>
+          <td class="actions-cell">
+            <button
+              (click)="startEditProject(project)"
+              class="btn-outline"
+              title="Modifier"
+            >
+              Modifier
+            </button>
+            <button
+              (click)="deleteProject(project.id!)"
+              class="btn-danger"
+              title="Supprimer"
+            >
+              Supprimer
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
 
     <ng-template #noProjects>
-      <p>Aucun projet trouvé.</p>
+      <p class="empty-message">Aucun projet trouvé.</p>
     </ng-template>
   </div>
 
-  <hr />
+  <hr style="margin: 40px 0;" />
 
   <!-- FORMULAIRE D'ÉDITION -->
-  <div *ngIf="editingProject" class="project-edit-form">
-    <h3>Modifier projet : {{ editingProject.name }}</h3>
+  <div *ngIf="editingProject" class="project-edit-form" style="margin-top: 20px;">
+    <h3 class="solution-title" style="margin-bottom: 20px;">Modifier projet : {{ editingProject.name }}</h3>
 
-    <label>Nom du projet :</label>
-    <input type="text" [(ngModel)]="editingProject.name" />
+    <div class="form-group">
+      <label>Nom du projet :</label>
+      <input type="text" [(ngModel)]="editingProject.name" class="form-input" />
+    </div>
 
-    <h4>Équipements</h4>
-    <table class="solution-table">
+    <h4 style="margin-top: 30px; margin-bottom: 10px;">Équipements</h4>
+    <table class="solution-table table-wrapper" style="margin-bottom: 20px;">
       <thead>
         <tr>
           <th>Équipement</th>
@@ -129,43 +173,57 @@
         <tr *ngFor="let eq of editingProject.equipements">
           <td>{{ getEquipementNameById(eq.equipementId) }}</td>
           <td>
-            <input
-              type="number"
-              min="1"
-              [(ngModel)]="eq.quantite"
-            />
+            <input type="number" min="1" [(ngModel)]="eq.quantite" class="edit-input" />
           </td>
           <td>
-            <button (click)="removeEquipementFromEditingProject(eq.equipementId)">X</button>
+            <button
+              (click)="removeEquipementFromEditingProject(eq.equipementId)"
+              class="btn-danger"
+              style="padding: 6px 12px;"
+              title="Supprimer"
+            >
+              X
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <label>Ajouter un équipement :</label>
-    <select [(ngModel)]="selectedEquipementId" name="editEquipSelect">
-      <option [ngValue]="null" disabled>Choisir un équipement</option>
-      <option *ngFor="let eq of equipementsDisponibles" [ngValue]="eq.id">
-        {{ eq.nameEquipement }} (stock: {{ eq.quantite }})
-      </option>
-    </select>
-    <input
-      type="number"
-      min="1"
-      [(ngModel)]="selectedQuantite"
-      name="editEquipQuantite"
-      placeholder="Quantité"
-    />
+    <div class="form-group">
+      <label>Ajouter un équipement :</label>
+      <select [(ngModel)]="selectedEquipementId" name="editEquipSelect" class="form-input">
+        <option [ngValue]="null" disabled>Choisir un équipement</option>
+        <option *ngFor="let eq of equipementsDisponibles" [ngValue]="eq.id">
+          {{ eq.nameEquipement }} (stock: {{ eq.quantite }})
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input
+        type="number"
+        min="1"
+        [(ngModel)]="selectedQuantite"
+        name="editEquipQuantite"
+        placeholder="Quantité"
+        class="form-input"
+      />
+    </div>
+
     <button
       (click)="addEquipementToEditingProject()"
       [disabled]="!selectedEquipementId || !selectedQuantite || selectedQuantite <= 0"
+      class="btn-primary"
+      style="margin-bottom: 20px;"
     >
       Ajouter équipement
     </button>
 
     <div style="margin-top: 10px;">
-      <button (click)="saveEditProject()">Enregistrer</button>
-      <button (click)="cancelEditProject()">Annuler</button>
+      <button (click)="saveEditProject()" class="btn-primary" style="margin-right: 10px;">
+        Enregistrer
+      </button>
+      <button (click)="cancelEditProject()" class="btn-outline">Annuler</button>
     </div>
   </div>
 

@@ -1,6 +1,7 @@
 package com.airoport.backend.controller;
 
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import com.airoport.backend.dto.CampagnyDTO;
 import com.airoport.backend.model.Campagny;
 import com.airoport.backend.service.CampagnyService;
@@ -54,5 +55,26 @@ public class CampagnyController {
         campagnyService.deleteCampagny(id);
         return ResponseEntity.noContent().build();
     }
+
+
+
+    @GetMapping("/stats/date-range")
+    public ResponseEntity<List<Campagny>> getCampagnyByDateRange(
+            @RequestParam String start,
+            @RequestParam String end) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
+        LocalDateTime endDate = LocalDateTime.parse(end, formatter);
+
+        List<Campagny> campagnies = campagnyService.getCampagnyByDateRange(startDate, endDate);
+        return ResponseEntity.ok(campagnies);
+    }
+
+    @GetMapping("/stats/total")
+    public ResponseEntity<Long> getTotalCampagny() {
+        return ResponseEntity.ok(campagnyService.getTotalCampagny());
+    }
+
 
 }

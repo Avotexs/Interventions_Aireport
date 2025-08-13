@@ -1,6 +1,7 @@
 package com.airoport.backend.service;
 
-
+import java.time.LocalDateTime;
+import java.util.List;
 import com.airoport.backend.dto.CampagnyDTO;
 import com.airoport.backend.model.Campagny;
 import com.airoport.backend.repository.CampagnyRepository;
@@ -58,5 +59,16 @@ public class CampagnyService {
         campagnyRepository.deleteById(id);
 
     }
+
+
+
+    public List<Campagny> getCampagnyByDateRange(LocalDateTime start, LocalDateTime end) {
+        return campagnyRepository.findByCreatedAtBetween(start, end);
+    }
+
+    public long getTotalCampagny() {
+        return campagnyRepository.count();
+    }
+
 
 }

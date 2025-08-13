@@ -7,6 +7,7 @@ import com.airoport.backend.model.Solution;
 import com.airoport.backend.repository.SolutionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,15 @@ public class SolutionService {
             throw new RuntimeException("Erreur interne lors de la recherche des solutions", e);
         }
     }
+
+    public List<Solution> getSolutionsByDateRange(LocalDateTime start, LocalDateTime end) {
+        return solutionRepository.findByCreatedAtBetween(start, end);
+    }
+
+    public long getTotalSolutions() {
+        return solutionRepository.count();
+    }
+
 
 
     public List<Solution> getdAll() {
