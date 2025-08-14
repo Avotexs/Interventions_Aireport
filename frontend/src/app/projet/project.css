@@ -1,6 +1,24 @@
-.solution-container {
-  max-width: 900px;
-  margin: 30px auto;
+/* Font Awesome Icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+/* Google Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+.project-container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
   background-color: #f7f9fc;
   border-radius: 10px;
@@ -9,47 +27,31 @@
   color: #2c3e50;
 }
 
-/* Titres */
-.solution-title {
-  font-weight: 600;
-  font-size: 24px;
-  color: #1a2e57;
-  margin-bottom: 8px;
+/* Header */
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
 }
 
-h3.solution-title {
-  font-size: 20px;
-}
-
-/* Labels */
-label {
-  display: block;
+.project-title {
+  font-size: 28px;
   font-weight: 500;
   margin-bottom: 6px;
   color: #34495e;
 }
 
-/* Inputs et selects */
-.form-input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1.8px solid #cbd6e2;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: border-color 0.3s ease;
-  color: #34495e;
-  background-color: white;
-  margin-bottom: 16px;
+.project-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 5px 0 0;
 }
 
-.form-input:focus {
-  outline: none;
-  border-color: #1a2e57;
-  box-shadow: 0 0 6px rgba(26, 46, 87, 0.25);
-}
-
-/* Boutons */
-.btn-primary {
+/* Add button */
+.btn-add-project {
   background-color: white;
   border: 2px solid #1a2e57;
   color: #1a2e57;
@@ -63,48 +65,213 @@ label {
   gap: 6px;
 }
 
-.btn-primary:hover:not(:disabled) {
-  background-color: #1a2e57;
+.btn-add-project:hover {
+  background-color: #2c6ea7;
   color: white;
 }
 
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.btn-add-project i {
+  font-size: 14px;
 }
 
-/* Boutons danger */
-.btn-danger {
+/* Project Form */
+.project-form, .project-edit-form {
   background-color: white;
-  border: 2px solid #b42a2a;
-  color: #b42a2a;
-  border-radius: 12px;
-  padding: 8px 14px;
-  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid #ddd;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.project-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.project-form h2, 
+.project-edit-form h3,
+.project-form-header h2 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #2c6ea7;
+  margin: 0;
+}
+
+.form-close-btn {
+  background: none;
+  border: 2px solid #2c6ea7;
+  color: #2c6ea7;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.2s ease;
+  font-size: 16px;
 }
 
-.btn-danger:hover {
-  background-color: #b42a2a;
+.form-close-btn:hover {
+  background-color: #2c6ea7;
   color: white;
 }
 
-/* Table */
-.table-wrapper {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  margin-bottom: 24px;
-  border: 1.5px solid #cbd6e2;
+.project-form h3, .project-edit-form h4 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 20px 0 15px;
+  color: #2c6ea7;
 }
 
+.project-form label, .project-edit-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.project-form input, 
+.project-form select,
+.project-edit-form input,
+.project-edit-form select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.project-form input:focus, 
+.project-form select:focus,
+.project-edit-form input:focus,
+.project-edit-form select:focus {
+  outline: none;
+  border-color: #2c6ea7;
+  box-shadow: 0 0 0 3px rgba(44, 110, 167, 0.1);
+}
+
+.project-form button,
+.project-edit-form button {
+  background-color: white;
+  color: #2c6ea7;
+  border: 2px solid #2c6ea7;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+  margin-right: 8px;
+}
+
+.project-form button:hover:not(:disabled),
+.project-edit-form button:hover:not(:disabled) {
+  background-color: #2c6ea7;
+  color: white;
+}
+
+.project-form button:disabled,
+.project-edit-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #ccc;
+  color: #999;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.btn-cancel {
+  background-color: white;
+  color: #666;
+  border: 2px solid #ccc;
+}
+
+.btn-cancel:hover {
+  background-color: #f1f1f1;
+  color: #333;
+  border-color: #999;
+}
+
+.btn-create {
+  background-color: white;
+  color: #2a7745;
+  border: 2px solid #2a7745;
+}
+
+.btn-create:hover:not(:disabled) {
+  background-color: #2a7745;
+  color: white;
+}
+
+/* Selected Equipements Table */
+.selected-equipements {
+  background-color: #f0f8ff;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid #ddd;
+}
+
+.selected-equipements table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.selected-equipements th,
+.selected-equipements td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.selected-equipements th {
+  font-weight: 500;
+  color: #2c6ea7;
+}
+
+/* Project List */
+.project-list {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid #ddd;
+}
+
+.project-list h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #2c6ea7;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Tables */
 .solution-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 15px;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .solution-table th,
@@ -121,25 +288,87 @@ label {
 }
 
 .solution-table tbody tr:hover {
-  background-color: #f0f6fc;
+  background-color: #f5f9ff;
 }
 
-.actions-cell {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+/* Table buttons */
+.solution-table button {
+  background-color: white;
+  border: 2px solid #2c6ea7;
+  color: #2c6ea7;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* Liste équipements */
-ul {
-  padding-left: 20px;
+.solution-table button:hover {
+  background-color: #2c6ea7;
+  color: white;
+}
+
+.solution-table button:last-child {
+  border-color: #b42a2a;
+  color: #b42a2a;
+}
+
+.solution-table button:last-child:hover {
+  background-color: #b42a2a;
+  color: white;
+}
+
+/* Lists in tables */
+.solution-table ul {
+  list-style-type: none;
+  padding: 0;
   margin: 0;
-  color: #34495e;
 }
 
-.empty-message {
+.solution-table li {
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.solution-table li:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .solution-table th,
+  .solution-table td {
+    padding: 10px;
+  }
+  
+  .project-form, .project-edit-form {
+    padding: 15px;
+  }
+}
+
+/* Separators */
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #ddd;
+  margin: 30px 0;
+}
+
+/* Input number specific styles */
+input[type="number"] {
+  width: 80px;
   text-align: center;
-  color: #7f8c8d;
-  font-style: italic;
-  margin-top: 20px;
+}
+
+/* Remove arrows from number inputs */
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }

@@ -26,6 +26,8 @@ export class LangService {
       ok: 'OK',
       page: 'Page',
       of: 'sur',
+      quantity: 'Quantité',
+      stock: 'stock',
 
       // Messages
       confirmDeleteGeneric: 'Voulez-vous vraiment supprimer cet élément ?',
@@ -82,8 +84,88 @@ export class LangService {
       solutionUpdated: 'Solution mise à jour avec succès !',
       solutionDeleted: 'Solution supprimée avec succès !',
 
-      // Techniciens
+      zoneTitle: 'Zones',
+      zoneSubtitle: 'Liste de toutes les zones',
+      addZone: 'Nouvelle zone',
+      searchZone: '🔍 Rechercher une zone...',
+      noZones: 'Aucune zone trouvée',
+      zoneName: 'Nom de la zone',
+      enterZoneName: 'Entrez le nom de la zone',
+      zoneExists: 'Une zone avec ce nom existe déjà !',
+      zoneEmptyField: 'Le nom de la zone ne peut pas être vide !',
+      confirmDeleteZone: 'Voulez-vous vraiment supprimer cette zone ?',
+      zoneAdded: 'Zone ajoutée avec succès !',
+      zoneUpdated: 'Zone mise à jour avec succès !',
+      zoneDeleted: 'Zone supprimée avec succès !',
+      cannotDelete: 'Suppression impossible',
+      zoneHasCounters: 'Cette zone contient des comptoirs et ne peut pas être supprimée.',
+      deleteCountersFirst: 'Veuillez d\'abord supprimer tous les comptoirs associés à cette zone.',
+
+      counterTitle: 'Comptoires',
+      counterSubtitle: 'Liste de tous les comptoires',
+      addCounter: 'Nouveau comptoire',
+      searchCounter: '🔍 Rechercher un comptoire...',
+      noCounters: 'Aucun comptoire trouvé',
+      counterName: 'Nom du comptoire',
+      enterCounterName: 'Entrez le nom du comptoire',
+      selectZone: 'Sélectionnez une zone',
+      zone: 'Zone',
+      zoneRequired: 'Zone nécessaire',
+      counterNeedsZone: 'Veuillez sélectionner une zone pour ce comptoir.',
+      zoneUnavailable: 'Zone indisponible',
+      counterExists: 'Un comptoire avec ce nom existe déjà !',
+      counterEmptyField: 'Le nom du comptoire ne peut pas être vide !',
+      confirmDeleteCounter: 'Voulez-vous vraiment supprimer ce comptoire ?',
+      counterAdded: 'Comptoire ajouté avec succès !',
+      counterUpdated: 'Comptoire mis à jour avec succès !',
+      counterDeleted: 'Comptoire supprimé avec succès !',
       
+      // Équipements
+      equipementTitle: 'Équipements',
+      equipementSubtitle: 'Liste de tous les équipements',
+      addEquipement: 'Nouvel équipement',
+      searchEquipement: '🔍 Rechercher un équipement...',
+      noEquipements: 'Aucun équipement trouvé',
+      nameEquipement: 'Nom de l\'équipement',
+      enterEquipementName: 'Entrez le nom de l\'équipement',
+      quantite: 'Quantité',
+      enterQuantite: 'Entrez la quantité',
+      equipementExists: 'Un équipement avec ce nom existe déjà !',
+      equipementEmptyField: 'Les champs ne peuvent pas être vides !',
+      confirmDeleteEquipement: 'Voulez-vous vraiment supprimer cet équipement ?',
+      equipementAdded: 'Équipement ajouté avec succès !',
+      equipementUpdated: 'Équipement mis à jour avec succès !',
+      equipementDeleted: 'Équipement supprimé avec succès !',
+      
+      // Projets
+      projectTitle: 'Projets',
+      projectSubtitle: 'Gérez vos projets et leurs équipements',
+      addProject: 'Nouveau projet',
+      createProject: 'Créer un projet',
+      projectName: 'Nom du projet',
+      enterProjectName: 'Entrez le nom du projet',
+      selectEquipment: 'Choisir un équipement',
+      equipmentQuantity: 'Quantité',
+      selectedEquipments: 'Équipements sélectionnés',
+      projectListTitle: 'Liste des projets',
+      noProjects: 'Aucun projet trouvé',
+      modifyProject: 'Modifier projet',
+      saveProject: 'Enregistrer le projet',
+      deleteProjectConfirm: 'Voulez-vous vraiment supprimer ce projet ?',
+      projectAdded: 'Projet ajouté avec succès !',
+      projectUpdated: 'Projet mis à jour avec succès !',
+      projectDeleted: 'Projet supprimé avec succès !',
+      equipments: 'Équipements',
+      addEquipment: 'Ajouter équipment',
+      equipment: 'Équipement',
+      unknownEquipment: 'Équipement inconnu',
+      editEquipment: 'Modifier',
+      deleteEquipment: 'Supprimer',
+      chooseEquipment: 'Choisir un équipement',
+      equipmentStock: 'stock',
+      removeEquipment: 'X',
+
+      // Techniciens
       firstname: 'Prénom',
       enterFirstname: 'Entrez le prénom',
       lastname: 'Nom',
@@ -110,7 +192,7 @@ export class LangService {
       technicienUpdated: 'Technicien mis à jour avec succès !',
       technicienDeleted: 'Technicien supprimé avec succès !',
 
-       // Aeroports
+      // Aeroports
       aeroportTitle: 'Liste des Aéroports',
       aeroportSubtitle: 'Liste de tous les aéroports',
       addAeroport: 'Nouvel aéroport',
@@ -127,10 +209,6 @@ export class LangService {
       // New cannot-delete messages
       cannotDeleteAeroport: 'Suppression impossible',
       aeroportInUseByTechniciens: 'Cet aéroport est associé à un ou plusieurs techniciens. Supprimez ou modifiez ces techniciens avant de supprimer l\'aéroport.'
-
-
-
-
     },
 
     en: {
@@ -148,6 +226,8 @@ export class LangService {
       ok: 'OK',
       page: 'Page',
       of: 'of',
+      quantity: 'Quantity',
+      stock: 'stock',
 
       // Messages
       confirmDeleteGeneric: 'Are you sure you want to delete this item?',
@@ -204,6 +284,87 @@ export class LangService {
       solutionUpdated: 'Solution updated successfully!',
       solutionDeleted: 'Solution deleted successfully!',
 
+      zoneTitle: 'Zones',
+      zoneSubtitle: 'The list of all zones',
+      addZone: 'New zone',
+      searchZone: '🔍 Search a zone...',
+      noZones: 'No zones found',
+      zoneName: 'Zone Name',
+      enterZoneName: 'Enter zone name',
+      zoneExists: 'A zone with this name already exists!',
+      zoneEmptyField: 'The zone name cannot be empty!',
+      confirmDeleteZone: 'Are you sure you want to delete this zone?',
+      zoneAdded: 'Zone added successfully!',
+      zoneUpdated: 'Zone updated successfully!',
+      zoneDeleted: 'Zone deleted successfully!',
+      cannotDelete: 'Deletion not allowed',
+      zoneHasCounters: 'This zone contains counters and cannot be deleted.',
+      deleteCountersFirst: 'Please delete all counters associated with this zone first.',
+
+      counterTitle: 'Counters',
+      counterSubtitle: 'The list of all counters',
+      addCounter: 'New counter',
+      searchCounter: '🔍 Search a counter...',
+      noCounters: 'No counters found',
+      counterName: 'Counter Name',
+      enterCounterName: 'Enter counter name',
+      selectZone: 'Select a zone',
+      zone: 'Zone',
+      zoneRequired: 'Zone Required',
+      counterNeedsZone: 'Please select a zone for this counter.',
+      zoneUnavailable: 'Zone unavailable',
+      counterExists: 'A counter with this name already exists!',
+      counterEmptyField: 'The counter name cannot be empty!',
+      confirmDeleteCounter: 'Are you sure you want to delete this counter?',
+      counterAdded: 'Counter added successfully!',
+      counterUpdated: 'Counter updated successfully!',
+      counterDeleted: 'Counter deleted successfully!',
+      
+      // Equipment
+      equipementTitle: 'Equipment',
+      equipementSubtitle: 'List of all equipment',
+      addEquipement: 'New equipment',
+      searchEquipement: '🔍 Search equipment...',
+      noEquipements: 'No equipment found',
+      nameEquipement: 'Equipment name',
+      enterEquipementName: 'Enter equipment name',
+      quantite: 'Quantity',
+      enterQuantite: 'Enter quantity',
+      equipementExists: 'Equipment with this name already exists!',
+      equipementEmptyField: 'Fields cannot be empty!',
+      confirmDeleteEquipement: 'Are you sure you want to delete this equipment?',
+      equipementAdded: 'Equipment added successfully!',
+      equipementUpdated: 'Equipment updated successfully!',
+      equipementDeleted: 'Equipment deleted successfully!',
+      
+      // Projects
+      projectTitle: 'Projects',
+      projectSubtitle: 'Manage your projects and their equipment',
+      addProject: 'New project',
+      createProject: 'Create project',
+      projectName: 'Project name',
+      enterProjectName: 'Enter project name',
+      selectEquipment: 'Select equipment',
+      equipmentQuantity: 'Quantity',
+      selectedEquipments: 'Selected equipment',
+      projectListTitle: 'Project list',
+      noProjects: 'No projects found',
+      modifyProject: 'Modify project',
+      saveProject: 'Save project',
+      deleteProjectConfirm: 'Are you sure you want to delete this project?',
+      projectAdded: 'Project added successfully!',
+      projectUpdated: 'Project updated successfully!',
+      projectDeleted: 'Project deleted successfully!',
+      equipments: 'Equipment',
+      addEquipment: 'Add equipment',
+      equipment: 'Equipment',
+      unknownEquipment: 'Unknown equipment',
+      editEquipment: 'Edit',
+      deleteEquipment: 'Delete',
+      chooseEquipment: 'Choose equipment',
+      equipmentStock: 'stock',
+      removeEquipment: 'X',
+
       // Technicians
       firstname: 'Firstname',
       enterFirstname: 'Enter firstname',
@@ -229,25 +390,24 @@ export class LangService {
       confirmDeleteTechnicien: 'Are you sure you want to delete this technician?',
       technicienAdded: 'Technician added successfully!',
       technicienUpdated: 'Technician updated successfully!',
-      technicienDeleted: 'Technician deleted successfully!' ,
+      technicienDeleted: 'Technician deleted successfully!',
 
-
-       // Aeroports
-       aeroportTitle: 'Airports',
-       aeroportSubtitle: 'The list of all airports',
-       addAeroport: 'New airport',
-       searchAeroport: '🔍 Search an airport...',
-       noAeroports: 'No airports found',
-       aeroportName: 'Airport Name',
-       enterAeroportName: 'Enter airport name',
-       aeroportExists: 'An airport with this name already exists!',
-       aeroportEmptyField: 'The airport name cannot be empty!',
-       confirmDeleteAeroport: 'Are you sure you want to delete this airport?',
-       aeroportAdded: 'Airport added successfully!',
-       aeroportUpdated: 'Airport updated successfully!',
-       aeroportDeleted: 'Airport deleted successfully!',
-       cannotDeleteAeroport: 'Cannot delete airport',
-       aeroportInUseByTechniciens: 'This airport is linked to one or more technicians. Please delete or modify these technicians before deleting the airport.'
+      // Aeroports
+      aeroportTitle: 'Airports',
+      aeroportSubtitle: 'The list of all airports',
+      addAeroport: 'New airport',
+      searchAeroport: '🔍 Search an airport...',
+      noAeroports: 'No airports found',
+      aeroportName: 'Airport Name',
+      enterAeroportName: 'Enter airport name',
+      aeroportExists: 'An airport with this name already exists!',
+      aeroportEmptyField: 'The airport name cannot be empty!',
+      confirmDeleteAeroport: 'Are you sure you want to delete this airport?',
+      aeroportAdded: 'Airport added successfully!',
+      aeroportUpdated: 'Airport updated successfully!',
+      aeroportDeleted: 'Airport deleted successfully!',
+      cannotDeleteAeroport: 'Cannot delete airport',
+      aeroportInUseByTechniciens: 'This airport is linked to one or more technicians. Please delete or modify these technicians before deleting the airport.'
     }
   };
 
@@ -257,14 +417,22 @@ export class LangService {
       { value: 'problem', label: 'Problème' },
       { value: 'solution', label: 'Solution' },
       { value: 'staff', label: 'Personnel' },
-      { value: 'technicien', label: 'Technicien' }
+      { value: 'zone', label: 'Zone' },
+      { value: 'comptoire', label: 'Comptoire' },
+      { value: 'technicien', label: 'Technicien' },
+      { value: 'project', label: 'Projet' },
+      { value: 'equipement', label: 'Équipement' }
     ],
     en: [
       { value: 'campagny', label: 'Company' },
       { value: 'problem', label: 'Problem' },
       { value: 'solution', label: 'Solution' },
       { value: 'staff', label: 'Staff' },
-      { value: 'technicien', label: 'Technician' }
+      { value: 'zone', label: 'Zone' },
+      { value: 'comptoire', label: 'Counter' },
+      { value: 'technicien', label: 'Technician' },
+      { value: 'project', label: 'Project' },
+      { value: 'equipement', label: 'Equipment' }
     ]
   };
 

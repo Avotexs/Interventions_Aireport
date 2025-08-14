@@ -1,0 +1,272 @@
+<div class="zone-container">
+  <div class="zone-header">
+    <div>
+      <h1 class="zone-title">{{ t.zoneTitle }}</h1>
+      <p class="zone-subtitle">{{ t.zoneSubtitle }}</p>
+    </div>
+    <button class="btn-primary" (click)="showPopup = true">
+      <i class="fas fa-plus"></i> {{ t.addZone }}
+    </button>
+  </div>
+
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="text"
+        [(ngModel)]="term"
+        placeholder="{{ t.searchZone }}"
+        (input)="page = 0"
+        class="search-input"
+      />
+      <button *ngIf="term" (click)="clearSearch()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="zone-table">
+      <thead>
+        <tr>
+          <th>{{ t.id }}</th>
+          <th>{{ t.name }}</th>
+          <th class="actions-column">{{ t.actions }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="list().length === 0">
+          <td colspan="3" class="empty-message">{{ t.noZones }}</td>
+        </tr>
+        <tr *ngFor="let z of list()">
+          <td>{{ z.id }}</td>
+          <td class="name-cell">{{ z.nom }}</td>
+          <td class="actions-cell">
+            <button (click)="startEdit(z)" class="action-btn edit-btn" title="{{ t.edit }}">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="askDelete(z.id!)" class="action-btn delete-btn" title="{{ t.delete }}">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="pageCount() > 1" class="pagination">
+    <span class="page-info">{{ t.page }} {{ page + 1 }} {{ t.of }} {{ pageCount() }}</span>
+    <div class="page-controls">
+      <button (click)="toPage(0)" [disabled]="page === 0" class="page-btn">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+      <button (click)="toPage(page - 1)" [disabled]="page === 0" class="page-btn">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      <button (click)="toPage(page + 1)" [disabled]="page === pageCount() - 1" class="page-btn">
+        <i class="fas fa-angle-right"></i>
+      </button>
+      <button (click)="toPage(pageCount() - 1)" [disabled]="page === pageCount() - 1" class="page-btn">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal pour ajouter une zone -->
+  <div *ngIf="showPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.addZone }}</h3>
+        <button (click)="showPopup = false" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="zoneName">{{ t.zoneName }}</label>
+          <input
+            type="text"
+            id="zoneName"
+            [(ngModel)]="newZone.nom"
+            placeholder="{{ t.enterZoneName }}"
+            class="form-input"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="showPopup = false" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="saveNew()" class="btn-primary">{{ t.add }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour modifier une zone -->
+  <div *ngIf="editing" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.edit }}</h3>
+        <button (click)="cancelEdit()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editZoneName">{{ t.zoneName }}</label>
+          <input
+            type="text"
+            id="editZoneName"
+            [(ngModel)]="editedNom"
+            placeholder="{{ t.enterZoneName }}"
+            class="form-input"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="cancelEdit()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="applyEdit()" class="btn-primary">{{ t.save }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmation de suppression -->
+  <div *ngIf="showDeletePopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.confirm }}</h3>
+        <button (click)="cancelDelete()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ t.confirmDeleteZone }}</p>
+        <p class="warning-text">
+          <i class="fas fa-exclamation-triangle"></i> {{ t.actionUndone }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="cancelDelete()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="confirmDelete()" class="btn-danger">{{ t.confirm }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Existe déjà" -->
+  <div *ngIf="showAlreadyExistsPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.zoneExists }}</h3>
+        <button (click)="closeAlreadyExistsPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.zoneExists }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeAlreadyExistsPopup()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Champ vide" -->
+  <div *ngIf="showEmptyFieldPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.emptyField }}</h3>
+        <button (click)="closeEmptyFieldPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.zoneEmptyField }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeEmptyFieldPopup()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Succès Ajout" -->
+  <div *ngIf="showSuccessPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.successAdd }}</h3>
+        <button (click)="closeSuccessPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="success-text">
+          <i class="fas fa-check-circle"></i> {{ t.zoneAdded }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeSuccessPopup()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Succès Modification" -->
+  <div *ngIf="showEditSuccessPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.successEdit }}</h3>
+        <button (click)="closeEditSuccessPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="success-text">
+          <i class="fas fa-check-circle"></i> {{ t.zoneUpdated }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeEditSuccessPopup()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Succès Suppression" -->
+  <div *ngIf="showDeleteSuccessPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.successDelete }}</h3>
+        <button (click)="closeDeleteSuccessPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="success-text">
+          <i class="fas fa-check-circle"></i> {{ t.zoneDeleted }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeDeleteSuccessPopup()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal "Zone contient des comptoirs" -->
+  <div *ngIf="showZoneHasComptoirsPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.cannotDelete }}</h3>
+        <button (click)="closeZoneHasComptoirsPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-triangle"></i> {{ t.zoneHasCounters }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeZoneHasComptoirsPopup()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+</div>

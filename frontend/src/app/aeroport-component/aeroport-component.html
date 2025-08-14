@@ -40,16 +40,11 @@
         </tr>
         <tr *ngFor="let aeroport of filteredAeroports()">
           <td>{{ aeroport.id }}</td>
-          <td *ngIf="editingAeroport?.id !== aeroport.id" class="name-cell">{{ aeroport.name }}</td>
-          <td *ngIf="editingAeroport?.id === aeroport.id" class="edit-cell">
-            <input [(ngModel)]="editedName" class="edit-input" />
-          </td>
+          <td class="name-cell">{{ aeroport.name }}</td>
+          
           <td class="actions-cell">
-            <button *ngIf="editingAeroport?.id !== aeroport.id" (click)="startEdit(aeroport)" class="action-btn edit-btn" title="{{ t.edit }}">
+            <button (click)="startEdit(aeroport)" class="action-btn edit-btn" title="{{ t.edit }}">
               <i class="fas fa-edit"></i>
-            </button>
-            <button *ngIf="editingAeroport?.id === aeroport.id" (click)="updateAeroport(aeroport.id!)" class="action-btn save-btn" title="{{ t.save }}">
-              <i class="fas fa-save"></i>
             </button>
             <button (click)="askDelete(aeroport.id!)" class="action-btn delete-btn" title="{{ t.delete }}">
               <i class="fas fa-trash-alt"></i>

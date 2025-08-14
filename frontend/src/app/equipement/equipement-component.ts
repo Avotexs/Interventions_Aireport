@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EquipementService, Equipement } from './equipement-service';
-
+import { LangService } from '../services/lang.service';
 @Component({
   selector: 'app-equipement',
   imports: [ CommonModule, FormsModule ],
@@ -12,39 +12,7 @@ import { EquipementService, Equipement } from './equipement-service';
 })
 export class EquipementComponent {
 
-  // Texte (labels, messages, boutons)
-  t = {
-    equipementTitle: 'Gestion des équipements',
-    equipementSubtitle: 'Liste de tous les équipements',
-    addEquipement: 'Ajouter un équipement',
-    searchEquipement: 'Rechercher un équipement...',
-    id: 'ID',
-    nameEquipement: 'Nom',
-    quantite: 'Quantité',
-    actions: 'Actions',
-    noEquipements: 'Aucun équipement trouvé.',
-    edit: 'Modifier',
-    delete: 'Supprimer',
-    confirm: 'Confirmation',
-    confirmDeleteEquipement: 'Voulez-vous vraiment supprimer cet équipement ?',
-    actionUndone: 'Cette action est irréversible.',
-    equipementExists: 'Cet équipement existe déjà.',
-    emptyField: 'Champ vide',
-    equipementEmptyField: 'Veuillez remplir tous les champs.',
-    successAdd: 'Succès',
-    equipementAdded: 'Équipement ajouté avec succès.',
-    equipementUpdated: 'Équipement modifié avec succès.',
-    equipementDeleted: 'Équipement supprimé avec succès.',
-    cancel: 'Annuler',
-    add: 'Ajouter',
-    save: 'Enregistrer',
-    ok: 'OK',
-    enterEquipementName: 'Entrez le nom de l\'équipement',
-    enterQuantite: 'Entrez la quantité',
-    page: 'Page',
-    of: 'sur'
-  };
-
+ 
   searchTerm: string = '';
   currentPage: number = 0;
   pageSize: number = 5;
@@ -66,8 +34,24 @@ export class EquipementComponent {
   showDeleteSuccessPopup: boolean = false;
 
   equipementToDelete: number | null = null;
+  selectedEntity = 'equipement';
 
-  constructor(private equipementService: EquipementService) {
+  toggleLang() {
+    this.langService.toggleLang();
+  }
+
+  onEntityChange(newValue: string) {
+    this.selectedEntity = newValue;
+  }
+  
+  get t() {
+    return this.langService.t;
+  }
+  
+  get lang() {
+    return this.langService.lang;
+  }
+  constructor(private equipementService: EquipementService, public langService: LangService) {
     this.getEquipementList();
   }
 

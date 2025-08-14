@@ -64,4 +64,3 @@ public class ProjetEquipement {
         this.quantiteReservee = quantiteReservee;
     }
 }
-
