@@ -160,9 +160,11 @@ export class ProjectComponent implements OnInit {
       next: (data) => {
         // console.debug('Projects API raw:', data);
         this.projects = data.map(p => this.normalizeProject(p));
+        console.log(this.projects);
       },
       error: (err) => console.error('Erreur chargement projets', err),
     });
+    
   }
 
   loadEquipementsDisponibles() {

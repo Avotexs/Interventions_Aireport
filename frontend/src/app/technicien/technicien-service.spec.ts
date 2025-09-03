@@ -13,5 +13,4 @@ describe('TechnicienService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-  
 });
