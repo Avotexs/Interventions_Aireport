@@ -1,6 +1,7 @@
 package com.airoport.backend.controller;
 
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import com.airoport.backend.dto.SolutionDTO;
 import com.airoport.backend.model.Solution;
 import com.airoport.backend.service.SolutionService;
@@ -51,6 +52,27 @@ public class SolutionController {
         solutionService.deleteSolution(id);
         return ResponseEntity.noContent().build();
     }
+
+
+
+    @GetMapping("/stats/date-range")
+    public ResponseEntity<List<Solution>> getSolutionsByDateRange(
+            @RequestParam String start,
+            @RequestParam String end) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
+        LocalDateTime endDate = LocalDateTime.parse(end, formatter);
+
+        List<Solution> solutions = solutionService.getSolutionsByDateRange(startDate, endDate);
+        return ResponseEntity.ok(solutions);
+    }
+
+    @GetMapping("/stats/total")
+    public ResponseEntity<Long> getTotalSolutions() {
+        return ResponseEntity.ok(solutionService.getTotalSolutions());
+    }
+
 
 
 }

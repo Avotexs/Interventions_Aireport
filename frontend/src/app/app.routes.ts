@@ -1,4 +1,4 @@
-// src/app/app.routes.ts
+
 import { Routes } from '@angular/router';
 
 import { Home } from './home/home';
@@ -11,6 +11,8 @@ import { ZoneComponent } from './zone/zone-component';
 import { ComptoireComponent } from './comptoire/comptoire-component';
 import { TechnicienComponent } from './technicien-component/technicien-component';
 import { AeroportComponent } from './aeroport-component/aeroport-component';
+import { InterventionComponent } from './intervention-component/intervention-component';
+import { Technicien } from './technicien/technicien';
 
 // ⚠️ Ajoute ces imports :
 import { LoginComponent } from './login/login';
@@ -26,7 +28,12 @@ export const routes: Routes = [
   {
     path: 'technicien-home',
     component: TechnicienHomeComponent,
-    canActivate: [authGuard, roleGuard(['technicien'])]
+    canActivate: [authGuard, roleGuard(['technicien'])],
+    children: [
+
+      { path: 'technicien', component: Technicien },
+      
+    ]
   },
 
   // Bloc ADMIN : toutes tes pages actuelles sont ici et protégées
@@ -40,10 +47,12 @@ export const routes: Routes = [
       { path: 'solution', component: SolutionComponent },
       { path: 'comptoire', component: ComptoireComponent },
       { path: 'zone', component: ZoneComponent },
-      { path: 'technicien', component: TechnicienComponent },
+      { path: 'techniciens', component: TechnicienComponent },
       { path: 'aeroport', component: AeroportComponent },
+      { path: 'intervention', component: InterventionComponent },
       { path: 'equipement', component: EquipementComponent },
       { path: 'project', component: ProjectComponent }
+      
     ]
   },
 

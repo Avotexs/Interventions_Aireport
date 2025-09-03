@@ -105,6 +105,7 @@ getAeroports() {
 togglePasswordVisibility() {
   this.showPassword = !this.showPassword;
 }
+
 /*
  /**
  * Returns the list of techniciens filtered by the search term
@@ -147,8 +148,6 @@ filteredTechniciens(): Technicien[] {
    * Clears the search term and resets pagination.
    */
   clearSearch() {
-
-    
   this.searchTerm = '';
   this.onSearchChange(); 
   }
@@ -261,6 +260,7 @@ closeDeleteSuccessPopup() {
   }
  
 startEdit(technician: Technicien) {
+  
   this.showEditPopup = true;
     // Set the editing technicien and pre-fill the edit fields
     this.editingTechnicien = technician;
@@ -269,7 +269,7 @@ startEdit(technician: Technicien) {
     this.editedPseudoname = technician.pseudoname;
     this.editedRole = technician.role;
     this.editedMotDePass = technician.motDePass;
-    this.editedAeroport = technician.aeroportId; // Assuming aeroportId is a number
+    this.editedAeroport = technician.aeroportId; 
   }
 
   saveEditedTechnicien() {
@@ -412,8 +412,10 @@ addTechnicien() {
   }
 
   getAeroportNameById(id?: number | null): string {
+    
     if (id == null) return '';
     const a = this.aeroports.find(x => x.id === id);
+    console.log('Aéroport trouvé:', a);
     return a?.name ?? '';
   }
 }

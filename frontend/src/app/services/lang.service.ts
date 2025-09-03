@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { InterventionComponent } from '../intervention-component/intervention-component';
 
 type Lang = 'fr' | 'en';
 
@@ -43,7 +44,7 @@ export class LangService {
       companyTitle: 'Liste Campagny',
       companySubtitle: 'Liste de toutes les companies',
       addCompany: 'Nouvelle compagnie',
-      searchCompany: '🔍 Rechercher une entreprise...',
+      searchCompany: ' Rechercher une entreprise...',
       noCompanies: 'Aucune compagnie trouvée',
       companyName: 'Nom de l\'entreprise',
       enterCompanyName: 'Entrez le nom de l\'entreprise',
@@ -73,7 +74,7 @@ export class LangService {
       solutionTitle: 'Solutions',
       solutionSubtitle: 'Liste de toutes les solutions',
       addSolution: 'Nouvelle solution',
-      searchSolution: '🔍 Rechercher une solution...',
+      searchSolution: ' Rechercher une solution...',
       noSolutions: 'Aucune solution trouvée',
       solutionName: 'Nom de la solution',
       enterSolutionName: 'Entrez le nom de la solution',
@@ -87,7 +88,7 @@ export class LangService {
       zoneTitle: 'Zones',
       zoneSubtitle: 'Liste de toutes les zones',
       addZone: 'Nouvelle zone',
-      searchZone: '🔍 Rechercher une zone...',
+      searchZone: ' Rechercher une zone...',
       noZones: 'Aucune zone trouvée',
       zoneName: 'Nom de la zone',
       enterZoneName: 'Entrez le nom de la zone',
@@ -104,7 +105,7 @@ export class LangService {
       counterTitle: 'Comptoires',
       counterSubtitle: 'Liste de tous les comptoires',
       addCounter: 'Nouveau comptoire',
-      searchCounter: '🔍 Rechercher un comptoire...',
+      searchCounter: ' Rechercher un comptoire...',
       noCounters: 'Aucun comptoire trouvé',
       counterName: 'Nom du comptoire',
       enterCounterName: 'Entrez le nom du comptoire',
@@ -190,7 +191,7 @@ export class LangService {
       technicienTitle: 'Techniciens', 
       technicienSubtitle: 'Liste de tous les techniciens',
       addTechnicien: 'Nouveau technicien',
-      searchTechnicien: '🔍 Rechercher un technicien...',
+      searchTechnicien: ' Rechercher un technicien...',
       noTechniciens: 'Aucun technicien trouvé',
       technicienName: 'Nom du technicien',  
       enterTechnicienName: 'Entrez le nom du technicien',
@@ -217,7 +218,53 @@ export class LangService {
       aeroportDeleted: 'Aéroport supprimé avec succès !',
       // New cannot-delete messages
       cannotDeleteAeroport: 'Suppression impossible',
-      aeroportInUseByTechniciens: 'Cet aéroport est associé à un ou plusieurs techniciens. Supprimez ou modifiez ces techniciens avant de supprimer l\'aéroport.'
+      aeroportInUseByTechniciens: 'Cet aéroport est associé à un ou plusieurs techniciens. Supprimez ou modifiez ces techniciens avant de supprimer l\'aéroport.',
+    
+      //intervention
+      interventionTitle: 'Interventions',
+      interventionId: 'ID',
+      interventionNumber: 'Numéro ',
+      interventionDate: 'Date',
+      interventionDuration: 'Durée',
+      interventionEndTime: 'Date de fin',
+      interventionStartTime: 'Date de début',
+      interventionInProgress: 'En cours',
+      interventionCompleted: 'Terminé',
+      interventionProblem: 'Problème',
+      interventionSolution: 'Solution',
+      interventionTechnicien: 'Technicien',
+      interventionCampagne: 'Entreprise',
+      interventionAeroport: 'Aéroport',
+      interventionEquipement: 'Équipement',
+      interventionProjet: 'Projet',
+      interventionZone: 'Zone d\'intervention',
+      interventionComptoir: 'Comptoire',
+      interventionEnterNumero: 'Entrez le numéro',
+      interventionSubtitle: 'La liste de toutes les interventions',
+      addIntervention: 'Nouvelle intervention',
+      searchIntervention: ' Rechercher une intervention...',
+      noInterventions: 'Aucune intervention trouvée',
+      interventionName: 'Nom de l\'intervention',
+      enterInterventionName: 'Entrez le nom de l\'intervention',
+      interventionExists: 'Une intervention avec ce numéro existe déjà !',
+      interventionEmptyField: 'Veuillez remplir tous les champs !',
+      confirmDeleteIntervention: 'Voulez-vous vraiment supprimer cette intervention ?',
+      interventionAdded: 'Intervention ajoutée avec succès !',
+      interventionUpdated: 'Intervention mise à jour avec succès !',
+      interventionDeleted: 'Intervention supprimée avec succès !',
+      interventionDateDebut: 'Entrez la date de début',
+      interventionDateFin: 'Entrez la date de fin',
+      interventionAddCampagne: 'Entrez la entreprise',
+      interventionAddTechnicien: 'Entrez le technicien',
+      interventionAddZone: 'Entrez la zone',
+      interventionAddComptoir: 'Entrez le comptoir',
+      interventionAddProjet: 'Entrez le projet',
+      interventionAddEquipement: 'Entrez l\'équipement',
+      interventionAddSolution: 'Entrez la solution',
+      interventionAddProblem: 'Entrez le problème',
+      interventionAddAeroport: 'Entrez l\'aéroport',
+      interventionDownloadAllInterventions: 'Télécharger toutes les interventions',
+      interventionDownloadCurrentPage: 'Télécharger la page actuelle'
     },
 
     en: {
@@ -252,7 +299,7 @@ export class LangService {
       companyTitle: 'Company List',
       companySubtitle: 'The list of all companies',
       addCompany: 'New company',
-      searchCompany: '🔍 Search a company...',
+      searchCompany: ' Search a company...',
       noCompanies: 'No companies found',
       companyName: 'Company Name',
       enterCompanyName: 'Enter company name',
@@ -282,7 +329,7 @@ export class LangService {
       solutionTitle: 'Solutions',
       solutionSubtitle: 'The list of all solutions',
       addSolution: 'New solution',
-      searchSolution: '🔍 Search a solution...',
+      searchSolution: ' Search a solution...',
       noSolutions: 'No solutions found',
       solutionName: 'Solution Name',
       enterSolutionName: 'Enter solution name',
@@ -292,7 +339,7 @@ export class LangService {
       solutionAdded: 'Solution added successfully!',
       solutionUpdated: 'Solution updated successfully!',
       solutionDeleted: 'Solution deleted successfully!',
-
+      // Zones
       zoneTitle: 'Zones',
       zoneSubtitle: 'The list of all zones',
       addZone: 'New zone',
@@ -309,11 +356,11 @@ export class LangService {
       cannotDelete: 'Deletion not allowed',
       zoneHasCounters: 'This zone contains counters and cannot be deleted.',
       deleteCountersFirst: 'Please delete all counters associated with this zone first.',
-
+      // Counters
       counterTitle: 'Counters',
       counterSubtitle: 'The list of all counters',
       addCounter: 'New counter',
-      searchCounter: '🔍 Search a counter...',
+      searchCounter: ' Search a counter...',
       noCounters: 'No counters found',
       counterName: 'Counter Name',
       enterCounterName: 'Enter counter name',
@@ -333,7 +380,7 @@ export class LangService {
       equipementTitle: 'Equipment',
       equipementSubtitle: 'List of all equipment',
       addEquipement: 'New equipment',
-      searchEquipement: '🔍 Search equipment...',
+      searchEquipement: ' Search equipment...',
       noEquipements: 'No equipment found',
       nameEquipement: 'Equipment name',
       enterEquipementName: 'Enter equipment name',
@@ -399,7 +446,7 @@ export class LangService {
       technicienTitle: 'Technicians',
       technicienSubtitle: 'The list of all technicians',
       addTechnicien: 'New technician',
-      searchTechnicien: '🔍 Search a technician...',
+      searchTechnicien: ' Search a technician...',
       noTechniciens: 'No technicians found',
       technicienName: 'Technician Name',
       enterTechnicienName: 'Enter technician name',
@@ -425,7 +472,55 @@ export class LangService {
       aeroportUpdated: 'Airport updated successfully!',
       aeroportDeleted: 'Airport deleted successfully!',
       cannotDeleteAeroport: 'Cannot delete airport',
-      aeroportInUseByTechniciens: 'This airport is linked to one or more technicians. Please delete or modify these technicians before deleting the airport.'
+      aeroportInUseByTechniciens: 'This airport is linked to one or more technicians. Please delete or modify these technicians before deleting the airport.',
+
+
+      //intervention
+      interventionTitle: 'Interventions',
+      interventionId: 'ID',
+      interventionNumber: 'Number ',
+      interventionDate: 'Date',
+      interventionDuration: 'Duration',
+      interventionEndTime: 'End Time',
+      interventionStartTime: 'Start Time',
+      interventionInProgress: 'In Progress',
+      interventionCompleted: 'Completed',
+      interventionProblem: 'Problem',
+      interventionSolution: 'Solution',
+      interventionTechnicien: 'Technician',
+      interventionCampagne: 'Company',
+      interventionAeroport: 'Airport',
+      interventionEquipement: 'Equipment',
+      interventionZone: 'Intervention Zone',
+      interventionComptoir: 'Counter',
+      interventionProjet: 'Project',
+      interventionSubtitle: 'The list of all interventions',
+      addIntervention: 'New intervention',
+      searchIntervention: '🔍 Search an intervention...',
+      noInterventions: 'No interventions found',
+      interventionName: 'Intervention Name',
+      enterInterventionName: 'Enter intervention name',
+      interventionExists: 'An intervention with this number already exists!',
+      interventionEmptyField: 'Please fill in all fields!',
+      confirmDeleteIntervention: 'Are you sure you want to delete this intervention?',
+      interventionAdded: 'Intervention added successfully!',
+      interventionUpdated: 'Intervention updated successfully!',
+      interventionDeleted: 'Intervention deleted successfully!',
+      interventionEnterNumero: 'Entrez le numéro de l\'intervention',
+      interventionDateDebut: 'Enter start date',
+      interventionDateFin: 'Enter end date',
+      interventionAddCampagne: 'Enter company',
+      interventionAddTechnicien: 'Enter technician',
+      interventionAddZone: 'Enter zone',
+      interventionAddComptoir: 'Enter counter',
+      interventionAddProjet: 'Enter project',
+      interventionAddEquipement: 'Enter equipment',
+      interventionAddSolution: 'Enter solution',
+      interventionAddProblem: 'Enter problem',
+      interventionAddAeroport: 'Enter airport',
+      interventionDownloadAllInterventions: 'Download all interventions',
+      interventionDownloadCurrentPage: 'Download current page'
+
     }
   };
 
@@ -439,7 +534,8 @@ export class LangService {
       { value: 'comptoire', label: 'Comptoire' },
       { value: 'technicien', label: 'Technicien' },
       { value: 'project', label: 'Projet' },
-      { value: 'equipement', label: 'Équipement' }
+      { value: 'equipement', label: 'Équipement' },
+      { value: 'intervention', label: 'Intervention' }
     ],
     en: [
       { value: 'campagny', label: 'Company' },
@@ -450,7 +546,8 @@ export class LangService {
       { value: 'comptoire', label: 'Counter' },
       { value: 'technicien', label: 'Technician' },
       { value: 'project', label: 'Project' },
-      { value: 'equipement', label: 'Equipment' }
+      { value: 'equipement', label: 'Equipment' },
+      { value: 'intervention', label: 'Intervention' }
     ]
   };
 
