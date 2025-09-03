@@ -136,6 +136,15 @@ export class LangService {
       equipementAdded: 'Équipement ajouté avec succès !',
       equipementUpdated: 'Équipement mis à jour avec succès !',
       equipementDeleted: 'Équipement supprimé avec succès !',
+  // Login
+  loginTitle: 'Connexion',
+  loginUsername: 'Pseudonyme',
+  loginPassword: 'Mot de passe',
+  loginEnterUsername: 'Entrez votre identifiant',
+  loginEnterPassword: 'Entrez votre mot de passe',
+  loginSubmit: 'Se connecter',
+  loginMissingFields: 'Veuillez remplir tous les champs',
+  loginInvalid: 'Identifiants invalides',
       
       // Projets
       projectTitle: 'Projets',
@@ -336,6 +345,15 @@ export class LangService {
       equipementAdded: 'Equipment added successfully!',
       equipementUpdated: 'Equipment updated successfully!',
       equipementDeleted: 'Equipment deleted successfully!',
+  // Login
+  loginTitle: 'Login',
+  loginUsername: 'Username',
+  loginPassword: 'Password',
+  loginEnterUsername: 'Enter your username',
+  loginEnterPassword: 'Enter your password',
+  loginSubmit: 'Sign in',
+  loginMissingFields: 'Please fill in all fields',
+  loginInvalid: 'Invalid credentials',
       
       // Projects
       projectTitle: 'Projects',
