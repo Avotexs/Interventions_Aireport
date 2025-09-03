@@ -89,10 +89,10 @@ public class InterventionService {
         // inProgress is computed by entity lifecycle hooks
 
         // Map relations if IDs provided (> 0)
-        if (dto.getEntrepriseId() > 0) {
-            Campagny entreprise = campagnyRepository.findById(dto.getEntrepriseId())
-                    .orElseThrow(() -> new IllegalArgumentException("Entreprise (Campagny) non trouvée: id=" + dto.getEntrepriseId()));
-            intervention.setEntreprise(entreprise);
+        if (dto.getCampagnyId() > 0) {
+            Campagny entreprise = campagnyRepository.findById(dto.getCampagnyId())
+                    .orElseThrow(() -> new IllegalArgumentException("Entreprise (Campagny) non trouvée: id=" + dto.getCampagnyId()));
+            intervention.setCampagny(entreprise);
         }
         if (dto.getZoneId() > 0) {
             Zone zone = zoneRepository.findById(dto.getZoneId())
@@ -144,7 +144,7 @@ public class InterventionService {
         dto.setInProgress(intervention.isInProgress());
 
         // Include related IDs in response
-        dto.setEntrepriseId(intervention.getEntreprise() != null ? intervention.getEntreprise().getId() : 0);
+        dto.setCampagnyId(intervention.getCampagny() != null ? intervention.getCampagny().getId() : 0);
         dto.setZoneId(intervention.getZone() != null ? intervention.getZone().getId() : 0);
         dto.setComptoireId(intervention.getComptoire() != null ? intervention.getComptoire().getId() : 0);
         dto.setSolutionId(intervention.getSolution() != null ? intervention.getSolution().getId() : 0);
