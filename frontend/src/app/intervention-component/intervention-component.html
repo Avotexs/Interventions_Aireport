@@ -1,0 +1,695 @@
+<div class="intervention-container">
+  <div class="intervention-header">
+    <div>
+      <h1 class="intervention-title">{{ t.interventionTitle }}</h1>
+      <p class="intervention-subtitle">{{ t.interventionSubtitle }}</p>
+    </div>
+    <button class="btn-primary" (click)="showPopup = true">
+      <i class="fas fa-plus"></i> {{ t.addIntervention }}
+    </button>
+  </div>
+<div class="searchFilters">
+    <!-- Filtre aéroport -->
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-plane-departure search-icon"></i>
+      <select
+        [(ngModel)]="aeroportFilter"
+        (change)="onAeroportFilterChange()"
+        class="search-input"
+      >
+        <option value="">{{ t.interventionAeroport }}</option>
+        <option *ngFor="let aeroport of aeroports" [value]="aeroport.name">
+          {{ aeroport.name }}
+        </option>
+      </select>
+      <button *ngIf="aeroportFilter" (click)="clearAeroportFilter()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+   <!-- Filtre zone -->
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-map-marker-alt search-icon"></i>
+      <select
+        [(ngModel)]="zoneFilter"
+        (change)="onZoneFilterChange()"
+        class="search-input"
+      >
+        <option value="">{{ t.interventionZone }}</option>
+        <option *ngFor="let zone of zones" [value]="zone.nom">
+          {{ zone.nom }}
+        </option>
+      </select>
+      <button *ngIf="zoneFilter" (click)="clearZoneFilter()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+    <!-- Filtre Comptoir -->
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-map-marker-alt search-icon"></i>
+      <select
+        [(ngModel)]="comptoirFilter"
+        (change)="onComptoirFilterChange()"
+        class="search-input"
+      >
+        <option value="">{{ t.interventionComptoir }}</option>
+        <option *ngFor="let comptoir of allComptoires" [value]="comptoir.nom">
+          {{ comptoir.nom }}
+        </option>
+      </select>
+      <button *ngIf="comptoirFilter" (click)="clearComptoirFilter()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtre TECHNICIEN -->
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-user search-icon"></i>
+      <select
+        [(ngModel)]="technicienFilter"
+        (change)="onTechnicienFilterChange()"
+        class="search-input"
+      >
+        <option value="">{{ t.interventionTechnicien }}</option>
+        <option *ngFor="let technicien of techniciens" [value]="technicien.firstname">
+          {{ technicien.firstname }}
+        </option>
+      </select>
+      <button *ngIf="technicienFilter" (click)="clearTechnicienFilter()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <!-- Date Filters -->
+   <!--
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-calendar-alt search-icon"></i>
+      <input
+        type="date"
+        [(ngModel)]="dateFromFilter"
+        (change)="onDateFilterChange()"
+        class="search-input"
+      />
+      <span style="padding:0 .4rem;">-</span>
+      <input
+        type="date"
+        [(ngModel)]="dateToFilter"
+        (change)="onDateFilterChange()"
+        class="search-input"
+      />
+      <button *ngIf="dateFromFilter || dateToFilter" (click)="clearDateFilter()" class="clear-search">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+-->
+
+
+  <div class="search-box">
+  <div class="header-actions">
+      <button class="btn-secondary" (click)="exportAllInterventions()">
+        <i class="fas fa-file-download"></i> {{ t.interventionDownloadAllInterventions || 'Exporter tout' }}
+      </button>
+    </div>
+  </div>  
+</div>
+
+
+  
+
+<!-- Tabs -->
+<div class="tabs">
+  <!-- Radios invisibles pour gérer l'état -->
+  <input type="radio" id="tab-progress" name="status" checked  (click)="Inprogress()">
+  <input type="radio" id="tab-closed"   name="status" (click)="Closed()">
+
+  <div class="tab-buttons">
+    <label for="tab-progress" class="tab">In progress</label>
+    <label for="tab-closed"   class="tab">Closed</label>
+    <span class="underline"></span>
+  </div>
+</div>
+
+  <div class="table-wrapper">
+    <table class="intervention-table">
+      <thead>
+        <tr>
+          <th>{{ t.interventionId }}</th>
+          <th>{{ t.interventionNumber}}</th>
+          <th>{{ t.interventionDate }}</th>
+          <th>{{ t.interventionStartTime }}</th>
+          <th>{{ t.interventionEndTime }}</th>
+          <th>{{ t.interventionDuration }}</th>
+          <th>{{ t.interventionCampagne }}</th>
+          <th>{{ t.interventionTechnicien }}</th>
+          <th>{{ t.interventionZone }}</th>
+          <th>{{ t.interventionComptoir }}</th>
+          <th>{{ t.interventionProjet }}</th>
+          <th>{{ t.interventionEquipement }}</th>
+          <th>{{ t.interventionSolution }}</th>
+          <th>{{ t.interventionProblem }}</th>
+          <th>{{ t.interventionAeroport }}</th>
+          
+          
+          
+          <th class="actions-column">{{ t.actions }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="filteredInterventions().length === 0">
+          <td colspan="3" class="empty-message">{{ t.noInterventions }}</td>
+        </tr>
+        <!---->
+        <tr *ngFor="let intervention of filteredInterventions()">
+          <td>{{ intervention.id }}</td>
+          <td >{{ intervention.numero }}</td>
+          <td >{{ intervention.date }}</td>
+          <td >{{ intervention.dateDebut }}</td>
+          <td >{{ intervention.dateFin }}</td>
+          <td >{{ intervention.duration }}</td>
+          <td >{{getCampagneNameById(intervention.campagnyId) }}</td>
+          <td >{{ getTechnicienNameById(intervention.technicienId) }}</td>
+          <td >{{getZoneNameById(intervention.zoneId) }}</td>
+          <td >{{ getComptoireNameById(intervention.comptoireId)  }}</td>
+          <td >{{ getProjectNameById(intervention.projetId) }}</td>
+          <td>
+            <ul>
+              <!--
+            <li *ngFor="let eq of getEquipementsByProjectId(intervention.projetId)">
+                  {{ eq.nameEquipement }} {{eq.quantite}}
+                </li>
+                -->
+                <li *ngFor="let eq of getProjectById(intervention.projetId)?.equipements">
+                {{ getEquipementDisplayName(eq) }} : {{ eq.quantite }}
+                <span *ngIf="getEquipementDisplayName(eq) === t.unknownEquipment">(id: {{ eq.equipementId }})</span>
+              </li>
+            </ul>
+          </td>
+
+          <td >{{getSolutionNameById(intervention.solutionId) }}</td>
+          <td >{{getProblemNameById(intervention.problemId) }}</td>
+
+          <td >{{ getAeroportNameById(intervention.aeroportId) }}</td>
+
+          <td class="actions-cell">
+            <button (click)="startEdit(intervention)" class="action-btn edit-btn" title="{{ t.edit }}">
+              <i class="fas fa-edit"></i>
+            </button>
+            
+            <button (click)="askDelete(intervention.id!)" class="action-btn delete-btn" title="{{ t.delete }}" 
+                    [disabled]="!intervention.id">
+              <i class="fas fa-trash-alt"></i>
+            
+             
+            </button>
+            
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="pageCount > 1" class="pagination">
+    <span class="page-info">{{ t.page }} {{ currentPage + 1 }} {{ t.of }} {{ pageCount }}</span>
+    <div class="page-controls">
+      <button (click)="goToPage(0)" [disabled]="currentPage === 0" class="page-btn">
+        <i class="fas fa-angle-double-left"></i>
+      </button>
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0" class="page-btn">
+        <i class="fas fa-angle-left"></i>
+      </button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === pageCount - 1" class="page-btn">
+        <i class="fas fa-angle-right"></i>
+      </button>
+      <button (click)="goToPage(pageCount - 1)" [disabled]="currentPage === pageCount - 1" class="page-btn">
+        <i class="fas fa-angle-double-right"></i>
+      </button>
+    </div>
+  </div>
+ </div>
+  <!-- Modal pour ajouter un intervention -->
+
+  <div *ngIf="showPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.addIntervention }}</h3>
+        <button (click)="canceladd()"class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label for="interventionEnterNumero">{{ t.interventionEnterNumero }}</label>
+          <input
+            type="number"
+            id="interventionEnterNumero"
+            [(ngModel)]="newIntervention.numero"
+            placeholder="{{ t.interventionEnterNumero }}"
+            class="form-input"
+          />
+      </div>
+      
+      <div class="form-group">
+          <label for="interventionDateDebut">{{ t.interventionDateDebut }}</label>
+          <input
+            type="datetime-local"
+            id="interventionDateDebut"
+            [(ngModel)]="newIntervention.dateDebut"
+            placeholder="{{ t.interventionDateDebut }}"
+            class="form-input"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="interventionDateFin">{{ t.interventionDateFin }}</label>
+          <input
+            type="datetime-local"
+            id="interventionDateFin"
+            [(ngModel)]="newIntervention.dateFin"
+            placeholder="{{ t.interventionDateFin }}"
+            class="form-input"
+          />
+        </div>
+        
+    
+
+       <div class="form-group">
+        <label for="interventionAddCampagne">{{ t.interventionAddCampagne }}</label>
+        <select
+            id="interventionAddCampagne"
+            [(ngModel)]="newIntervention.campagnyId"
+            (ngModelChange)="onCampagneChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>Sélectionner une campagne</option>
+            <option *ngFor="let campagne of campagnes" [ngValue]="campagne.id">{{ campagne.name }}</option>
+          </select>
+        </div>
+
+       <div class="form-group">
+        <label for="interventionAddTechnicien">{{ t.interventionAddTechnicien }}</label>
+        <select
+            id="interventionAddTechnicien"
+            [(ngModel)]="newIntervention.technicienId"
+            (ngModelChange)="onTechnicienChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddTechnicien }}</option>
+            <option *ngFor="let technicien of techniciens" [ngValue]="technicien.id">{{ technicien.lastname + ' ' + technicien.firstname }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+        <label for="interventionAddZone">{{ t.interventionAddZone }}</label>
+        <select
+            id="interventionAddZone"
+            [(ngModel)]="newIntervention.zoneId"
+            (ngModelChange)="onZoneChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddZone }}</option>
+            <option *ngFor="let zone of zones" [ngValue]="zone.id">{{ zone.nom }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+        <label for="interventionAddComptoir">{{ t.interventionAddComptoir }}</label>
+        <select
+            id="interventionAddComptoir"
+            [(ngModel)]="newIntervention.comptoireId"
+            (ngModelChange)="onComptoireChange($event)"
+            class="form-input"
+            [disabled]="!comptoires.length"
+            required
+          >
+            <option [ngValue]="0" disabled selected *ngIf="comptoires.length">{{ t.interventionAddComptoir }}</option>
+            <option *ngFor="let comptoire of comptoires" [ngValue]="comptoire.id">{{ comptoire.nom }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+        <label for="interventionAddProjet">{{ t.interventionAddProjet }}</label>
+        <select
+            id="interventionAddProjet"
+            [(ngModel)]="newIntervention.projetId"
+            (ngModelChange)="onProjetChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddProjet }}</option>
+            <option *ngFor="let projet of projects" [ngValue]="projet.id">{{ projet.name }}</option>
+          </select>
+        </div>
+
+         <div class="form-group">
+        <label for="interventionAddSolution">{{ t.interventionAddSolution }}</label>
+        <select
+            id="interventionAddSolution"
+            [(ngModel)]="newIntervention.solutionId"
+            (ngModelChange)="onSolutionChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddSolution }}</option>
+            <option *ngFor="let solution of solutions" [ngValue]="solution.id">{{ solution.name }}</option>
+          </select>
+        </div>
+
+         <div class="form-group">
+        <label for="interventionAddProblem">{{ t.interventionAddProblem }}</label>
+        <select
+            id="interventionAddProblem"
+            [(ngModel)]="newIntervention.problemId"
+            (ngModelChange)="onProblemChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddProblem }}</option>
+            <option *ngFor="let problem of problems" [ngValue]="problem.id">{{ problem.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+        <label for="interventionAddAeroport">{{ t.interventionAddAeroport }}</label>
+        <select
+            id="interventionAddAeroport"
+            [(ngModel)]="newIntervention.aeroportId"
+            (ngModelChange)="onAeroportChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddAeroport }}</option>
+            <option *ngFor="let aeroport of aeroports" [ngValue]="aeroport.id">{{ aeroport.name }}</option>
+          </select>
+        </div>
+
+      
+
+      <div class="modal-footer">
+        
+        <button (click)="canceladd()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="addIntervention()" class="btn-primary">{{ t.add }}</button>
+      
+      </div>
+    </div>
+  </div>
+</div>
+ 
+
+
+  <!-- Modal pour modifier une intervention -->
+  <div *ngIf="showEditPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.edit }}</h3>
+        <button (click)="closeEditPopup()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+         <div class="modal-body">
+        
+        <div class="form-group">
+          <label for="interventionEnterNumero">{{ t.interventionEnterNumero }}</label>
+          <input
+            type="number"
+            id="interventionEnterNumero"
+            [(ngModel)]="numeroEdited"
+            placeholder="{{ t.interventionEnterNumero }}"
+            class="form-input"
+          />
+      </div>
+      
+      <div class="form-group">
+          <label for="interventionDateDebut">{{ t.interventionDateDebut }}</label>
+          <input
+            type="datetime-local"
+            id="interventionDateDebut"
+            [(ngModel)]="dateDebutEdited"
+            placeholder="{{ t.interventionDateDebut }}"
+            class="form-input"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="interventionDateFin">{{ t.interventionDateFin }}</label>
+          <input
+            type="datetime-local"
+            id="interventionDateFin"
+            [(ngModel)]="dateFinEdited"
+            placeholder="{{ t.interventionDateFin }}"
+            class="form-input"
+          />
+        </div>
+        
+    
+
+       <div class="form-group">
+        <label for="interventionAddCampagne">{{ t.interventionAddCampagne }}</label>
+        <select
+            id="interventionAddCampagne"
+            [(ngModel)]="campagnyIdEdited"
+            (ngModelChange)="onCampagneChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>Sélectionner une campagne</option>
+            <option *ngFor="let campagne of campagnes" [ngValue]="campagne.id">{{ campagne.name }}</option>
+          </select>
+        </div>
+
+       <div class="form-group">
+        <label for="interventionAddTechnicien">{{ t.interventionAddTechnicien }}</label>
+        <select
+            id="interventionAddTechnicien"
+            [(ngModel)]="technicienIdEdited"
+            (ngModelChange)="onTechnicienChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddTechnicien }}</option>
+            <option *ngFor="let technicien of techniciens" [ngValue]="technicien.id">{{ technicien.lastname + ' ' + technicien.firstname }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+        <label for="interventionAddZone">{{ t.interventionAddZone }}</label>
+        <select
+            id="interventionAddZone"
+            [(ngModel)]="zoneIdEdited"
+            (ngModelChange)="onZoneChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddZone }}</option>
+            <option *ngFor="let zone of zones" [ngValue]="zone.id">{{ zone.nom }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+        <label for="interventionAddComptoir">{{ t.interventionAddComptoir }}</label>
+        <select
+            id="interventionAddComptoir"
+            [(ngModel)]="comptoireIdEdited"
+            (ngModelChange)="onComptoireChange($event)"
+            class="form-input"
+            [disabled]="!comptoires.length"
+            required
+          >
+            <option [ngValue]="0" disabled selected *ngIf="comptoires.length">{{ t.interventionAddComptoir }}</option>
+            <option *ngFor="let comptoire of comptoires" [ngValue]="comptoire.id">{{ comptoire.nom }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+        <label for="interventionAddProjet">{{ t.interventionAddProjet }}</label>
+        <select
+            id="interventionAddProjet"
+            [(ngModel)]="projetIdEdited"
+            (ngModelChange)="onProjetChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddProjet }}</option>
+            <option *ngFor="let projet of projects" [ngValue]="projet.id">{{ projet.name }}</option>
+          </select>
+        </div>
+
+         <div class="form-group">
+        <label for="interventionAddSolution">{{ t.interventionAddSolution }}</label>
+        <select
+            id="interventionAddSolution"
+            [(ngModel)]="solutionIdEdited"
+            (ngModelChange)="onSolutionChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddSolution }}</option>
+            <option *ngFor="let solution of solutions" [ngValue]="solution.id">{{ solution.name }}</option>
+          </select>
+        </div>
+
+         <div class="form-group">
+        <label for="interventionAddProblem">{{ t.interventionAddProblem }}</label>
+        <select
+            id="interventionAddProblem"
+            [(ngModel)]="problemIdEdited"
+            (ngModelChange)="onProblemChange($event)"
+            class="form-input"
+            required
+          >
+            <option [ngValue]="" disabled selected>{{ t.interventionAddProblem }}</option>
+            <option *ngFor="let problem of problems" [ngValue]="problem.id">{{ problem.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="interventionAeroportId">{{ t.interventionAddAeroport }}</label>
+          <select
+            id="interventionAeroportId"
+            [(ngModel)]="aeroportIdEdited"
+            (ngModelChange)="onAeroportChange($event)"
+            class="form-input"
+          >
+            <option [ngValue]="null" placeholder="Sélectionner un aéroport">{{t.interventionAddAeroport}}</option>
+            <option *ngFor="let aeroport of aeroports" [ngValue]="aeroport.id">{{ aeroport.name }}</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeEditPopup()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="saveEditedIntervention()" class="btn-primary">{{ t.save }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Modal de confirmation de suppression -->
+  
+  <div *ngIf="showPopupSuppression" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.confirm }}</h3>
+        <button (click)="cancelDelete()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ t.confirmDeleteIntervention }}</p>
+        <p class="warning-text">
+          <i class="fas fa-exclamation-triangle"></i> {{ t.actionUndone }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="cancelDelete()" class="btn-outline">{{ t.cancel }}</button>
+        <button (click)="confirmDelete()" class="btn-danger">{{ t.confirm }}</button>
+      </div>
+    </div>
+  </div>
+   
+
+  <!-- Modal "Existe déjà" -->
+   <div *ngIf="showAlreadyExistsPopupadd" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.interventionExists }}</h3>
+        <button (click)="closeAlreadyExistsPopupAdd()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.interventionExists }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeAlreadyExistsPopupAdd()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+  
+    <!-- Modal "Existe déjà" -->
+     
+   <div *ngIf="showAlreadyExistsPopupUpdate" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.interventionExists }}</h3>
+        <button (click)="closeAlreadyExistsPopupUpdate()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.interventionExists }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeAlreadyExistsPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Modal "Champ vide" -->
+  
+  
+  <div *ngIf="showEmptyFieldPopup || showEmptyFieldPopupUpdate" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.emptyField }}</h3>
+        <button (click)="showEmptyFieldPopup ? closeEmptyFieldPopup() : closeEmptyFieldPopupUpdate()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="warning-text">
+          <i class="fas fa-exclamation-circle"></i> {{ t.technicienEmptyField }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="showEmptyFieldPopup ? closeEmptyFieldPopup() : closeEmptyFieldPopupUpdate()" class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal "Succès" -->
+
+  
+  <div *ngIf="showSuccessPopup || showEditSuccessPopup || showDeleteSuccessPopup" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>{{ t.successAdd }}</h3>
+        <button 
+          (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
+          class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="success-text">
+          <i class="fas fa-check-circle"></i> 
+          {{ showSuccessPopup ? t.technicienAdded : 
+             (showEditSuccessPopup ? t.technicienUpdated : t.technicienDeleted) }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button 
+          (click)="showSuccessPopup ? closeSuccessPopup() : (showEditSuccessPopup ? closeEditSuccessPopup() : closeDeleteSuccessPopup())" 
+          class="btn-primary">{{ t.ok }}</button>
+      </div>
+    </div>
+  </div>
+  

@@ -35,7 +35,7 @@ export class ProjectService {
       map(data => data.map(p => ({
         id: p.id,
         name: p.name,
-        equipements: p.projetEquipements ?? p.equipements ?? []
+        equipements: p.projetEquipements ??  []
       } as ProjectDTO)))
     );
   }
