@@ -8,7 +8,7 @@ public class InterventionDTO {
     private Date dateFin;
     private String duration;
     private boolean inProgress;
-    private int entrepriseId;
+    private int campagnyId;
     private int zoneId;
     private int comptoireId;
     private int solutionId;
@@ -20,7 +20,7 @@ public class InterventionDTO {
     public InterventionDTO() {}
 
     public InterventionDTO(int id, long numero, Date date, Date dateDebut, Date dateFin, String duration,
-                           boolean inProgress, int entrepriseId, int zoneId, int comptoireId, int solutionId,
+                           boolean inProgress, int campagnyId, int zoneId, int comptoireId, int solutionId,
                            int problemId, int aeroportId, Long projetId, int technicienId) {
         this.id = id;
         this.numero = numero;
@@ -29,7 +29,7 @@ public class InterventionDTO {
         this.dateFin = dateFin;
         this.duration = duration;
         this.inProgress = inProgress;
-        this.entrepriseId = entrepriseId;
+        this.campagnyId = campagnyId;
         this.zoneId = zoneId;
         this.comptoireId = comptoireId;
         this.solutionId = solutionId;
@@ -67,8 +67,8 @@ public class InterventionDTO {
         return inProgress;
     }
 
-    public int getEntrepriseId() {
-        return entrepriseId;
+    public int getCampagnyId() {
+        return campagnyId;
     }
 
     public int getZoneId() {
@@ -120,8 +120,8 @@ public class InterventionDTO {
     public void setInProgress(boolean inProgress) {
         this.inProgress = inProgress;
     }
-    public void setEntrepriseId(int entrepriseId) {
-        this.entrepriseId = entrepriseId;
+    public void setCampagnyId(int entrepriseId) {
+        this.campagnyId = entrepriseId;
     }
     public void setZoneId(int zoneId) {
         this.zoneId = zoneId;

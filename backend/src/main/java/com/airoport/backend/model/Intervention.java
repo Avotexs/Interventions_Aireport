@@ -24,8 +24,8 @@ public class Intervention {
     private String duration;
 
     @ManyToOne
-    @JoinColumn(name = "entreprise_id")
-    private Campagny entreprise; // You can rename to Entreprise if your entity is named so
+    @JoinColumn(name = "campagny_id")
+    private Campagny campagny;
 
     @ManyToOne
     @JoinColumn(name = "zone_id")
@@ -35,7 +35,7 @@ public class Intervention {
     @JoinColumn(name = "comptoire_id")
     private Comptoire comptoire;
 
-    private boolean inProgress;
+    private boolean inProgress=true;
 
     @ManyToOne
     @JoinColumn(name = "solution_id")
@@ -62,7 +62,7 @@ public class Intervention {
     @PrePersist
     @PreUpdate
     private void updateInProgress() {
-        this.inProgress = (this.dateFin == null);
+        this.inProgress = false;
     }
 
     // Getters and Setters
@@ -88,8 +88,8 @@ public class Intervention {
     public String getDuration() { return duration; }
     public void setDuration(String duration) { this.duration = duration; }
 
-    public Campagny getEntreprise() { return entreprise; }
-    public void setEntreprise(Campagny entreprise) { this.entreprise = entreprise; }
+    public Campagny getCampagny() { return campagny; }
+    public void setCampagny(Campagny campagny) { this.campagny = campagny; }
 
     public Zone getZone() { return zone; }
     public void setZone(Zone zone) { this.zone = zone; }
