@@ -1,0 +1,54 @@
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="logo-container">
+      <img src="/assets/AIroportlogo.png" alt="Logo Aéroport" class="airport-logo">
+    </div>
+    <button type="button" class="lang-btn" (click)="toggleLang()">
+      {{ lang === 'fr' ? 'English' : 'Français' }}
+    </button>
+    <h1>{{ t.loginTitle }}</h1>
+    <div class="field">
+      <label>{{ t.loginUsername }}</label>
+      <input type="text" [(ngModel)]="pseudoname" [placeholder]="t.loginEnterUsername" />
+    </div>
+
+    <div class="field" style="position:relative">
+      <label>{{ t.loginPassword }}</label>
+      <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="motDePass" [placeholder]="t.loginEnterPassword" />
+      <button class="eye" type="button" (click)="togglePassword()">{{ showPassword ? '👁️' : '👁️' }}</button>
+    </div>
+
+    <button class="btn" (click)="submit()">{{ t.loginSubmit }}</button>
+  </div>
+</div>
+
+<!-- Popups -->
+<div class="modal-overlay" *ngIf="showEmptyPopup">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>{{ t.emptyField }}</h3>
+      <button (click)="showEmptyPopup=false" class="close-btn">×</button>
+    </div>
+    <div class="modal-body">
+      <p>{{ t.loginMissingFields }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" (click)="showEmptyPopup=false">{{ t.ok }}</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showInvalidPopup">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>{{ t.loginTitle }}</h3>
+      <button (click)="showInvalidPopup=false" class="close-btn">×</button>
+    </div>
+    <div class="modal-body">
+      <p>{{ t.loginInvalid }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" (click)="showInvalidPopup=false">{{ t.ok }}</button>
+    </div>
+  </div>
+</div>
