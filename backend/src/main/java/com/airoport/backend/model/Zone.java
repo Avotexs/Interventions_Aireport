@@ -1,6 +1,6 @@
 package com.airoport.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class Zone {
 
     // 1 Zone  -> 0..* Comptoires
     @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Comptoire> comptoires;
 
     public Zone() { }
