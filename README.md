@@ -1,138 +1,486 @@
-# Airport Intervention Management Platform
+# ✈️ Airport Intervention Management System
 
-An end-to-end platform for managing airport maintenance operations. The project pairs an Angular 20 frontend with a Spring Boot 3 backend to help administrators and technicians track equipment, zones, counters, projects, problems, solutions, interventions, and reporting dashboards.
+A full-stack web application for managing airport interventions, equipment, projects, and operational activities.
 
-## Features
-- **Role-aware UX**: Angular standalone components guarded by authentication and role-based access; admins manage data, technicians land on a dedicated home view.
-- **Entity management**: CRUD flows for airports, companies, zones, counters, equipment, projects, problems, solutions, technicians, and interventions.
-- **Reporting & analytics**: Monthly trends, breakdowns by equipment/problem/project, Mean Time Between Failures (MTBF) calculations, and on-demand CSV exports.
-- **Internationalisation**: Built-in `LangService` toggles French/English labels across screens.
-- **Session handling**: Simple token-based login backed by Spring Boot with in-memory session storage (ready to swap for a persistent provider).
-- **Container-ready**: Dockerfiles for both halves plus a `docker-compose.yml` that provisions MySQL, the backend API, and the compiled frontend in Nginx.
+## 📋 Table of Contents
 
-## Tech Stack
-- **Frontend**: Angular 20 (standalone components, Angular Router, RxJS, Karma/Jasmine testing).
-- **Backend**: Spring Boot 3.5 (Web, Data JPA), Java 21, Maven, MySQL 8.
-- **Tooling**: Docker, Docker Compose, Angular CLI, npm.
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [API Documentation](#api-documentation)
+- [Architecture](#architecture)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Project Structure
+## 🎯 Overview
 
-```text
+The Airport Intervention Management System is a comprehensive solution designed to streamline airport operations management. It provides tools for tracking equipment, managing interventions, coordinating projects, and monitoring airport zones and counters.
+
+### Key Capabilities
+
+- **Equipment Management**: Track equipment entries, exits, and inventory
+- **Intervention Tracking**: Monitor open and closed interventions with detailed status
+- **Project Coordination**: Manage ongoing and completed projects with equipment allocation
+- **Zone & Counter Management**: Organize airport zones and their associated counters
+- **Company Management**: Maintain airline company information
+- **Dashboard Analytics**: Real-time overview of airport operations
+- **Multi-language Support**: French and English language options
+
+## ✨ Features
+
+### 🏠 Dashboard
+- Real-time statistics for equipment, airports, interventions, and projects
+- Recent activity feed with color-coded status indicators
+- Quick action buttons for common tasks
+- Responsive design for all device types
+
+### 🔧 Equipment Module
+- Add, edit, and delete equipment records
+- Track equipment quantities and locations
+- Search and filter functionality
+- Equipment assignment to projects
+
+### 🛠️ Intervention Management
+- Create and manage intervention records
+- Associate problems and solutions
+- Track intervention status (open/closed)
+- Link interventions to companies and zones
+
+### 📊 Project Management
+- Create projects with multiple equipment assignments
+- Track project progress
+- Manage equipment allocation per project
+- View project history and details
+
+### 🏢 Administrative Features
+- Zone management with hierarchical counter assignment
+- Company (airline) management
+- Problem and solution catalog management
+- Comptoir (counter) management within zones
+
+### 🌐 User Interface
+- Modern, intuitive design
+- Gradient backgrounds and smooth animations
+- Font Awesome icons throughout
+- Responsive tables and forms
+- Modal dialogs for create/edit operations
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **Framework**: Angular (Standalone Components)
+- **Language**: TypeScript
+- **Styling**: CSS3 with gradients and animations
+- **Icons**: Font Awesome
+- **HTTP Client**: Angular HttpClient
+- **Routing**: Angular Router
+
+### Backend
+- **Framework**: Spring Boot 3.x
+- **Language**: Java 17+
+- **Build Tool**: Maven
+- **Database**: MySQL 8.x
+- **ORM**: Spring Data JPA
+- **API**: RESTful architecture
+
+### DevOps
+- **Containerization**: Docker
+- **Orchestration**: Docker Compose
+- **Database Container**: MySQL official image
+- **Multi-stage Builds**: Optimized Docker images
+
+## 📁 Project Structure
+
+```
 App airport/
-├─ backend/                  # Spring Boot service
-│  ├─ src/main/java/com/airoport/backend
-│  │  ├─ controller/         # REST controllers (auth, reports, entities, ...)
-│  │  ├─ service/            # Business logic and reporting calculations
-│  │  ├─ repository/         # Spring Data JPA repositories
-│  │  ├─ model/              # Entities (Aeroport, Campagny, Zone, Comptoire, Technicien, ...)
-│  │  └─ dto/                # Transport objects (LoginResponse, ChartDataDTO, ...)
-│  ├─ src/main/resources/    # application.properties, templates
-│  ├─ pom.xml
-│  └─ Dockerfile
-├─ frontend/                 # Angular workspace (standalone app configuration)
-│  ├─ src/app/               # Components, routes, guards, services
-│  ├─ angular.json
-│  ├─ package.json
-│  └─ Dockerfile
-├─ docker-compose.yml        # Optional stack: MySQL + backend + frontend
-└─ .github/                  # Automation & IDE helpers
+├── backend/                    # Spring Boot backend
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/airoport/backend/
+│   │   │   │   ├── controller/      # REST API controllers
+│   │   │   │   ├── dto/             # Data Transfer Objects
+│   │   │   │   ├── model/           # JPA Entities
+│   │   │   │   ├── repository/      # Spring Data repositories
+│   │   │   │   ├── service/         # Business logic layer
+│   │   │   │   └── BackendApplication.java
+│   │   │   └── resources/
+│   │   │       └── application.properties
+│   │   └── test/                    # Unit tests
+│   ├── Dockerfile
+│   ├── pom.xml
+│   └── HELP.md
+│
+├── frontend/                   # Angular frontend
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── campagny/           # Company management
+│   │   │   ├── comptoire/          # Counter management
+│   │   │   ├── equipement/         # Equipment management
+│   │   │   ├── home/               # Dashboard
+│   │   │   ├── intervention/       # Intervention management
+│   │   │   ├── problem/            # Problem catalog
+│   │   │   ├── projet/             # Project management
+│   │   │   ├── solution/           # Solution catalog
+│   │   │   ├── zone/               # Zone management
+│   │   │   ├── services/           # Shared services
+│   │   │   │   └── lang.service.ts # i18n service
+│   │   │   ├── app.ts              # Root component
+│   │   │   ├── app.config.ts       # App configuration
+│   │   │   └── app.routes.ts       # Route definitions
+│   │   ├── index.html
+│   │   ├── main.ts
+│   │   └── styles.css
+│   ├── public/
+│   │   └── AIroportlogo.png
+│   ├── angular.json
+│   ├── package.json
+│   ├── Dockerfile
+│   └── README.md
+│
+├── docker-compose.yml          # Docker orchestration
+├── .github/
+│   └── copilot-instructions.md # GitHub Copilot guidelines
+└── README.md                   # This file
 ```
 
-## Prerequisites
-- Node.js 20+ (matches the Docker build stage) and npm.
-- Angular CLI 20 (`npm install -g @angular/cli`).
-- Java 21+ and Maven 3.9+.
-- MySQL 8 (or Docker with the official image).
-- Docker Desktop (optional, for containerised runs).
+## 🚀 Getting Started
 
-## Configuration
-- Default database name is `intervention`. Create it manually when running MySQL locally.
-- `backend/src/main/resources/application.properties` uses:
-  - `spring.datasource.username=root`
-  - `spring.datasource.password=` (empty by default for local dev)
-  - `spring.jpa.hibernate.ddl-auto=create-drop` (resets schema on each run; switch to `update` or `validate` before shipping to production).
-- Override credentials via environment variables (`SPRING_DATASOURCE_*`) when running in containers or other environments.
-- The frontend talks to the API at `http://localhost:9090/api`. Adjust service URLs if hosting elsewhere.
+### Prerequisites
 
-## Local Development
+- **Docker** (version 20.x or higher)
+- **Docker Compose** (version 2.x or higher)
+- **Node.js** (version 18.x or higher) - for local frontend development
+- **Java JDK** (version 17 or higher) - for local backend development
+- **Maven** (version 3.8+) - for local backend development
+- **MySQL** (version 8.x) - for local database setup
 
-1. **Start MySQL**
+### System Requirements
+
+- **RAM**: Minimum 4GB (8GB recommended)
+- **Disk Space**: At least 2GB free space
+- **Ports**: 3306 (MySQL), 9090 (Backend), 4200 (Frontend)
+
+## 📥 Installation
+
+### Option 1: Docker (Recommended)
+
+1. **Clone the repository**
    ```bash
-   mysql -u root -p
-   CREATE DATABASE intervention;
+   git clone https://github.com/Avotexs/Interventions_Aireport.git
+   cd "App airport"
    ```
 
-2. **Backend**
+2. **Start all services with Docker Compose**
+   ```bash
+   docker-compose up --build
+   ```
+
+   This will:
+   - Start MySQL database container
+   - Build and start Spring Boot backend (port 9090)
+   - Build and start Angular frontend (port 4200)
+
+3. **Access the application**
+   - Frontend: http://localhost:4200
+   - Backend API: http://localhost:9090/api
+   - MySQL: localhost:3306
+
+### Option 2: Local Development
+
+#### Backend Setup
+
+1. **Navigate to backend directory**
    ```bash
    cd backend
+   ```
+
+2. **Configure database connection**
+   Edit `src/main/resources/application.properties`:
+   ```properties
+   spring.datasource.url=jdbc:mysql://localhost:3306/airport_db
+   spring.datasource.username=your_username
+   spring.datasource.password=your_password
+   spring.jpa.hibernate.ddl-auto=update
+   ```
+
+3. **Build and run**
+   ```bash
+   # Using Maven wrapper (recommended)
+   ./mvnw clean install
+   ./mvnw spring-boot:run
+
+   # Or using Maven directly
+   mvn clean install
    mvn spring-boot:run
    ```
-   The API is available at `http://localhost:9090`. Swagger is not bundled; use tools such as Postman for manual calls.
 
-3. **Frontend**
+   Backend will start at: http://localhost:9090
+
+#### Frontend Setup
+
+1. **Navigate to frontend directory**
    ```bash
    cd frontend
-   npm install
-   npm start
    ```
-   The Angular dev server listens on `http://localhost:4200` and proxies calls directly to the backend.
 
-## Docker Compose Workflow
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-Build and run the whole stack (MySQL + backend + frontend) with:
+3. **Start development server**
+   ```bash
+   ng serve
+   ```
+
+   Frontend will start at: http://localhost:4200
+
+## 🏃 Running the Application
+
+### Development Mode
+
+**Using Docker Compose:**
 ```bash
-docker-compose up --build
+docker-compose up
 ```
 
-- MySQL is exposed on `localhost:3306` with `root/root`.
-- The backend is available at `http://localhost:9090`.
-- The production build of the frontend is served from Nginx at `http://localhost:4200`.
-- Data is persisted to a named volume `mysql-data`.
+**Using Local Development:**
+```bash
+# Terminal 1 - Backend
+cd backend
+./mvnw spring-boot:run
 
-## Testing
-- **Backend**: `cd backend && mvn test`
-- **Frontend**: `cd frontend && npm test` (runs Karma + Jasmine in watch mode)
+# Terminal 2 - Frontend
+cd frontend
+ng serve
 
-## API Surface (Highlights)
+# Terminal 3 - Database (if not using Docker)
+mysql -u root -p
+```
 
-| Resource        | Endpoint                            | Methods            | Notes |
-|-----------------|-------------------------------------|--------------------|-------|
-| Auth            | `/api/auth/login`, `/api/auth/logout` | `POST`             | UUID token stored in-memory; include `X-Auth-Token` on logout. |
-| Technicians     | `/api/techniciens`                  | `GET, POST, PUT, DELETE` | Manages technician roster and their roles (`admin`/`technicien`). |
-| Airports        | `/api/aeroports`                    | CRUD               | Links technicians to airports. |
-| Zones & Counters| `/api/zones`, `/api/comptoires`     | CRUD + validation  | Prevents deleting zones with existing counters. |
-| Equipment       | `/api/equipements`                  | CRUD               | Used by intervention reporting. |
-| Projects        | `/api/projects`                     | CRUD               | Associates with interventions and reporting filters. |
-| Problems/Solutions | `/api/problems`, `/api/solutions`| CRUD               | Catalogues recurring issues and corrective actions. |
-| Interventions   | `/api/interventions`                | CRUD + filtering   | Central event log; DTO supports project, equipment, problem, and technician links. |
-| Reporting       | `/api/reporting/...`                | `GET`              | Monthly trends, equipment/problem/project breakdowns, MTBF stats, CSV downloads. |
+### Production Build
 
-> All controllers are annotated with `@CrossOrigin(origins = "http://localhost:4200")` for local development. Tighten this list before deploying.
+**Backend:**
+```bash
+cd backend
+./mvnw clean package -DskipTests
+java -jar target/backend-0.0.1-SNAPSHOT.jar
+```
 
-## Frontend Notes
-- Routes are declared in `frontend/src/app/app.routes.ts`. Guards enforce authentication and role access.
-- `LangService` toggles the UI between French and English strings; extend `translations` to add new locales.
-- Services in `frontend/src/app/*/*-service.ts` encapsulate HTTP calls; update `apiUrl` values when relocating the backend.
-- Technicians can view their home dashboard at `/technicien-home`; admins access the management area under `/`.
+**Frontend:**
+```bash
+cd frontend
+ng build --configuration production
+# Serve the dist/frontend folder with a web server
+```
 
-## Security & Production Checklist
-- Replace in-memory tokens with a persistent/session-backed solution (e.g., Spring Security + JWT).
-- Hash technician passwords (currently stored in plain text).
-- Review `spring.jpa.hibernate.ddl-auto` to avoid data loss and configure Flyway/Liquibase for migrations.
-- Configure CORS origins, HTTPS, and environment-specific secrets.
-- Add frontend environment files (`environment.ts`) to drive API URLs and feature flags per deployment.
+### Docker Production Deployment
 
-## Useful Commands
-- Format Angular code with `npm run lint` or `ng lint` (add a script if desired).
-- Regenerate the Angular production build: `npm run build`.
-- Package the backend jar: `mvn clean package`.
+```bash
+# Build production images
+docker-compose -f docker-compose.yml build
 
-## Contributing
-1. Fork and clone the repository.
-2. Create a feature branch from `main`.
-3. Make your changes with clear commits and accompanying tests where possible.
-4. Open a pull request describing the motivation and testing steps.
+# Run in detached mode
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+## 📚 API Documentation
+
+### Base URL
+```
+http://localhost:9090/api
+```
+
+### Endpoints Overview
+
+#### Equipment (`/equipements`)
+- `GET /equipements` - Get all equipment
+- `GET /equipements/{id}` - Get equipment by ID
+- `POST /equipements` - Create new equipment
+- `PUT /equipements/{id}` - Update equipment
+- `DELETE /equipements/{id}` - Delete equipment
+
+#### Projects (`/projets`)
+- `GET /projets` - Get all projects
+- `GET /projets/{id}` - Get project by ID
+- `POST /projets` - Create new project
+- `PUT /projets/{id}` - Update project
+- `DELETE /projets/{id}` - Delete project
+
+#### Interventions (`/interventions`)
+- `GET /interventions` - Get all interventions
+- `GET /interventions/{id}` - Get intervention by ID
+- `POST /interventions` - Create new intervention
+- `PUT /interventions/{id}` - Update intervention
+- `DELETE /interventions/{id}` - Delete intervention
+
+#### Problems (`/problems`)
+- `GET /problems` - Get all problems
+- `POST /problems` - Create new problem
+- `PUT /problems/{id}` - Update problem
+- `DELETE /problems/{id}` - Delete problem
+
+#### Solutions (`/solutions`)
+- `GET /solutions` - Get all solutions
+- `POST /solutions` - Create new solution
+- `PUT /solutions/{id}` - Update solution
+- `DELETE /solutions/{id}` - Delete solution
+
+#### Companies (`/campagnies`)
+- `GET /campagnies` - Get all companies
+- `POST /campagnies` - Create new company
+- `PUT /campagnies/{id}` - Update company
+- `DELETE /campagnies/{id}` - Delete company
+
+#### Zones (`/zones`)
+- `GET /zones` - Get all zones
+- `POST /zones` - Create new zone
+- `PUT /zones/{id}` - Update zone
+- `DELETE /zones/{id}` - Delete zone
+
+#### Counters (`/comptoires`)
+- `GET /comptoires` - Get all counters
+- `GET /comptoires/zone/{zoneId}` - Get counters by zone
+- `POST /comptoires` - Create new counter
+- `PUT /comptoires/{id}` - Update counter
+- `DELETE /comptoires/{id}` - Delete counter
+
+### Request/Response Examples
+
+**Create Equipment:**
+```json
+POST /api/equipements
+{
+  "nameEquipement": "Scanner X-Ray",
+  "quantite": 5
+}
+```
+
+**Create Project with Equipment:**
+```json
+POST /api/projets
+{
+  "name": "Terminal Modernization",
+  "equipements": [
+    {
+      "equipementId": 1,
+      "quantite": 3
+    },
+    {
+      "equipementId": 2,
+      "quantite": 5
+    }
+  ]
+}
+```
+
+## 🏗️ Architecture
+
+### Data Flow
+1. **Frontend** (Angular) → HTTP requests → **Backend** (Spring Boot)
+2. **Backend** → JPA/Hibernate → **Database** (MySQL)
+3. **Backend** → JSON responses → **Frontend**
+
+### Design Patterns Used
+- **MVC Pattern**: Model-View-Controller separation
+- **Repository Pattern**: Data access abstraction
+- **DTO Pattern**: Data transfer between layers
+- **Service Layer Pattern**: Business logic encapsulation
+- **Dependency Injection**: Loose coupling via Spring/Angular DI
+
+### Key Features
+- **CORS Configuration**: Enabled for frontend-backend communication
+- **RESTful API**: Standard HTTP methods and status codes
+- **JPA Relationships**: One-to-Many, Many-to-One entity mappings
+- **Reactive Components**: Angular standalone components with RxJS
+- **Internationalization**: Multi-language support via service layer
+
+## 🔒 Security Considerations
+
+- Update default MySQL credentials in `docker-compose.yml`
+- Configure Spring Security for production deployments
+- Enable HTTPS in production
+- Implement authentication/authorization
+- Use environment variables for sensitive data
+- Regular dependency updates for security patches
+
+## 🧪 Testing
+
+### Backend Tests
+```bash
+cd backend
+./mvnw test
+```
+
+### Frontend Tests
+```bash
+cd frontend
+# Unit tests
+ng test
+
+# E2E tests
+ng e2e
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Coding Standards
+- **Java**: Follow Spring Boot best practices
+- **TypeScript**: Use Angular style guide
+- **Commits**: Use conventional commit messages
+- **Documentation**: Update README for new features
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👥 Authors
+
+- **Avotexs** - *Initial work* - [GitHub](https://github.com/Avotexs)
+
+## 🙏 Acknowledgments
+
+- Spring Boot framework and community
+- Angular framework and team
+- Font Awesome for icons
+- Docker for containerization
+- All contributors and users of this project
+
+## 📞 Support
+
+For support, please open an issue on the GitHub repository or contact the development team.
+
+## 🗺️ Roadmap
+
+- [ ] User authentication and authorization
+- [ ] Role-based access control (RBAC)
+- [ ] Advanced reporting and analytics
+- [ ] Email notifications for interventions
+- [ ] Mobile application
+- [ ] Real-time updates with WebSockets
+- [ ] Export data to PDF/Excel
+- [ ] Integration with external airport systems
+- [ ] Advanced search and filtering
+- [ ] Audit logging and history tracking
 
 ---
 
-Need help or found a bug? Open an issue or reach out to the maintainers listed in your team documentation.
+**Last Updated**: November 2025  
+**Version**: 1.0.0  
+**Status**: Active Development
